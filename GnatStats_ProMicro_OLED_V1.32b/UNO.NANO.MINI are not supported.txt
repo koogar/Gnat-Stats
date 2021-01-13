@@ -1,3 +1,0 @@
-Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported
-
-Use Leonardo/ProMicro (Atmel 32u4)
