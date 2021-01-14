@@ -74,6 +74,7 @@ v1.59.6:
   v1.6: 
 
            ADD: ESP8266 Support (On the ESP8266, some of the data can glitch before the first screen refresh.)
+                You may also need to remove the Rotary Encoder to upload the code, else you just get a white screen!!! (nodeMCU 0.9)
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
