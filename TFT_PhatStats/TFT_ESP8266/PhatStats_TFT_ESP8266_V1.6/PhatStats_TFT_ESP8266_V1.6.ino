@@ -12,7 +12,9 @@
   UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
 
   Board Manager
-  http://arduino.esp8266.com/stable/package_esp8266com_index.json , https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+  http://arduino.esp8266.com/stable/package_esp8266com_index.json 
+
+  ESP8266 Support (On the ESP8266, some of the data can glitch before the first screen refresh.)
 
   Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
