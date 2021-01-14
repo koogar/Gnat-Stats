@@ -26,7 +26,7 @@
 
   Notes:
   Board Manager
-  http://arduino.esp8266.com/stable/package_esp8266com_index.json , https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+  http://arduino.esp8266.com/stable/package_esp8266com_index.json 
 
   Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
@@ -73,7 +73,8 @@ v1.59.6:
         
   v1.6: 
 
-      ADD: ESP8266 Support
+           ADD: ESP8266 Support (On the ESP8266, some of the data can glitch before the first screen refresh.)
+
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
