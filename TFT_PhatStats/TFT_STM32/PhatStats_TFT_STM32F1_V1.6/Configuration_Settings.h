@@ -109,8 +109,8 @@ v1.59.6:
 #define INTEL_CPU
 
 /* Uncomment your GPU,*/
-//#define NVIDIA_GRAPHICS
-#define AMD_GRAPHICS
+#define NVIDIA_GRAPHICS
+//#define AMD_GRAPHICS
 
 //-------------------------------------------------------
 
