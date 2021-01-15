@@ -88,7 +88,7 @@
   /* NeoPixel Setup Feather M0 Express: pins 6, 12 and MOSI*.*/
 #include <Adafruit_NeoPixel_ZeroDMA.h>
 #include <Adafruit_NeoPixel.h>
-#define PIN        6
+#define NEOPIN      6
 #define NUM_PIXELS 16
 
 
@@ -102,8 +102,8 @@
 #define WHITE      0xFFFFFF
 #define BLACK      0x000000 // OFF
 
-//Adafruit_NeoPixel_ZeroDMA pixels(NUM_PIXELS, PIN, NEO_GRB);
-Adafruit_NeoPixel pixels(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
+//Adafruit_NeoPixel_ZeroDMA pixels(NUM_PIXELS, NEOPIN, NEO_GRB);
+Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 //---------------------------------------------------------------------------------------
 
 
