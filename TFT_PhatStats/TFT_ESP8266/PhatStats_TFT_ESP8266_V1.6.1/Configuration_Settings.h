@@ -25,15 +25,11 @@
 
 
   Notes:
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-
-  https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/adafruit2-pinouts
-
   Board Manager
-  -------------
+  http://arduino.esp8266.com/stable/package_esp8266com_index.json , https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 
-  Install Arduino ATSAMD then ADD
-  https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+  Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
+  Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
 
   UNO/NANO/MINI are not supported!!! use this sketch with STM32 based boards such as the Blue Pill or ESP variants, due to there large memory.
 
@@ -74,10 +70,11 @@ v1.59.6:
         Minimise Screen Refresh Blinking using "tft.setTextColor(Text, Background);"
         and "Magic Digit Eraser" Function for digits that gain in length.
         (the above only works for the default font!!! (This is a limitation of the GRFX library)
-   v1.6:
-        ADD: ESP8266 Support
-        ADD: Tweaks
-             
+        
+  v1.6: 
+
+      ADD: ESP8266 Support
+
   v1.6.1 :
   
         ADD: ATSAMD21 Support
@@ -104,8 +101,6 @@ v1.59.6:
 //#define Debug
 //-------------------------------------------------------
 
-//HardwareSerialMonitor does not require OpenHardwareMonitor to aquire data for GnatStats
-
 /* Uncomment your CPU,*/
 //#define AMD_CPU
 #define INTEL_CPU
@@ -120,7 +115,7 @@ v1.59.6:
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
 #define GPU_TJMAX 83   //  TJ Max for the Nvidia GTX1080 = 83c
 
-/* CPU & GPU Turbo/Boost Frequency Values in Mhz */
+/* CPU & GPU Turbo/Boost Frequency Values */
 #define CPU_BOOST 3700  //  Intel Core i9600k = 3700MHz Turbo to 4600MHz
 #define GPU_BOOST 1683  //  MSi GamingX 1080 = 1683MHz
 
@@ -148,8 +143,6 @@ v1.59.6:
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-#define enableNeopixelGauges     // NeoPixel ring bargraph example
-int NeoBrightness = 5;           //Global Brightness
 //-------------------------------------------------------
 
 /* Define your Backlight PWM, Uncomment only one choice, */
@@ -162,7 +155,7 @@ int NeoBrightness = 5;           //Global Brightness
 
 /* PWM Using a Rotary Encoder with a PNP transistor*/
 /* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */
-/*#define Encoder_PWM_PNP */ // use rotary encoder for PWM screen brightness control with NPN Transistor 5v.
+//#define Encoder_PWM_PNP // use rotary encoder for PWM screen brightness control with NPN Transistor 5v.
 
 //-------------------------------------------------------
 
@@ -174,6 +167,7 @@ int TFT_brightness = 255; // 0 - 255
 /* Do not adjust, it will affect the GUI % value */
 #ifdef Encoder_PWM
 int TFT_brightness = 100;
+
 #endif
 /* Do not adjust, it will affect the GUI % value */
 #ifdef Encoder_PWM_PNP
@@ -199,7 +193,7 @@ int TFT_brightness = 155;
 int ASPECT = 0; //Do not adjust,
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 0;  //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //
