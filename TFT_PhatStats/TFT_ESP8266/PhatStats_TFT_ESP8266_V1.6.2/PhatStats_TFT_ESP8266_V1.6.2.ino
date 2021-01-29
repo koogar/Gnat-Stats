@@ -193,8 +193,88 @@ void setup() {
 
   tft.setTextColor(ILI9341_WHITE);
   //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
-  //splashScreen();
-  splashScreenSumo();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  splashScreen();
+  //splashScreenSumo();
 }
 
 /* End of Set up */
@@ -355,7 +435,7 @@ void backlightOFF () {
 void splashScreenSumo() {
 
   /* Initial Boot Screen, */
- 
+
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
   tft.setFont(&Org_01);
@@ -406,7 +486,7 @@ void splashScreenSumo() {
 
   delay(3000);
 
-  
+
   tft.fillScreen(ILI9341_BLACK);
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);

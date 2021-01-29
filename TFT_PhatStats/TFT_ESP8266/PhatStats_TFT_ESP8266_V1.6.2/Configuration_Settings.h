@@ -158,6 +158,7 @@ v1.59.6:
 #define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
 
 /* PWM connected direct to the MCU PIN*/
+// PWM on the ESP8266 is a bit weak!!!
 //#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
 /* PWM Using a Rotary Encoder with a PNP transistor*/
