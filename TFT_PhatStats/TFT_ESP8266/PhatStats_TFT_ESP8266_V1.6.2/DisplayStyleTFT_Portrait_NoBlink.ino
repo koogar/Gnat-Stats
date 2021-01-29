@@ -431,20 +431,29 @@ void DisplayStyle_Portrait_NoBlink () {
     int gpuMemoryUsedEnd = inputString.indexOf("|", gpuMemoryUsedStart);
     String gpuMemoryUsedString = inputString.substring(gpuMemoryUsedStart, gpuMemoryUsedEnd);
     //Char erase and spacing adjust, MaDerer
-    while (gpuMemoryUsedString.length() < 3) gpuMemoryUsedString = " " + gpuMemoryUsedString;
-
-    double gpuMemUsed = atof(gpuMemoryUsedString.c_str()); //values in MB    if (gpuMemUsed.length() == 3) gpuMemUsed = " " + gpuMemUsed;
-    double  gpuMemUsedSumGB = gpuMemUsed / 1024; //values in GB
-
-    //end of GPU total memory, Use fill box on last char "B" as its not a string
-    tft.fillRect(224, 128, 14, 8, ILI9341_updateBox);   //  GPU Memory Used Character Erase
-
-    tft.setCursor(140, 128); //
-    tft.print(" / Used: ");
+    while (gpuMemoryUsedString.length() < 4) gpuMemoryUsedString = " " + gpuMemoryUsedString;
+    
+    tft.setCursor(140, 129); //
+    tft.print(" / Used:");
     tft.print(gpuMemoryUsedString); //  show values in MB
-
     tft.setTextSize(1);
     tft.print("MB");
+
+    /*
+        double gpuMemUsed = atof(gpuMemoryUsedString.c_str()); //values in MB    if (gpuMemUsed.length() == 3) gpuMemUsed = " " + gpuMemUsed;
+        double  gpuMemUsedSumGB = gpuMemUsed / 1024; //values in GB
+
+        //end of GPU total memory, Use fill box on last char "B" as its not a string
+        tft.fillRect(224, 128, 14, 8, ILI9341_updateBox);   //  GPU Memory Used Character Erase
+
+        tft.setCursor(140, 128); //
+        tft.print(" / Used: ");
+        tft.print(gpuMemUsedSumGB); //  show values in GB
+
+        tft.setTextSize(1);
+        tft.print("GB");
+
+    */
     //------------------------------------------------GPU Power Consumption--------------------------------------------------------
 
     /* GPU Power, */  // Nvidia Driver 457.51 works. Broken in Driver Version: 460.79 460.89
@@ -538,7 +547,7 @@ void DisplayStyle_Portrait_NoBlink () {
     tft.print(intRamSum, 0) ; tft.setTextSize(0); tft.print("GB"); tft.print(" ");
     tft.setTextSize(2); //set background txt font size
     tft.print(ramString)    ; tft.setTextSize(0); tft.print("GB");
-    
+
 
     //------------------------------------------ RX indicator Clear-----------------------------------------------
 
