@@ -41,9 +41,7 @@
 #include "Sumo_Bitmap.h"
 
 /*
-    ESP8266 (NodeMCU 0.9)
-  -----------------------
-
+   ESP8266 (NodeMCU 0.9)
   ----------------------
   ILI9341 320x240 PINOUT
   ----------------------
@@ -58,23 +56,22 @@
 
   BLIGHT = D6
 
-  --------------------
+  -----------------------------
   Rotary Encoder
-  --------------------
+  -----------------------------
   Button   = D1( Encoder Button)
   EncoderA = D3
   EncoderB = D2
-  --------------------
+  -----------------------------
   
   I2C
-  --------------------
+  -----------------------------
   SCL = D1   FOR REFERENCE ONLY !!!
   SDA = D2   FOR REFERENCE ONLY !!!
-  --------------------
-  
+  -----------------------------  
   (TX)= D10  FOR REFERENCE ONLY !!!
   (RX)= D9   FOR REFERENCE ONLY !!!
-  
+  -----------------------------
   SPARE = A0 FOR REFERENCE ONLY !!!
   /*
 
@@ -191,85 +188,6 @@ void setup() {
 
   tft.setTextColor(ILI9341_WHITE);
   //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   splashScreen();
   //splashScreenSumo();
