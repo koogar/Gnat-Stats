@@ -36,10 +36,10 @@
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
   Feather M0
-  ------------
+  ---------------------
   ATSAMD21G18 @ 48MHz with 3.3V logic/power
   256KB of FLASH + 32KB of RAM
-  --------------
+  ---------------------
   (TFT)
   CS     =  17-A3 /PB04
   RST    =  18-A4 /PB05
@@ -47,23 +47,33 @@
   SCLK   =  24    /PB11
   MOSI   =  23    /PB10
   MISO   =  22    /PA12
+  
   BLIGHT =  5     /PA15
+  ---------------------
+  
+  ---------------------
   Rotary Encoder
-  ---------------
+  ---------------------
   EncoderA = 16-A2/PB09
   EncoderB = 15-A1/PB08
   EncButton= 14-A0/PB02
-  ---------------
+  ---------------------
+  
+  ---------------------
   i2c
-  ---------------
+  ---------------------
   SCL = 27       /PA23
   SDA = 26       /PA22
+  
+  ---------------------
   Neopixel / LED's
-  ---------------
+  ---------------------
   Built in LED (RED)   = 13
   Built in NeoPixel    =  8 (Use Standard NeoPixel Library (APA102?))
   Neopixel  M0 Express = 6 or 12 (Neopixel ZeroDMA Library)
+  
   /*
+  
   //---------------------------------------------------------------------------------------
   /* NeoPixel Setup Feather M0 Express: pins 6, 12 and MOSI*.*/
 #include <Adafruit_NeoPixel_ZeroDMA.h>
