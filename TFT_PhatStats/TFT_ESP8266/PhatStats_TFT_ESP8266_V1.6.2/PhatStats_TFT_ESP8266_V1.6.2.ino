@@ -40,24 +40,9 @@
 #include "bitmap_STM32.h"
 #include "Sumo_Bitmap.h"
 
-
 /*
-
-
     ESP8266 (NodeMCU 0.9)
   -----------------------
-
-    I2C
-  --------------------
-  SCL = D1  DO NOT USE ONLY FOR REFERENCE!!!
-  SDA = D2  DO NOT USE ONLY FOR REFERENCE!!!
-
-  Rotary Encoder
-  --------------------
-  Button   = D1( Encoder Button)
-
-  EncoderA = D3
-  EncoderB = D2
 
   ----------------------
   ILI9341 320x240 PINOUT
@@ -67,17 +52,30 @@
   RST    = D0
   DC     = D4
   SCLK   = D5
-  MISO   = D6  DO NOT USE ONLY FOR REFERENCE!!!
+  MISO   = D6  FOR REFERENCE ONLY !!!
   MOSI   = D7
   CS     = D8
 
   BLIGHT = D6
-  ----------------------
 
-   (TX)= D10  DO NOT USE ONLY FOR REFERENCE!!!
-   (RX)= D9
-
-   SPARE = A0
+  --------------------
+  Rotary Encoder
+  --------------------
+  Button   = D1( Encoder Button)
+  EncoderA = D3
+  EncoderB = D2
+  --------------------
+  
+  I2C
+  --------------------
+  SCL = D1   FOR REFERENCE ONLY !!!
+  SDA = D2   FOR REFERENCE ONLY !!!
+  --------------------
+  
+  (TX)= D10  FOR REFERENCE ONLY !!!
+  (RX)= D9   FOR REFERENCE ONLY !!!
+  
+  SPARE = A0 FOR REFERENCE ONLY !!!
   /*
 
   /*ILI9321 TFT setup*/
