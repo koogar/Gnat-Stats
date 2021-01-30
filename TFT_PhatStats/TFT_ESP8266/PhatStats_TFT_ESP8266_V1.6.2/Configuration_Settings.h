@@ -73,7 +73,7 @@ v1.59.6:
         
   v1.6: 
 
-      ADD: ESP8266 Support
+        ADD: ESP8266 Support
 
   v1.6.1 :
   
