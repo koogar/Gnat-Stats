@@ -57,22 +57,15 @@
 
                         : Remove PowerPin Support
 
-     TFT Version 1.5    : STM32 BluePill & ProMicro Suppport
+     TFT Version 1.6    : STM32 BluePill & ProMicro Suppport
                         : 128x160 ST7735 & 240x320 ILI9341 TFT Support
                         : Add PWM Output for Back Light
                         : Seperate "Configuration_Settings.h" to make settings easier
+                        : No Blink screen refresh
 
                          Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported
                          Use Leonardo/ProMicro (Atmel 32u4) or STM32BluePill
 
-         ToDo:
-         Windows custom GnatStats device icon
-         Auto or button screen change option,
-         PC Diagnostic switch / mode eg: Min / Max readings,
-         Analogue Panel Meter Readings output
-
-  STM32 BluePill Reference Pins: i2c : SDA:PB7 - SCL:PB6  / PWM BackLight:PB0 /  STM32    SPi(Hardware):  CS:PB11 RST:PB10 DC:PB1 SCLK:PA5 MOSI:PA7
-  32u4  ProMicro Reference Pins  i2c : SDA:2   - SCL:3    / PWM BackLight:6   /  ProMicro SPi(Hardware):  CS:10   RST:0  DC:9   SCLK:15  MOSI:16 / Neopixel Pin: 5
 
   ASCII: http://patorjk.com/software/taag/
 
@@ -101,11 +94,23 @@
   ST7735 TFT  Atmel & STM32
   https://github.com/adafruit/Adafruit-ST7735-Library
 
+
+  STM32 BluePill Reference Pins
+  -----------------------------
+  PWM BackLight:  PB0
+  SPi(Hardware):  CS:PB11  RST:PB10  DC:PB1  SCLK:PA5  MOSI:PA7
+
+  32u4  ProMicro Reference Pins
+  -----------------------------
+  PWM BackLight: 3
+  Neopixel Pin : 5
+  SPi(Hardware):  CS:10   RST:8   DC:9   SCLK:15  MOSI:16
+
 */
 
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-#define CODE_VERS  "1.5"  // Code version number
+#define CODE_VERS  "1.6"  // Code version number
 
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
@@ -118,36 +123,23 @@
 
 
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
                  SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-                 SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-                 SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-
   /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 #ifdef STM32_BluePill
-/* !!!!!! Sorry no NeoPixels for the STM32 as it uses the SPi MOSI pin !!!!!!!!
-
-  #include <WS2812B.h>
-  #define NEOPIN PA7   //STM32 uses hardware SPi pin PA7(MOSI) no need to configure it
-  #define NUMPIXELS 16
-  WS2812B pixels = WS2812B(NUMPIXELS);
-*/
-
+/* Sorry no NeoPixels for the STM32 as it uses the SPi MOSI pin !!!*/
 /* Screen TFT backlight brightness */
-int TFT_backlight_PIN = PB0; //PA3//STM32 PWM   / 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+
-
+int TFT_backlight_PIN = PB0;
 #endif
 
 #ifdef ProMicro
-
 #include <Adafruit_NeoPixel.h>
+/* Sorry no NeoPixels for the STM32 as it uses the SPi MOSI pin !!!*/
 #define NEOPIN 5   // Digital IO pin connected to the NeoPixels.
 #define NUMPIXELS 16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
-
-int TFT_backlight_PIN = 6;    //Atmel PWM   / 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+
-
+/* Screen TFT backlight brightness */
+int TFT_backlight_PIN = 3;    //Atmel PWM
 #endif
 
 //---------------------------------------------------------------------------------------
@@ -207,7 +199,6 @@ long lastDisplayChange;
 /*ILI9321 TFT setup*/
 #ifdef TFT_ILI9341
 #include <Adafruit_ILI9341.h>
-//#include <Adafruit_ILI9341_STM.h> //faster refresh than the generic adafruit library on STM32 micro's
 #endif
 
 //---------------------------------------------------------------------------------------
@@ -215,37 +206,25 @@ long lastDisplayChange;
 #ifdef TFT_ST7735
 
 #ifdef STM32_BluePill // STM32 SPi Hardware only for speed
-
 /* SPi Display Pins */
 #define TFT_CS     PB11
 #define TFT_RST    PB10
 #define TFT_DC     PB1
-
 /* These pins do not have to be defined as they are hardware pins */
 //Connect TFT_SCLK to pin   PA5
 //Connect TFT_MOSI to pin   PA7
-
 #endif
 
 #ifdef ProMicro        // ProMicro SPi= CS:10 RST:0 DC:9 SCLK:15 MOSI:16
-
 /* SPi Display Pins */
-#define TFT_DC       9  //7
-#define TFT_CS       10   //5
-#define TFT_RST      0   // you can also connect this to the Arduino reset in which case, set this #define pin to 0!
-
+#define TFT_DC       9    // 7
+#define TFT_CS       10   // 5
+#define TFT_RST      0    // 8 // Arduino reset pin(RST)in which case, set this #define pin to 0!
 /* These pins do not have to be defined as they are hardware pins */
 //Connect TFT_SCLK to pin  15
-//Connect TFT_MISO to pin  14
 //Connect TFT_MOSI to pin  16
-
 #endif
-
-// Option 1 (recommended): must use the hardware SPI pins
-// an output. This is much faster - also required if you want
-// to use the microSD card (see the image drawing example)
 Adafruit_ST7735  tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST); // Hardware SPI pins
-
 #endif
 
 //---------------------------------------------------------------------------------------
@@ -253,47 +232,33 @@ Adafruit_ST7735  tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST); // Hardware SP
 #ifdef TFT_ILI9341 // STM32 SPi Hardware  ProMicro SPi= CS:10 RST:0 DC:9 SCLK:15 MOSI:16
 
 #ifdef ProMicro
-#define TFT_DC       9
-#define TFT_CS       10
-#define TFT_RST      0 // you can also connect this to the Arduino reset in which case, set this #define pin to 0!
-
+#define TFT_DC       9  // 7
+#define TFT_CS       10 // 5
+#define TFT_RST      0  // 8 Arduino reset pin (RST) in which case, set this #define pin to 0!
 /* These pins do not have to be defined as they are hardware pins */
-
 //Connect TFT_SCLK to pin  15
-//Connect TFT_MISO to pin  14
 //Connect TFT_MOSI to pin  16
-
 #endif
 
 #ifdef STM32_BluePill // STM32 SPi Hardware only for speed // STM32 SPi= CS:PB11 RST:PB10 DC:PB1 SCLK:PA5 MOSI:PA7
-
 #define TFT_CS     PB11
 #define TFT_RST    PB10 // you can also connect this to the STM32 reset leave it undefined
 #define TFT_DC     PB1
-
 /* These pins do not have to be defined as they are hardware pins */
 //Connect TFT_SCLK to pin   PA5
 //Connect TFT_MOSI to pin   PA7
 
 #endif
-
-// Option 1 (recommended): must use the hardware SPI pins
-//Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC); // Use hardware SPI
-//Adafruit_ILI9341_STM tft = Adafruit_ILI9341_STM(TFT_CS, TFT_DC); // Use hardware SPI, faster refresh than the generic adafruit library on STM32 micro's
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardware SPI
 
 #endif
 
 //---------------------------------------------------------------------------------------
 
-
-/*
-   ___ ___ _____ _   _ ___
+/* ___ ___ _____ _   _ ___
   / __| __|_   _| | | | _ \
   \__ \ _|  | | | |_| |  _/
-  |___/___| |_|  \___/|_|
-
-*/
+  |___/___| |_|  \___/|_|*/
 
 void setup() {
 
@@ -305,9 +270,10 @@ void setup() {
 
   /* ST7735 SETUP */
 #ifdef TFT_ST7735
-  delay(100); // Give the micro time to initiate the SPi bus
+  delay(200); // Give the micro time to initiate the SPi bus
   // Use this initializer if you're using a 1.8" TFT
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
+  //tft.initR(INITR_GREENTAB);   // initialize a ST7735S chip, green tab
   tft.setRotation(ASPECT);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
   tft.fillScreen(ST7735_BLACK);
 #endif
@@ -316,8 +282,8 @@ void setup() {
 
   /* ILI9341 SETUP */
 #ifdef TFT_ILI9341
-  delay(100); // Give the micro time to initiate the SPi bus
-  tft.begin(); //ILI9341
+  delay(200); // Give the micro time to initiate the SPi bus
+  tft.begin();   
   tft.setRotation(ASPECT);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
   tft.fillScreen(ILI9341_BLACK);
 #endif
@@ -338,6 +304,11 @@ void setup() {
   pinMode(PC13, OUTPUT); // STM32 BluePill Builtin LED /  HIGH(OFF) LOW (ON)
 #endif
 
+  /*ProMicro  Serial Activity LED*/
+#ifdef ProMicro
+  pinMode(13, OUTPUT); // STM32 BluePill Builtin LED /  HIGH(OFF) LOW (ON)
+#endif
+
 #ifdef ProMicro
   pixels.begin();// Sets up the SPI
   pixels.show();// Clears the strip, as by default the strip data is set to all LED's off.
@@ -347,14 +318,10 @@ void setup() {
 
 //END of Setup
 
-
-/*
-   __  __   _   ___ _  _   _    ___   ___  ___
+/* __  __   _   ___ _  _   _    ___   ___  ___
   |  \/  | /_\ |_ _| \| | | |  / _ \ / _ \| _ \
   | |\/| |/ _ \ | || .` | | |_| (_) | (_) |  _/
-  |_|  |_/_/ \_\___|_|\_| |____\___/ \___/|_|
-
-*/
+  |_|  |_/_/ \_\___|_|\_| |____\___/ \___/|_|*/
 
 void loop() {
 
@@ -364,6 +331,10 @@ void loop() {
   /*STM32 Serial Activity LED*/
 #ifdef STM32_BluePill
   digitalWrite(PC13, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+#endif
+  /*ProMicro Serial Activity LED*/
+#ifdef ProMicro
+  digitalWrite(13, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
 #endif
 
 #ifdef enableActivityChecker
@@ -375,22 +346,9 @@ void loop() {
   {
     if (displayChangeMode == 1) {
       displayChangeMode = 2;
-      //tft.fillRect(0, 0, 128 , 160, BLACK); //ST7735
-      //tft.fillRect(0, 0, 320 , 240, BLACK); //ILI9341
-
-
     }
-    else if (displayChangeMode == 2) {
-      displayChangeMode = 3;
-      //tft.fillRect(0, 0, 128 , 160, BLACK); //ST7735
-      //tft.fillRect(0, 0, 320 , 240, BLACK); //ILI9341
-
-    }
-    else if (displayChangeMode == 3) {
+    if (displayChangeMode == 2) {
       displayChangeMode = 1;
-      //tft.fillRect(0, 0, 128 , 160, BLACK); //ST7735
-      //tft.fillRect(0, 0, 320 , 240, BLACK); //ILI9341
-
     }
 
     lastDisplayChange = millis();
@@ -401,54 +359,41 @@ void loop() {
 
     if (bootMode) {
 
-      splashScreen2();
-
 
 #ifdef TFT_ST7735
       tft.fillScreen(ST7735_BLACK);
 #endif
 
 #ifdef TFT_ILI9341
-
       tft.fillScreen(ILI9341_BLACK);
 #endif
       bootMode = false;
     }
 
-
     lastActiveConn = millis();
 
     backlightON();
 
+
     if (displayChangeMode == 1) {
 
 #ifdef TFT_ST7735
-      DisplayStyleTFT_1();      //ST7735 128x160
+      DisplayStyleTFT_ST7735();   //ST7735 128x160
 #endif
 
 #ifdef TFT_ILI9341
-      DisplayStyleTFT_HiRes(); // ILI9341 240x320
+      DisplayStyleTFT_ILI9341(); // ILI9341 240x320
 #endif
 
     }
-    else if (displayChangeMode == 2) {
+    if (displayChangeMode == 2) {
 
 #ifdef TFT_ST7735
-      DisplayStyleTFT_2();     //ST7735 128x160
+      DisplayStyleTFT_ST7735();   //ST7735 128x160
 #endif
 
 #ifdef TFT_ILI9341
-      DisplayStyleTFT_HiRes(); // ILI9341 240x320
-#endif
-
-    }
-    else if (displayChangeMode == 3) {
-
-#ifdef TFT_ST7735
-      DisplayStyleTFT_3();     //ST7735 128x160
-#endif
-#ifdef TFT_ILI9341
-      DisplayStyleTFT_HiRes(); // ILI9341 240x320
+      DisplayStyleTFT_ILI9341(); // ILI9341 240x320
 #endif
 
     }
@@ -491,11 +436,11 @@ void allNeoPixelsOff() {
 //-------------------------------------------  TFT Backlight  -------------------------------------------------------------
 
 void backlightON () {
-  analogWrite(TFT_backlight_PIN, TFT_brightness); // TFT turn on backlight  PWM 3906 Transitor, backlight brightness0=100% 255=0%
+  analogWrite(TFT_backlight_PIN, TFT_brightness); // TFT turn on backlight
 }
 
 void backlightOFF () {
-  analogWrite(TFT_backlight_PIN, 255);       // TFT turn off backlight  PWM 3906 Transitor, backlight brightness0=100% 255=0%
+  analogWrite(TFT_backlight_PIN, 0);       // TFT turn off backlight
 }
 
 //-------------------------------------------  Serial Events -------------------------------------------------------------
@@ -510,12 +455,14 @@ void serialEvent() {
     if (inChar == '|') {
       stringComplete = true;
 
-      //tft.fillRect(210, 0, 42, 15, WHITE); // Flash top right corner when updating
-      tft.fillRect(210, 0, 42, 15, BLACK); // Flash top right corner when updating
-
       /*STM32 Serial Activity LED*/
 #ifdef STM32_BluePill
       digitalWrite(PC13, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      delay(5);
+#endif
+      /*ProMicro Serial Activity LED*/
+#ifdef ProMicro
+      digitalWrite(13, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
       delay(5);
 #endif
 
@@ -531,6 +478,10 @@ void activityChecker() {
   else
     activeConn = true;
   if (!activeConn) {
+
+    /* Turn off display when there is no activity, */
+    backlightOFF ();
+
     if (invertedStatus)
 
       //Turn off display when there is no activity
@@ -579,21 +530,21 @@ void splashScreen() {
 
 #ifdef TFT_ST7735 // USB Serial Screen
   tft.fillScreen(ST7735_BLACK);
-  tft.drawBitmap(0, 0 + 36, JustGnatBMP, 64, 64, YELLOW);
+  tft.drawBitmap(0, 36, JustGnatBMP, 64, 64, YELLOW);
   tft.setTextSize(3);
-  tft.setCursor(58, 5 + 44);
-  tft.println("GNAT ");
+  tft.setCursor(58, 49);
+  tft.println("PHAT ");
   tft.setTextSize(2);
-  tft.setCursor(64, 30 + 44);
+  tft.setCursor(64, 74);
   tft.println("STATS");
 
   //Set version to USB Serial
   tft.setTextSize(1);
-  tft.setCursor(64, 55 + 44);
+  tft.setCursor(64, 99);
   tft.print("TFT:v");
   tft.print (CODE_VERS);
 
-  tft.setCursor(52, 66 + 44); tft.setTextColor(ST7735_RED);
+  tft.setCursor(52, 110); tft.setTextColor(ST7735_RED);
   tft.print("TallMan Labs");
 
   delay(3000);
@@ -602,6 +553,8 @@ void splashScreen() {
   tft.drawBitmap(26, 2, WaitingDataBMP2_90, 76, 154, RED);
 
   delay(1000);
+    /* Clear Screen*/
+  tft.fillScreen(ST7735_BLACK);
 #endif
 
 #ifdef TFT_ILI9341 // USB Serial Screen
@@ -611,7 +564,7 @@ void splashScreen() {
   tft.drawBitmap(84, 70, JustGnatBMP, 64, 64, YELLOW);
   tft.setTextSize(3);
   tft.setCursor(86, 142);
-  tft.println("GNAT ");
+  tft.println("PHAT ");
   tft.setTextSize(3);
   tft.setCursor(78, 170);
   tft.println("STATS");
@@ -628,76 +581,13 @@ void splashScreen() {
 
   delay(3000);
 
+  /* Clear Screen*/
   tft.fillScreen(ILI9341_BLACK);
-  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, RED);
+  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, WHITE);
 
   delay(1000);
-
+  /* Clear Screen*/
+  tft.fillScreen(ILI9341_BLACK);
 #endif
-
-}
-
-//--------------------------------------------- Splash Screens --------------------------------------------------------
-void splashScreen2() {
-
-#ifdef ProMicro
-  allNeoPixelsOff();
-#endif
-
-#ifdef TFT_ST7735
-  //tft.drawBitmap(32, 16, WaitingDataBMP90, 64, 128, GREEN);
-  tft.drawBitmap(26, 2, WaitingDataBMP2_90, 76, 154, GREEN);
-#endif
-
-#ifdef TFT_ILI9341
-  //tft.drawBitmap(90, 100, WaitingDataBMP90, 64, 128, GREEN);
-  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, GREEN);
-
-#endif
-  delay(2000);
-}
-
-//--------------------------------------------- Splash Screens --------------------------------------------------------
-void splashScreen3() {
-
-#ifdef ProMicro
-  allNeoPixelsOff();
-#endif
-
-  //backlightON();
-
-#ifdef TFT_ST7735
-  //tft.fillScreen(ST7735_BLACK);
-#endif
-#ifdef TFT_ILI9341
-  //tft.fillScreen(ILI9341_BLACK);
-#endif
-
-  tft.drawBitmap(0, 0 + 250, JustGnatBMP, 64, 64, YELLOW);
-
-  tft.setTextSize(3);
-  tft.setCursor(66, 5 + 250);
-  tft.println("GNAT ");
-  tft.setTextSize(2);
-  tft.setCursor(72, 30 + 250);
-  tft.println("STATS");
-
-  tft.setTextSize(1);
-  tft.setCursor(180, 55 + 250);
-  tft.print("TFT:v");
-  tft.print (CODE_VERS);
-
-
-
-
-#ifdef TFT_ST7735
-  tft.setCursor(70, 66 + 250); tft.setTextColor(ST7735_RED);
-#endif
-
-#ifdef TFT_ILI9341
-  tft.setCursor(70, 66 + 240); tft.setTextColor(ILI9341_RED);
-#endif
-
-  tft.print("TallManLabs.com");
 
 }
