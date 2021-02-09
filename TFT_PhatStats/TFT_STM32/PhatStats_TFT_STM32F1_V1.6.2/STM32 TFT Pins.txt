@@ -1,0 +1,23 @@
+  eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
+
+  ILI9341 320x240 PINOUT
+  --------------
+  (TFT)
+  CS     = PB11
+  RST    = PB10
+  DC     = PB1
+  SCLK   = PA5
+  MOSI   = PA7
+  BLIGHT = PB0
+  Rotary Encoder
+  ---------------
+  EncoderA = PB8
+  EncoderB = PB9
+  Button   = PB7
+  ---------------
+
+  i2c
+ ---------------
+  SDA = B7  FOR REFERENCE ONLY !!!
+  SCL = B6  FOR REFERENCE ONLY !!!
+ ---------------
