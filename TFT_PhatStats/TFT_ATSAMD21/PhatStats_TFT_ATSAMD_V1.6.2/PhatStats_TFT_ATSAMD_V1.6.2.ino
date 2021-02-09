@@ -70,7 +70,7 @@
   ---------------------
   Built in LED (RED)   = 13
   Built in NeoPixel    =  8 (Use Standard NeoPixel Library (APA102?))
-  Neopixel  M0 Express = 6 or 12 (Neopixel ZeroDMA Library)
+  Neopixel  M0 Express = 6 or 12 
   
   /*
   
