@@ -23,7 +23,7 @@
   GPU Pixel  0 - 7
 
 */
-#ifdef ProMicro // !!!!!! Sorry no NeoPixels for the STM32 as it uses the SPi MOSI pin !!!!!!!!
+#ifdef ProMicroNeoPixels // !!!!!! Sorry no NeoPixels for the STM32 as it uses the SPi MOSI pin !!!!!!!!
 
 void refreshNeopixels() {
   for ( int i = 0; i < NUMPIXELS; i++ ) {
