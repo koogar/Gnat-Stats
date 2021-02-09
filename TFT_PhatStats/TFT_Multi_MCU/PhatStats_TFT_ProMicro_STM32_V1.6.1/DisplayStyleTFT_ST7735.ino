@@ -296,8 +296,7 @@ void DisplayStyleTFT_ST7735 () {
   tft.print("GB");
   tft.print(" /");
   tft.print(ramString);
-
-  
+ 
   //------------------------------------------ RX indicator Clear-----------------------------------------------
 #ifdef TFT_ST7735
   tft.fillCircle(122, 5, 3, ST7735_BLACK);// Flash top right corner when updating

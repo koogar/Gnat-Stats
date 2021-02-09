@@ -51,13 +51,13 @@
 /*2nd define correct TFT display type!!!*/
 /*Beware on ProMicro these are 3.3v backlight and logic*/
 
-#define TFT_ST7735
-//#define TFT_ILI9341
+//#define TFT_ST7735
+#define TFT_ILI9341
 
 //------------------------------------------------------------------------------------------------------------
 
 /* PWM TFT backlight */
-int TFT_brightness = 150;   // PWM 0=100% 255=0%
+int TFT_brightness = 50;   // PWM 0=100% 255=0%
 
 /* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
 int ASPECT = 0;
@@ -85,7 +85,7 @@ long invertDelay = 60000; // 60 sec  delay
 /* Uncomment below, to enable custom threshold event triggers*/
 #define enableNeopixelGauges // NeoPixel ring bargraph example
 /* Set NeoPixel intensity, this only works on the ProMicro  */
-int NeoBrightness = 50;
+int NeoBrightness = 30;
 #endif
 /* Uncomment below to enable user custom triggers see "CustomTreshholdTriggers" tab */
 //#define enableCustomThesholdtriggers
