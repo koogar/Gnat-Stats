@@ -52,13 +52,14 @@
   STM32 BluePill Reference Pins
   -----------------------------
   PWM BackLight:  PB0
+  Neopixel Pin :  Not supported on the STM32!!!
   SPi(Hardware):  CS:PB11  RST:PB10  DC:PB1  SCLK:PA5  MOSI:PA7
 
   32u4  ProMicro Reference Pins
   -----------------------------
-  PWM BackLight: 9
+  PWM BackLight: 3
   Neopixel Pin : 5
-  SPi(Hardware): CS:10 RST:8 DC:7 SCLK:15 MOSI:16
+  SPi(Hardware): CS:10 RST:8 DC:9 SCLK:15 MOSI:16
 */
 
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -86,7 +87,7 @@ int TFT_backlight_PIN = PB0;
 
 #ifdef ProMicro
 /* Screen TFT backlight brightness */
-int TFT_backlight_PIN = 9;    //Atmel PWM
+int TFT_backlight_PIN = 3;    //Atmel PWM
 #endif
 
 #ifdef ProMicroNeoPixels
@@ -154,7 +155,7 @@ long lastDisplayChange;
 
 #ifdef ProMicro        // ProMicro SPi= CS:10 RST:8 DC:7 SCLK:15 MOSI:16
 /* SPi Display Pins */
-#define TFT_DC       7  // 7.9.10
+#define TFT_DC       9  // 7.9.10
 #define TFT_RST      8  // 8.0 Arduino reset pin (RST) in which case, set this #define pin to 0!
 #define TFT_CS       10 // 5.10
 /* These pins do not have to be defined as they are hardware pins */
@@ -166,12 +167,13 @@ Adafruit_ST7735  tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST); // Hardware SP
 
 //---------------------------------------------------------------------------------------
 
-#ifdef TFT_ILI9341 //  SPi Hardware  ProMicro SPi= CS:10 RST:8 DC:7 SCLK:15 MOSI:16
+#ifdef TFT_ILI9341 
 
-#ifdef ProMicro
-#define TFT_DC       7  // 7.9.10
+#ifdef ProMicro        // ProMicro SPi= SPi(Hardware): CS:10 RST:8 DC:9 SCLK:15 MOSI:16
+/* SPi Display Pins */
+#define TFT_DC       9  // 7.9.10
 #define TFT_RST      8  // 8.0 Arduino reset pin (RST) in which case, set this #define pin to 0!
-#define TFT_CS       10 // 5.10
+#define TFT_CS       10 // 5.10     10 // 5.10
 /* These pins do not have to be defined as they are hardware pins */
 //Connect TFT_SCLK to pin  15
 //Connect TFT_MOSI to pin  16

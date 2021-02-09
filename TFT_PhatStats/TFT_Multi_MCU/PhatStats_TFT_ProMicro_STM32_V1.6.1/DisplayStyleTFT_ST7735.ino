@@ -193,6 +193,17 @@ void DisplayStyleTFT_ST7735 () {
   //Char erase and spacing adjust, MaDerer
   while (gpuMemoryUsedString.length() < 4) gpuMemoryUsedString = " " + gpuMemoryUsedString;
 
+  /*GPU Total Memory*/
+  int gpuMemoryStart = inputString.indexOf("GMT") + 3;
+  int gpuMemoryEnd = inputString.indexOf("|", gpuMemoryStart);
+  String gpuMemoryString = inputString.substring(gpuMemoryStart, gpuMemoryEnd);
+  //Char erase and spacing adjust, MaDerer
+  while (gpuMemoryString.length() < 4) gpuMemoryString = " " + gpuMemoryString;
+
+  double totalGPUmem = atof(gpuMemoryString.c_str());
+  double totalGPUmemSum = totalGPUmem / 1024;    // divide by 1024 to get the correct value
+  float  totalGPUmemSumDP = totalGPUmemSum ;     // float to handle the decimal point when printed (totalGPUmemSumDP, 0)
+
   /*GPU Fan% String*/
   int gpuFanStart = inputString.indexOf("GFANL") + 5;  // GPU Fan Load %
   int gpuFanEnd = inputString.indexOf("|", gpuFanStart);
@@ -231,14 +242,14 @@ void DisplayStyleTFT_ST7735 () {
   tft.println("%");
 
   /*GPU Shader Display
-  tft.setCursor(30, 104);
-  tft.print("Shader:");
-  tft.print(gpuShaderClockString);
-  tft.print("MHz");
-  // Clear any artifacts trails from a slow string read
-  tft.setTextSize(1);
-  tft.println(" ");
-*/
+    tft.setCursor(30, 104);
+    tft.print("Shader:");
+    tft.print(gpuShaderClockString);
+    tft.print("MHz");
+    // Clear any artifacts trails from a slow string read
+    tft.setTextSize(1);
+    tft.println(" ");
+  */
 
   /*GPU Used Memory Display*/
   tft.setCursor(1, 118);
@@ -246,6 +257,14 @@ void DisplayStyleTFT_ST7735 () {
   tft.print(gpuMemoryUsedString); //  show values in MB
   tft.setTextSize(1);
   tft.println("MB");
+
+  /*GPU Total Memory Display, Side of the GPU Name*/
+  tft.setCursor(105, 58);  // Position GPU Total Memory
+  tft.setTextSize(1);
+  //tft.print(gpuMemoryString); // Show Value in MB
+  tft.print(totalGPUmemSumDP, 0); // Show Value in GB
+  tft.setTextSize(1);
+  tft.print("GB");
 
   //----------------------------------------SYSTEM RAM USAGE---------------------------------------------------
 
@@ -256,13 +275,29 @@ void DisplayStyleTFT_ST7735 () {
   //Char erase and spacing adjust, MaDerer
   while (ramString.length() < 6) ramString = " " + ramString;
 
-  //
+  /* SYSTEM RAM AVALABLE String, */
+  int AramStringStart = inputString.indexOf("RA", ramStringLimit);
+  int AramStringLimit = inputString.indexOf("|", AramStringStart);
+  String AramString = inputString.substring(AramStringStart + 2 , AramStringLimit);
+  //Char erase and spacing adjust, MaDerer
+  while (AramString.length() < 5) AramString = " " + AramString;
+
+  /* SYSTEM RAM TOTAL String, */
+  double intRam = atof(ramString.c_str());
+  double intAram = atof(AramString.c_str());
+  //double  intRamSum = intRam + intAram;
+  float  intRamSum = intRam + intAram; //float to handle the decimal point when printed (intRamSum,0)
+
   /*System RAM Usage Display*/
   tft.setTextSize(1); //set background txt font size
   tft.setCursor(1, 140);
-  tft.print("SYS Mem Used: ");
-  tft.println(ramString);
+  tft.print("SYS Mem:");
+  tft.print(intRamSum, 0) ;
+  tft.print("GB");
+  tft.print(" /");
+  tft.print(ramString);
 
+  
   //------------------------------------------ RX indicator Clear-----------------------------------------------
 #ifdef TFT_ST7735
   tft.fillCircle(122, 5, 3, ST7735_BLACK);// Flash top right corner when updating

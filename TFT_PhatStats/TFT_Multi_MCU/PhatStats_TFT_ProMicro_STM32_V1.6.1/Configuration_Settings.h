@@ -11,8 +11,8 @@
   --------------------------------------------------------------------------------------
 */
 
-/*1st define correct MCU & TFT display type!!!
-  Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported
+
+/*Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported
   Use Leonardo / ProMicro (Atmel 32u4) or STM32BluePill
 
     UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
@@ -37,10 +37,10 @@
 
 /*1st define correct Micro type!!!*/
 
-/* ProMicro SPi(Hardware): CS:10  RST:8  DC:7  SCLK:15  MOSI:16,*/
+/* ProMicro SPi(Hardware): CS:10 RST:8 DC:9 SCLK:15 MOSI:16,*/
 #define ProMicro
 /*Enable NeoPixels for ProMicro to save memory,*/
-//#define ProMicroNeoPixels
+#define ProMicroNeoPixels
 //-----------------------------
 /* Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.*/
@@ -51,8 +51,8 @@
 /*2nd define correct TFT display type!!!*/
 /*Beware on ProMicro these are 3.3v backlight and logic*/
 
-//#define TFT_ST7735
-#define TFT_ILI9341
+#define TFT_ST7735
+//#define TFT_ILI9341
 
 //------------------------------------------------------------------------------------------------------------
 
