@@ -159,8 +159,8 @@ void DisplayStyle_Portrait_NoBlink () {
     //------------------------------------------------------RX indicator---------------------------------------------------
     tft.setCursor(203, 11);
     tft.println("RX");
-    tft.fillCircle(226, 14, 8, ILI9341_RED);// Flash top right corner when updating  //see "serialEvent();" loop
-    tft.drawCircle(226, 14, 9, ILI9341_WHITE);
+    tft.fillCircle(226, 14, 6, ILI9341_RED);// Flash top right corner when updating  //see "serialEvent();" loop
+    tft.drawCircle(226, 14, 7, ILI9341_WHITE);
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
@@ -551,7 +551,7 @@ void DisplayStyle_Portrait_NoBlink () {
 
     //------------------------------------------ RX indicator Clear-----------------------------------------------
 
-    tft.fillCircle(226, 14, 8, ILI9341_BLACK); // Portrait Flash RX top right corner when updating
+    tft.fillCircle(226, 14, 6, ILI9341_BLACK); // Portrait Flash RX top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------
     //tft.drawCircle(120, 120, 120,  ILI9341_WHITE);// Test for 240 x 240 round tft

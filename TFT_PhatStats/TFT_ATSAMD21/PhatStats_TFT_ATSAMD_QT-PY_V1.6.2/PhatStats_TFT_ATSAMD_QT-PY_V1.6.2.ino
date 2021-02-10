@@ -1,6 +1,6 @@
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 #define CODE_VERS  "1.6.2"  // Code version number
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 /*
   GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
@@ -13,9 +13,8 @@
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
   Search: Adafruit SAMD Boards
+  
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
@@ -30,7 +29,7 @@
 
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
-#include "bitmap_STM32.h"
+#include "bitmap_large.h"
 #include "Sumo_bitmap.h"
 
 /*
@@ -43,13 +42,13 @@
   ---------------------
   (TFT)
   CS     =  6    (GND,0x,1,2,3,4,5,6,7,9x(MI))  (or to GND to save a pin)
-  RST    =  9   (0 ,1,2,3,4,5,6,7,9 (MI))
-  DC     =  7   (0 ,1,2,3,4,5,6,7,9 (MI))
+  RST    =  9    (0 ,1,2,3,4,5,6,7,9(MI))
+  DC     =  7    (0 ,1,2,3,4,5,6,7,9(MI))
   SCLK   =  8
   MOSI   =  10
   MISO   =  9   (*Not Required for Reference only!!!)
 
-  BLIGHT =  5
+  B.LIGHT =  5
   ---------------------
 
   Rotary Encoder

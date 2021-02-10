@@ -164,8 +164,8 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.setCursor(284, 9);
     tft.print("RX");
-    tft.fillCircle(306, 12, 7, ILI9341_RED);// Landscape Flash RX top right corner when updating
-    tft.drawCircle(306, 12, 8, ILI9341_WHITE);
+    tft.fillCircle(306, 12, 6, ILI9341_RED);// Landscape Flash RX top right corner when updating
+    tft.drawCircle(306, 12, 7, ILI9341_WHITE);
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
@@ -566,7 +566,7 @@ void DisplayStyle_Landscape_NoBlink () {
 
     //------------------------------------------ RX indicator Clear------------------------------------------------
 
-    tft.fillCircle(306, 12, 7, ILI9341_BLACK);// Flash top right corner when updating
+    tft.fillCircle(306, 12, 6, ILI9341_BLACK);// Flash top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------
 
