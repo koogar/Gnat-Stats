@@ -22,7 +22,7 @@
 
 #include <Wire.h>
 #include <SPI.h>
-#include "HID-Project.h"
+//#include "HID-Project.h"
 
 #include <Adafruit_GFX.h> // V1.4.7 / v1.7.0 / v1.7.5 Work  https://github.com/adafruit/Adafruit-GFX-Library
 #include <Fonts/Org_01.h>
@@ -41,9 +41,9 @@
   256KB of FLASH + 32KB of RAM
   ---------------------
   (TFT)
-  CS     =  6    (GND,0x,1,2,3,4,5,6,7,9x(MI))  (or to GND to save a pin)
-  RST    =  9    (0 ,1,2,3,4,5,6,7,9(MI))
-  DC     =  7    (0 ,1,2,3,4,5,6,7,9(MI))
+  CS     =  6    (GND,1,2,3,4,5,6,7)  (or to GND to save a pin)
+  RST    =  9    (0  ,1,2,3,4,5,6,7,9(MI))
+  DC     =  7    (0  ,1,2,3,4,5,6,7,9(MI))
   SCLK   =  8
   MOSI   =  10
   MISO   =  9   (*Not Required for Reference only!!!)
