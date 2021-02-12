@@ -22,9 +22,8 @@
 
 #include <Wire.h>
 #include <SPI.h>
-#include "HID-Project.h"
 
-#include <Adafruit_GFX.h> // V1.4.7 / v1.7.0 / v1.7.5 Work  https://github.com/adafruit/Adafruit-GFX-Library
+#include <Adafruit_GFX.h>   //https://github.com/adafruit/Adafruit-GFX-Library
 #include <Fonts/Org_01.h>
 
 #include "Configuration_Settings.h" // load settings
@@ -41,9 +40,9 @@
   256KB of FLASH + 32KB of RAM
   ---------------------
   (TFT)
-  CS     =  6    (GND,0x,1,2,3,4,5,6,7,9x(MI))  (or to GND to save a pin)
-  RST    =  9    (0 ,1,2,3,4,5,6,7,9(MI))
-  DC     =  7    (0 ,1,2,3,4,5,6,7,9(MI))
+  CS     =  6    (GND,1,2,3,4,5,6,7)  (or to GND to save a pin)
+  RST    =  9    (0  ,1,2,3,4,5,6,7,9(MI))
+  DC     =  7    (0  ,1,2,3,4,5,6,7,9(MI))
   SCLK   =  8
   MOSI   =  10
   MISO   =  9   (*Not Required for Reference only!!!)
@@ -70,14 +69,10 @@
   NeoPixel         =  1     (1,2,3,4,5,6)
   Built in Neopixel = 11 or (12 to turn it off)
   ==========================================================================================================
+*/
 
-  /*
-
-  //---------------------------------------------------------------------------------------
-  /* NeoPixel Setup Feather M0 Express: pins 6, 12 and MOSI*.*/
-//#include <Adafruit_NeoPixel_ZeroDMA.h>
 #include <Adafruit_NeoPixel.h>
-#define NEOPIN      1 //0,4
+#define NEOPIN      1 
 #define NUM_PIXELS 16
 
 /*onboard QT-PY NeoPixel for RX*/
@@ -106,8 +101,8 @@ Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
 #include <Adafruit_ILI9341.h>  // v1.5.6 Adafruit Standard
 
 /* ATSAMD21 SPi Hardware only for speed*/
-#define TFT_CS     6  //5
-#define TFT_DC     7  //6
+#define TFT_CS     6  
+#define TFT_DC     7  
 #define TFT_RST    9
 
 /* These pins do not have to be defined as they are hardware pins */
@@ -119,8 +114,8 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardwar
 //---------------------------------------------------------------------------------------
 
 /* Rotary Encoder*/
-#define encoderOutA 4 //2 CLK
-#define encoderOutB 3 //3 DT
+#define encoderOutA 4 // CLK
+#define encoderOutB 3 // DT
 
 int State;
 int old_State;
@@ -132,7 +127,7 @@ int switchPin = 2; //0
 //---------------------------------------------------------------------------------------
 
 /* Screen TFT backlight brightness */
-int TFT_backlight_PIN = 5; //6,7
+int TFT_backlight_PIN = 5;
 /* More Display stuff*/
 int displayDraw = 0;
 int displayOverride = 0;
@@ -220,7 +215,6 @@ void setup() {
   //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
   splashScreen();
   //splashScreenSumo();
-
 }
 
 /* End of Set up */

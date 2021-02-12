@@ -19,8 +19,6 @@
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 */
@@ -37,7 +35,7 @@
 
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
-#include "bitmap_STM32.h"
+#include "bitmap_large.h"
 #include "Sumo_Bitmap.h"
 
 /*

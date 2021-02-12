@@ -10,13 +10,12 @@ void PWM_Encoder () {
   {
     if (digitalRead(encoderOutB) != State)
     {
-      //Consumer.write(MEDIA_VOLUME_DOWN);
+      
       
       TFT_brightness --;  TFT_brightness --; TFT_brightness --;
       PWM_Percent_Scale --; PWM_Percent_Scale --; PWM_Percent_Scale --;
     }
     else {
-      //Consumer.write(MEDIA_VOLUME_UP);
       
       TFT_brightness ++; TFT_brightness ++; TFT_brightness ++;
       PWM_Percent_Scale ++; PWM_Percent_Scale ++; PWM_Percent_Scale ++;

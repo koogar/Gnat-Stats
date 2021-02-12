@@ -15,22 +15,20 @@
   Search: Adafruit SAMD Boards
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
 
 #include <Wire.h>
 #include <SPI.h>
-#include "HID-Project.h"
 
-#include <Adafruit_GFX.h> // V1.4.7 / v1.7.0 / v1.7.5 Work  https://github.com/adafruit/Adafruit-GFX-Library
+
+#include <Adafruit_GFX.h> https://github.com/adafruit/Adafruit-GFX-Library
 #include <Fonts/Org_01.h>
 
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
-#include "bitmap_STM32.h"
+#include "bitmap_large.h"
 #include "Sumo_bitmap.h"
 
 /*
@@ -189,9 +187,6 @@ void setup() {
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
-  /* Setup HID*/
-  // Sends a clean report to the host. This is important on any Arduino type.
-  // Consumer.begin();
 
   /* Set up PINs*/
   pinMode (encoderOutA, INPUT);
@@ -234,7 +229,6 @@ void loop() {
   if (switchVal == LOW)
 
   {
-    //Consumer.write(MEDIA_VOLUME_MUTE);
     delay(debounceEncButton); // Debounce Button
     counter ++;
 
