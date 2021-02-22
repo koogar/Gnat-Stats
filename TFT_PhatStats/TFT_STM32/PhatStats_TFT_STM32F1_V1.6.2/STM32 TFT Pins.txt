@@ -13,7 +13,7 @@
   ---------------
   EncoderA = PB8
   EncoderB = PB9
-  Button   = PB7
+  Button   = PB5
   ---------------
 
   i2c

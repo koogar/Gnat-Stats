@@ -67,7 +67,7 @@
   EncoderA = PB8
   EncoderB = PB9
 
-  Button   = PB7
+  Button   = PB5
   ---------------
   /*
 
@@ -100,7 +100,7 @@ int PWM_Percent_Scale  = 100;    // start brightness Scale @ 100%
 
 /* Button pin*/
 int counter = 0;
-int switchPin = PB7;
+int switchPin = PB5;
 //---------------------------------------------------------------------------------------
 
 /* Screen TFT backlight brightness */
