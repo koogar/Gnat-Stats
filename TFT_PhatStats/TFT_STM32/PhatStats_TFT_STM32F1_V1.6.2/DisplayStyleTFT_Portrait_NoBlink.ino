@@ -455,6 +455,7 @@ void DisplayStyle_Portrait_NoBlink () {
 
     */
     //------------------------------------------------GPU Power Consumption--------------------------------------------------------
+#ifdef enable_gpuPowerStats
 
     /* GPU Power, */  // Nvidia Driver 457.51 works. Broken in Driver Version: 460.79 460.89
     int gpuPowerStart = inputString.indexOf("GPWR") + 4;
@@ -463,7 +464,7 @@ void DisplayStyle_Portrait_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuPowerString.length() < 5) gpuPowerString = " " + gpuPowerString;
 
-#ifdef enable_gpuPowerStats
+
     tft.setTextSize(1);
     tft.setCursor(125, 240);
     tft.print("Power    :");
@@ -474,6 +475,7 @@ void DisplayStyle_Portrait_NoBlink () {
 
     //------------------------------------------------GPU FAN Speed Percentage-------------------------------------------------------
 
+#ifdef enable_gpuFanStats%
     /* GPU Fan Load %,*/
     int gpuFanStart = inputString.indexOf("GFANL") + 5;  //
     int gpuFanEnd = inputString.indexOf("|", gpuFanStart);
@@ -481,7 +483,7 @@ void DisplayStyle_Portrait_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuFanString.length() < 5) gpuFanString = " " + gpuFanString;
 
-#ifdef enable_gpuFanStats%
+
     tft.setTextSize(1);
     tft.setCursor(125, 230);
     tft.print("Fan Load :");
@@ -496,6 +498,7 @@ void DisplayStyle_Portrait_NoBlink () {
 #endif
 #endif
 
+#ifdef enable_gpuFanStatsRPM
     /* GPU Fan RPM, */
     int gpuRPMStart = inputString.indexOf("GRPM") + 4;
     int gpuRPMEnd = inputString.indexOf("|", gpuRPMStart);
@@ -503,7 +506,7 @@ void DisplayStyle_Portrait_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuRPMString.length() < 4) gpuRPMString = " " + gpuRPMString;
 
-#ifdef enable_gpuFanStatsRPM
+
     tft.setTextSize(1);
     tft.setCursor(125, 220); //
     tft.print("Fan Speed:");

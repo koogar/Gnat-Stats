@@ -58,7 +58,11 @@ void DisplayStyle_Landscape_NoBlink () {
     tft.fillRoundRect  (107, 210, 86, 20, 4, ILI9341_BLACK);   //
     tft.drawRoundRect  (106, 209, 88, 22, 4, ILI9341_SILVER); //
 
+    /* CPU  Freq Line */
+    tft.drawFastHLine(110, 50, 200,  ILI9341_SILVER);
 
+    /*GPU Memory Used Line */
+    tft.drawFastHLine(110, 170, 200, ILI9341_SILVER);
 
     //--------------------------------------Borders----------------------------------------
 
@@ -164,8 +168,8 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.setCursor(284, 9);
     tft.print("RX");
-    tft.fillCircle(306, 12, 6, ILI9341_RED);// Landscape Flash RX top right corner when updating
-    tft.drawCircle(306, 12, 7, ILI9341_WHITE);
+    tft.fillCircle(306, 12, 7, ILI9341_RED);// Landscape Flash RX top right corner when updating
+    tft.drawCircle(306, 12, 8, ILI9341_WHITE);
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
@@ -278,12 +282,13 @@ void DisplayStyle_Landscape_NoBlink () {
 
     //--------------------------------------- CPU FAN NOT WORKING!!!--------------------------------------------
 
-    /*CPU FAN String
-      int cpuFanStart = inputString.indexOf("CF") + 3;
-      int cpuFanEnd = inputString.indexOf("|", cpuFanstart);
+    /*CPU FAN String, Libre CFL{CpuFanSpeedLoad}
+      int cpuFanStart = inputString.indexOf("CF") + 2;
+      int cpuFanEnd = inputString.indexOf("|", cpuFanStart);
       String cpuFanString = inputString.substring(cpuFanStart, cpuFanEnd);
+      //Char erase and spacing adjust, MaDerer
+      while (cpuFanString.length() < 3) cpuFanString = " " + cpuFanString;
     */
-
     /*CPU FAN Display
       tft.setTextSize(1);
       tft.setCursor(215, 9);// (Left/Right, UP/Down)
@@ -292,7 +297,8 @@ void DisplayStyle_Landscape_NoBlink () {
 
       tft.setTextSize(3);
       tft.setCursor(245, 25);// (Left/Right, UP/Down)
-      tft.print("49"); //tft.print(cpuFanString); //CPU FAN NOT WORKING!!!
+      //tft.print("49");
+      tft.print(cpuFanString); //CPU FAN NOT WORKING!!!
 
       #ifdef  smallPercent
       tft.setTextSize(2);
@@ -395,14 +401,6 @@ void DisplayStyle_Landscape_NoBlink () {
 
 #endif
 
-    tft.setTextSize(1);
-    tft.setCursor(200, 200);  // (Left/Right, UP/Down)
-    tft.print("Core     :");
-    tft.print(gpuCoreClockString);
-
-    tft.setTextSize(1);
-    tft.print("MHz");       // Centigrade Symbol
-
 
     tft.setCursor(200, 180);// (Left/Right, UP/Down)
     tft.setTextSize(1);
@@ -419,6 +417,14 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.setTextSize(1);
     tft.print("MHz");
+
+    tft.setTextSize(1);
+    tft.setCursor(200, 200);  // (Left/Right, UP/Down)
+    tft.print("Core     :");
+    tft.print(gpuCoreClockString);
+
+    tft.setTextSize(1);
+    tft.print("MHz");       // Centigrade Symbol
 
     //----------------------------------------------GPU Memory Total----------------------------------------------------------
 
@@ -447,13 +453,13 @@ void DisplayStyle_Landscape_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuMemoryUsedString.length() < 4) gpuMemoryUsedString = " " + gpuMemoryUsedString;
 
-    tft.setCursor(109, 180);    // (Left/Right, UP/Down)
+    tft.setCursor(109, 179);    // (Left/Right, UP/Down)
     tft.setTextSize(3);
     tft.print(gpuMemoryUsedString); //  show values in MB
 
     tft.setTextSize(1);
     tft.print("MB");
-    
+
     /*
       double gpuMemUsed = atof(gpuMemoryUsedString.c_str()); //values in MB
       double  gpuMemUsedSumGB = gpuMemUsed / 1024; //values in GB
@@ -467,6 +473,7 @@ void DisplayStyle_Landscape_NoBlink () {
 
 
     //------------------------------------------------GPU Power Consumption--------------------------------------------------------
+#ifdef enable_gpuPowerStats
 
     /* GPU Power */  // Nvidia Driver 457.51 works. Broken in Driver Version: 460.79 460.89
     int gpuPowerStart = inputString.indexOf("GPWR") + 4;
@@ -475,7 +482,6 @@ void DisplayStyle_Landscape_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuPowerString.length() < 6) gpuPowerString = " " + gpuPowerString;
 
-#ifdef enable_gpuPowerStats
     tft.setTextSize(1);
     tft.setCursor(200, 222);   // (Left/Right, UP/Down)
     tft.print("Power    :");
@@ -484,8 +490,9 @@ void DisplayStyle_Landscape_NoBlink () {
     tft.setTextSize(1);
     tft.print("w");
 #endif
-    //------------------------------------------------GPU FAN Speed Percentage-------------------------------------------------------
 
+    //------------------------------------------------GPU FAN Speed Percentage-------------------------------------------------------
+#ifdef enable_gpuFanStats%
     /* GPU Fan Load% */
     int gpuFanStart = inputString.indexOf("GFANL") + 5;  //
     int gpuFanEnd = inputString.indexOf("|", gpuFanStart );
@@ -493,7 +500,6 @@ void DisplayStyle_Landscape_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuFanString.length() < 3) gpuFanString = " " + gpuFanString;
 
-#ifdef enable_gpuFanStats%
     tft.setTextSize(3);
     tft.setCursor(242, 144);   // (Left/Right, UP/Down)
     //tft.print("Fan Load :");
@@ -508,6 +514,7 @@ void DisplayStyle_Landscape_NoBlink () {
 #endif
 #endif
 
+#ifdef enable_gpuFanStatsRPM
     /* GPU Fan RPM */
     int gpuRPMStart = inputString.indexOf("GRPM") + 4;
     int gpuRPMEnd = inputString.indexOf("|", gpuRPMStart);
@@ -515,7 +522,6 @@ void DisplayStyle_Landscape_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuRPMString.length() < 4) gpuRPMString = " " + gpuRPMString;
 
-#ifdef enable_gpuFanStatsRPM
     tft.setTextSize(1);
     //tft.setCursor(150, 120); // (Left/Right, UP/Down)
     tft.setCursor(200, 210);   // (Left/Right, UP/Down)
@@ -550,11 +556,12 @@ void DisplayStyle_Landscape_NoBlink () {
     /* RAM & TOTAL */
 
     tft.setTextSize(1);
-    tft.setCursor(224 , 60); // (Left/Right, UP/Down)
+    tft.setCursor(224 , 65); // (Left/Right, UP/Down)
     tft.println("System RAM");
-    tft.setCursor(220 , 70); // (Left/Right, UP/Down)
-    tft.print("------------");
+
+    tft.drawFastHLine(220, 75, 71, ILI9341_SILVER);
     tft.setTextSize(1);
+
     tft.setCursor(220 , 80); // (Left/Right, UP/Down)
     tft.println("TOTAL / USED");
 
@@ -566,7 +573,7 @@ void DisplayStyle_Landscape_NoBlink () {
 
     //------------------------------------------ RX indicator Clear------------------------------------------------
 
-    tft.fillCircle(306, 12, 6, ILI9341_BLACK);// Flash top right corner when updating
+    tft.fillCircle(306, 12, 7, ILI9341_BLACK);// Flash top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------
 
