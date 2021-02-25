@@ -157,7 +157,7 @@ int  invertedStatus = 1;
 void setup() {
 
   Serial.begin(9600); // 32u4 USB Serial Baud Rate
-  inputString.reserve(100);
+  inputString.reserve(200);
 
 
   /* Set up PINS*/
