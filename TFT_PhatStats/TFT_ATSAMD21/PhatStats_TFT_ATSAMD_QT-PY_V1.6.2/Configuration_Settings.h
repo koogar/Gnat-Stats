@@ -164,10 +164,10 @@ int NeoBrightness = 20;         //Global Brightness
 /* Define your Backlight PWM, Uncomment only one choice, */
 
 /* PWM Using a Static fixed value, connected direct to the MCU PIN*/
-//#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
+#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
 
 /* PWM connected direct to the MCU PIN*/
-#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
+//#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
 /* PWM Using a Rotary Encoder with a PNP transistor*/
 /* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */
