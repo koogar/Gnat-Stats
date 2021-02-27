@@ -241,9 +241,8 @@ void DisplayStyle_Landscape_NoBlink () {
     double  cpuOverclockSum = cpuOverclockGain - CPU_BOOST; //values in Mhz
 
     /* CPU OVERCLOCK Freq Gain in Percent, eg: 3700MHz/100 = 37MHz(1%)  , (OC Gain)895MHz / 37MHz(1%) = 24.19%,*/
-    double  cpuOverclockOnePercent     = CPU_BOOST / 100; // 1% of Stock CPU
-    double  cpuOverclockGainPercentSum = cpuOverclockSum / cpuOverclockOnePercent; // % of gain over Stock CPU
 
+    double cpuOverclockGainPercentSum = cpuOverclockSum / (CPU_BOOST / 100); // % of gain over Stock CPU
     /* CPU  Freq Display */
     tft.setTextSize(4);
     tft.setCursor(105, 55);// (Left/Right, UP/Down)
@@ -375,9 +374,8 @@ void DisplayStyle_Landscape_NoBlink () {
     double gpuOverclockGain = atof(gpuCoreClockString.c_str());
     double  gpuOverclockSum = gpuOverclockGain - GPU_BOOST; //values in Mhz
 
-    /* GPU OVERCLOCK Freq Gain in Percent, eg: 1683MHz/100 = 16.83MHz(1%)  , (OC Gain)254MHz / 16.83MHz(1%) = 15.09%,*/
-    double  gpuOverclockOnePercent     = GPU_BOOST / 100; // 1% of Stock GPU
-    double  gpuOverclockGainPercentSum = gpuOverclockSum / gpuOverclockOnePercent; // % of gain over Stock GPU
+    /* GPU OVERCLOCK Freq Gain in Percent, eg: 1683MHz/100 = 16.83MHz(1%) , (OC Gain)254MHz / 16.83MHz(1%) = 15.09%,*/
+    double gpuOverclockGainPercentSum = gpuOverclockSum / (GPU_BOOST / 100); // % of gain over Stock GPU
 
 
 #ifdef  enable_ShowFrequencyGain
