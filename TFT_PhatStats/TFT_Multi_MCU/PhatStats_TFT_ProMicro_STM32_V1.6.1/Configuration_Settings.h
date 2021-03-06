@@ -57,7 +57,7 @@
 //------------------------------------------------------------------------------------------------------------
 
 /* PWM TFT backlight */
-int TFT_brightness = 50;   // PWM 0=100% 255=0%
+int TFT_brightness = 150;   // PWM 0=100% 255=0%
 
 /* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
 int ASPECT = 0;
