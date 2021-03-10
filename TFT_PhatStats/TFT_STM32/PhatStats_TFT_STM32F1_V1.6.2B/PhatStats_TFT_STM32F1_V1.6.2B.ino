@@ -1,7 +1,7 @@
 
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-#define CODE_VERS  "1.6.2"  // Code version number
+#define CODE_VERS  "1.6.2B"  // Code version number
 
 /*
   GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
@@ -63,10 +63,10 @@
 
   Rotary Encoder
   ---------------
-  EncoderA = PB8
-  EncoderB = PB9
+  EncoderA = PA2
+  EncoderB = PA3
 
-  Button   = PB5
+  Button   = PA4
   ---------------
   /*
 
@@ -90,8 +90,8 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardwar
 #define RX_LEDPin PC13
 
 /* Rotary Encoder*/
-#define encoderOutA PB8 // CLK
-#define encoderOutB PB9 // DT
+#define encoderOutA PA2; //PB8 // CLK
+#define encoderOutB PA3; //PB9 // DT
 
 int State;
 int old_State;
@@ -99,7 +99,7 @@ int PWM_Percent_Scale  = 100;    // start brightness Scale @ 100%
 
 /* Button pin*/
 int counter = 0;
-int switchPin = PB5;
+int switchPin = PA4; //PB5
 //---------------------------------------------------------------------------------------
 
 /* Screen TFT backlight brightness */

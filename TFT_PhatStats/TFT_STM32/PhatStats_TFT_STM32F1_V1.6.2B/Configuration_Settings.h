@@ -89,7 +89,9 @@ v1.59.6:
   
   v1.6.2 :  
         Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
-
+  
+  v1.6.2B : (STM32 Only) Change pins on the Encoder and Button 
+  
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
