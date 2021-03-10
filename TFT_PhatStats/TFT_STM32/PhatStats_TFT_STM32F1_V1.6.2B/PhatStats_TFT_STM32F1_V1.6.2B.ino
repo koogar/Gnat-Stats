@@ -90,8 +90,8 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardwar
 #define RX_LEDPin PC13
 
 /* Rotary Encoder*/
-#define encoderOutA PA2; //PB8 // CLK
-#define encoderOutB PA3; //PB9 // DT
+#define encoderOutA PA2 //PB8 // CLK
+#define encoderOutB PA3 //PB9 // DT
 
 int State;
 int old_State;
