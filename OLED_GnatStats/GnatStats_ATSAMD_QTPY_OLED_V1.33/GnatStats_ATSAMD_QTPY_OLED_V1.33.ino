@@ -146,7 +146,7 @@
 #define enableQTPYneopixel   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Global NeoPixel Brightness,*/
-#define neoBrightness 60
+#define neoBrightness 30
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
 #define enableActivityChecker
