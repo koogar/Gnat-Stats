@@ -53,13 +53,7 @@
 
     Version 1.31   : MOVE CONFLICTING!!! NEOPIXEL PIN TO 10
 
-    Version 1.4    : STM32 BluePill Support
-                   : Remove PowerPin Support
-
-    Version 1.41   : Add Configuration_Settings.h tab
-
-    Version 1.41b  : Add screen height/width definitions for updated Adafruit SSD1306 library & General clean up
-
+    
     Arduino UNO/NANO/MINI ETC. with Atmel ATMega 328 Chips are not supported, Please don't ask!!!
 
 
@@ -130,7 +124,7 @@
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#define CODE_VERS  "1.41"  // Code version number
+#define CODE_VERS  "1.32c"  // Code version number
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
