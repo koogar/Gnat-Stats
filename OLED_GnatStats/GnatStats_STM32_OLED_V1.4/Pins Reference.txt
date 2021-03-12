@@ -1,15 +1,17 @@
-  ----------------------------------
+----------------------------------
   Pins Reference
   ----------------------------------
   ProMicro:    SDA: D2, SCL: D3
   Leonardo:    SDA: D2, SCL: D3
   NeoPixel:    D10
   ----------------------------------
-  QT-PY/XIAO:  SDA: D4, SCL: D5
-  NeoPixel  :  A1
-  ----------------------------------
-  STM32 BluePill: SDA: PB7, SCL: PB6
-  NeoPixel  :  PA7
+  QT-PY   :    SDA: D4, SCL: D5
+  NeoPixel:    A1
+  Built in NeoPixel: 11
+  
+  XIAO    :    SDA: D4, SCL: D5
+  NeoPixel:    A1
+  Built in LED: 13
   ----------------------------------
   uVolume :    SDA: D2, SCL: D3
   NeoPixel:    D5

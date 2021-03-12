@@ -96,8 +96,13 @@
   Leonardo:    SDA: D2, SCL: D3
   NeoPixel:    D10
   ----------------------------------
-  QT-PY/XIAO:  SDA: D4, SCL: D5
-  NeoPixel  :  A1
+  QT-PY   :    SDA: D4, SCL: D5
+  NeoPixel:    A1
+  Built in NeoPixel: 11
+  
+  XIAO    :    SDA: D4, SCL: D5
+  NeoPixel:    A1
+  Built in LED: 13
   ----------------------------------
   uVolume :    SDA: D2, SCL: D3
   NeoPixel:    D5
@@ -143,7 +148,7 @@
 
 //------------------------------------- Other Stuff --------------------------------------------
 /* Seeeduino XIAO RX LED indicator,*/
-//#define RX_LEDPin ??
+//#define RX_LEDPin 13
 /* Adafruit QT-PY RX NeoPixel indicator,*/
 #define enableQTPYneopixel   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
