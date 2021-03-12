@@ -19,13 +19,13 @@
    Licence
    -------
    GPL v2
-   
+
   Notes:
 
   I strongly suggest using this sketch with Atmel 32u4 based boards such as, the Leonardo or ProMicro, due to to its native USB support.
 
   The Windows application "HardwareSerialMonitor v1"  uses the OpenHardwaremonitor  OpenHardwareMonitorLib.dll to detect the hardware.  http://openhardwaremonitor.org/
-  
+
   The application will not detect integrated graphics as a GPU!!!
   Presently HardwareSerialMonitor does not like virtual Bluetooth COM ports present on the users PC!!!
 
@@ -104,23 +104,21 @@
   -------------------------
   STM32duino:
   https://github.com/rogerclarkmelbourne/Arduino_STM32
-  
+
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
 
   Adafruit Neopixel STM32 library:
-  
+
    Note. Library uses hardware SPI1
    Connect the WS2812B data input to MOSI (PA7) on your board.
   https://github.com/rogerclarkmelbourne/Arduino_STM32/tree/master/STM32F1/libraries/WS2812B
 
 
   Adafruit SSD1306 STM32 library:
+  https://github.com/adafruit/Adafruit_SSD1306
 
-  https://github.com/rogerclarkmelbourne/Arduino_STM32/tree/master/STM32F1/libraries/Adafruit_SSD1306
-
-
-  Adafruit SH1106 STM32 library:
+  Adafruit SH1106 STM32 library: only works with this core https://github.com/rogerclarkmelbourne/Arduino_STM32
   https://github.com/Tamakichi/Adafruit_SH1106_STM32
 
 */
@@ -145,7 +143,7 @@
 
 
 #ifdef ProMicro
- 
+
 #include <Adafruit_NeoPixel.h>
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 #endif
@@ -182,7 +180,7 @@ WS2812B pixels = WS2812B(NUMPIXELS); //STM32 neopixel library
 
 #define SH1106_128_64
 #define OLED_RESET 4  //  "OLED_RESET" IS IS NOT A PHYSICAL PIN DO NOT CONNECT!!!
-Adafruit_SH1106 display(OLED_RESET); 
+Adafruit_SH1106 display(OLED_RESET);
 
 #endif
 

@@ -41,9 +41,6 @@
                     Add Neopixel Global Brightness
 
     ---------------------------------------------------------------
-  ASCII: http://patorjk.com/software/taag/
-    Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
-
 
   stm32duino Core
   ----------------
@@ -67,7 +64,7 @@
   Adafruit SSD1306 library
   https://github.com/adafruit/Adafruit_SSD1306
 
-  SH1106 library
+  SH1106 library : only works with this core https://github.com/rogerclarkmelbourne/Arduino_STM32
   https://github.com/Tamakichi/Adafruit_SH1106_STM32
 
   Adafruit GFX Library
@@ -122,7 +119,9 @@
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 #define OLED_SSD1306
-//#define OLED_SH1106 // not supported under stm32duino core
+
+// not supported under stm32duino core
+//#define OLED_SH1106 // only works with this core https://github.com/rogerclarkmelbourne/Arduino_STM32
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -132,7 +131,7 @@
 #define rotateScreen 2
 
 /* Uncomment below, to enable positive and negative screen cycler */
-//#define enableInvertscreen
+#define enableInvertscreen
 
 /* Uncomment below, to take out small degree symbol for better spacing
    when hitting 100% cpu/gpu load the percent symbol gets clipped */
@@ -145,7 +144,7 @@
 //#define enableCustomThesholdtriggers
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
-#define enableNeopixelGauges //
+//#define enableNeopixelGauges //
 
 //------------------------------------- Other Stuff --------------------------------------------
 /* Global NeoPixel Brightness,*/
