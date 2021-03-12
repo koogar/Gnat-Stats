@@ -1,0 +1,13 @@
+  ----------------------------------
+  Pins Reference
+  ----------------------------------
+  ProMicro:    SDA: D2, SCL: D3
+  Leonardo:    SDA: D2, SCL: D3
+  NeoPixel:    D10
+  ----------------------------------
+  QT-PY/XIAO:  SDA: D4, SCL: D5
+  NeoPixel  :  A3
+  ----------------------------------
+  uVolume :    SDA: D2, SCL: D3
+  NeoPixel:    D5
+  ----------------------------------

@@ -5,10 +5,9 @@
   Leonardo:    SDA: D2, SCL: D3
   NeoPixel:    D10
   ----------------------------------
+  QT-PY/XIAO:  SDA: D4, SCL: D5
+  NeoPixel  :  A3
+  ----------------------------------
   uVolume :    SDA: D2, SCL: D3
   NeoPixel:    D5
-  ----------------------------------
-  UNO/NANO : Atmel ATMega 328 Chips
-  are not supported!!!!!
-  Use Leonardo/ProMicro (Atmel 32u4)
   ----------------------------------
