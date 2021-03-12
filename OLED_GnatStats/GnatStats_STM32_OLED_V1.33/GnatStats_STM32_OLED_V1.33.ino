@@ -44,6 +44,16 @@
   ASCII: http://patorjk.com/software/taag/
     Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
 
+
+  stm32duino Core
+  ----------------
+  https://github.com/stm32duino/Arduino_Core_STM32
+
+  This repo is available as a package usable with Arduino Boards Manager.
+  Use this link in the "Additional Boards Managers URLs" field:
+  https://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json
+
+  https://github.com/stm32duino/wiki/wiki/Getting-Started
    _    ___ ___ ___    _   ___ ___ ___ ___
   | |  |_ _| _ ) _ \  /_\ | _ \_ _| __/ __|
   | |__ | || _ \   / / _ \|   /| || _|\__ \
@@ -57,26 +67,15 @@
   Adafruit SSD1306 library
   https://github.com/adafruit/Adafruit_SSD1306
 
+  SH1106 library
+  https://github.com/Tamakichi/Adafruit_SH1106_STM32
+
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
   Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
-
-  Link Below for the STM32 Bootloader and Arduino Core (you may have to install the Arduino Due core also for the compiler.)
-
-  https://github.com/rogerclarkmelbourne/Arduino_STM32
-
-  https://github.com/rogerclarkmelbourne/STM32duino-bootloader/tree/master/binaries
-
-  BluePill_generic_boot20_pc13.bin  (On the "Bluepill" bootloader "_pc13" refers to the LED pin. )
-
-  https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
-
-  USB Issues:
-  https://www.onetransistor.eu/2017/11/stm32-bluepill-arduino-ide.html
-
-
 */
+
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
@@ -123,6 +122,7 @@
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 #define OLED_SSD1306
+//#define OLED_SH1106 // not supported under stm32duino core
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -147,12 +147,9 @@
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
 #define enableNeopixelGauges //
 
-/* uVolume only,*/
-//#define uVol_enableThesholdtriggers
-
 //------------------------------------- Other Stuff --------------------------------------------
 /* Global NeoPixel Brightness,*/
-#define neoBrightness 60
+#define neoBrightness 30
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
 #define enableActivityChecker
@@ -167,7 +164,7 @@
 
 /* Neo Pixel Setup */
 #define NEOPIN         PA7 // MOSI
-#define NUMPIXELS      16
+#define NUMPIXELS      1
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
@@ -190,6 +187,13 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KH
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET -1   //   QT-PY / XIAO
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#endif
+
+#ifdef OLED_SH1106
+#include <Adafruit_SH1106_STM32.h> // i2C not SPI
+#define SH1106_128_64
+#define OLED_RESET 4  //  "OLED_RESET" IS IS NOT A PHYSICAL PIN DO NOT CONNECT!!!
+Adafruit_SH1106 display(OLED_RESET);
 #endif
 
 //----------------------
@@ -231,10 +235,16 @@ long lastDisplayChange;
 
 void setup() {
 
-  /* OLED SETUP */
+  /*STM32 Serial Activity LED Setup*/
+  pinMode(PC13, OUTPUT); // STM32 BluePill Builtin LED
 
+  /* OLED SETUP */
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
+#endif
+
+#ifdef OLED_SH1106
+  display.begin(SH1106_SWITCHCAPVCC, i2c_Address);    // initialize with the I2C addr 0x3D (for the 128x64)
 #endif
 
   display.clearDisplay();
@@ -272,6 +282,10 @@ void loop() {
 
   /*Serial stuff*/
   serialEvent();
+
+  /*STM32 Serial Activity LED*/
+  digitalWrite(PC13, LOW);    // turn the LED off HIGH(OFF) LOW (ON)
+
 
 #ifdef enableActivityChecker
   activityChecker();
@@ -367,6 +381,11 @@ void serialEvent() {
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
+
+      /*STM32 Serial Activity LED*/
+      digitalWrite(PC13, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+      delay(5);
+
 
     }
   }
