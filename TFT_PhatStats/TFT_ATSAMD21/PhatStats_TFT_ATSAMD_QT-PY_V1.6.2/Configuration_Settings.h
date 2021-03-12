@@ -7,16 +7,17 @@
 
   /*
 
-  GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
+   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   Rupert Hirst & Colin Conway © 2016-2018
 
-  Licence
-  -------
+   http://tallmanlabs.com
+   http://runawaybrainz.blogspot.com/
+   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
 
-  Attribution-NonCommercial-ShareAlike  CC BY-NC-SA
-
-  This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.
-
+   Licence
+   -------
+   GPL v2
+   
   https://creativecommons.org/licenses/
 
   https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX

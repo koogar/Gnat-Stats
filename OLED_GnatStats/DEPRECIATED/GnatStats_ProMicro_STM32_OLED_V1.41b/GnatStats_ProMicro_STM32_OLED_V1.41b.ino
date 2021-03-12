@@ -9,20 +9,17 @@
 
   ------------------------------------------------------------------------------------------
 
-  GNATSTATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
+   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   Rupert Hirst & Colin Conway © 2016-2018
 
-  Licence
-  -------
+   http://tallmanlabs.com
+   http://runawaybrainz.blogspot.com/
+   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
 
-  Attribution-NonCommercial-ShareAlike  CC BY-NC-SA
-
-  This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.
-
-  https://creativecommons.org/licenses/
-
-
-
+   Licence
+   -------
+   GPL v2
+   
   Notes:
 
   I strongly suggest using this sketch with Atmel 32u4 based boards such as, the Leonardo or ProMicro, due to to its native USB support.

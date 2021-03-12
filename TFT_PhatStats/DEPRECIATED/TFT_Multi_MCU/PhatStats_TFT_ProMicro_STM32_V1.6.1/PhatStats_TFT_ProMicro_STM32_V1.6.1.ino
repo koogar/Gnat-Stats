@@ -5,14 +5,16 @@
   | |__| | | | | (_| | |_ ____) | || (_| | |_\__ \    | |  | |       | |
    \_____|_| |_|\__,_|\__|_____/ \__\__,_|\__|___/    |_|  |_|       |_|
 
-  GNATSTATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
+   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   Rupert Hirst & Colin Conway © 2016-2018
 
-  Licence
-  -------
-  Attribution-NonCommercial-ShareAlike  CC BY-NC-SA
-  This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.
-  https://creativecommons.org/licenses/
+   http://tallmanlabs.com
+   http://runawaybrainz.blogspot.com/
+   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
+
+   Licence
+   -------
+   GPL v2
 
   Notes:
   The Windows application "HardwareSerialMonitor v1.1 & v1.3"  uses the OpenHardwareMonitor OpenHardwareMonitorLib.dll to detect the hardware.  https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
