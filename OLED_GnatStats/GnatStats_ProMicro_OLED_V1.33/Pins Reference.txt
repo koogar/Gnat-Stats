@@ -6,7 +6,7 @@
   NeoPixel:    D10
   ----------------------------------
   QT-PY/XIAO:  SDA: D4, SCL: D5
-  NeoPixel  :  A3
+  NeoPixel  :  A1
   ----------------------------------
   STM32 BluePill: SDA: PB7, SCL: PB6
   NeoPixel  :  PA7
