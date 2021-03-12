@@ -63,7 +63,7 @@
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
   Search: Adafruit SAMD Boards
-  
+
 */
 #include <SPI.h>
 #include <Wire.h>
@@ -92,7 +92,7 @@
   NeoPixel:    D10
   ----------------------------------
   QT-PY/XIAO:  SDA: D4, SCL: D5
-  NeoPixel  :  A3
+  NeoPixel  :  A1
   ----------------------------------
   uVolume :    SDA: D2, SCL: D3
   NeoPixel:    D5
@@ -103,6 +103,7 @@
   ----------------------------------
 
   ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!*/
+
 
 //----------------------------------- OLED Setup ----------------------------------------
 
@@ -136,6 +137,11 @@
 //#define uVol_enableThesholdtriggers
 
 //------------------------------------- Other Stuff --------------------------------------------
+/* Seeeduino XIAO RX LED indicator,*/
+//#define RX_LEDPin ??
+/* Adafruit QT-PY RX NeoPixel indicator,*/
+#define enableQTPYneopixel   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+
 /* Global NeoPixel Brightness,*/
 #define neoBrightness 60
 
@@ -150,10 +156,18 @@
 
 //------------------------------------ End of User configuration ---------------------------------
 
+/*onboard QT-PY NeoPixel for RX*/
+#ifdef enableQTPYneopixel
+#define RX_NeoPin 11  //Built in NeoPixel, on the QT-PY
+#else
+#define RX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
+#endif
+
 /* Neo Pixel Setup */
-#define NEOPIN         3
+#define NEOPIN         1
 #define NUMPIXELS      16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
 #define BLUE       0x0000FF
@@ -216,8 +230,10 @@ long lastDisplayChange;
 
 void setup() {
 
-  /* OLED SETUP */
+  /* Set up PINs*/
+  //pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
 
+  /* OLED SETUP */
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
 #endif
@@ -237,6 +253,7 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin(); // This initializes the NeoPixel library.
+  RX_pixel.begin();  // This initializes the NeoPixel library.
   pixels.setBrightness(neoBrightness); // Global Brightness
   pixels.show(); // Turn off all Pixels
 
@@ -261,6 +278,12 @@ void loop() {
 #ifdef enableActivityChecker
   activityChecker();
 #endif
+
+  /*Serial Activity LED */
+  //digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  /* Serial Activity NeoPixel */
+  RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
+  RX_pixel.show();
 
   /*change display screen*/
   if ((millis() - lastDisplayChange) > displayChangeDelay)
@@ -348,6 +371,13 @@ void serialEvent() {
       stringComplete = true;
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
+
+      /* Serial Activity LED */
+      //digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+
+      /* Serial Activity NeoPixel */
+      RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+      RX_pixel.show();
 
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
