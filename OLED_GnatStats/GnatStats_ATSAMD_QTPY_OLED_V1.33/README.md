@@ -1,5 +1,5 @@
  
-  #GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client  
+  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client  
    Rupert Hirst & Colin Conway © 2016-2018
 
   http://tallmanlabs.com
