@@ -1,3 +1,6 @@
+
+https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
+
 eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
   
 Feather M0
