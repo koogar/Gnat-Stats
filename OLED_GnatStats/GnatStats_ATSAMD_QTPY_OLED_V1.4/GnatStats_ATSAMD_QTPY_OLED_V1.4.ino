@@ -99,7 +99,7 @@
   QT-PY   :    SDA: D4, SCL: D5
   NeoPixel:    A1
   Built in NeoPixel: 11
-  
+
   XIAO    :    SDA: D4, SCL: D5
   NeoPixel:    A1
   Built in LED: 13
@@ -116,6 +116,12 @@
 
 
 //----------------------------------- OLED Setup ----------------------------------------
+/*Uncomment the correct Micro type, uncomment only one!!!*/
+/* Adafruit QT-PY*/
+//#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+
+/* Seeeduino XIAO,*/
+#define XIAO
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 #define OLED_SSD1306
@@ -147,10 +153,6 @@
 //#define uVol_enableThesholdtriggers
 
 //------------------------------------- Other Stuff --------------------------------------------
-/* Seeeduino XIAO RX LED indicator,*/
-//#define RX_LEDPin 13
-/* Adafruit QT-PY RX NeoPixel indicator,*/
-#define enableQTPYneopixel   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Global NeoPixel Brightness,*/
 #define neoBrightness 30
@@ -165,9 +167,13 @@
 #define lastActiveDelay 10000
 
 //------------------------------------ End of User configuration ---------------------------------
+/* Seeeduino XIAO RX LED indicator,*/
+#ifdef XIAO
+#define RX_LEDPin 13
+#endif
 
 /*onboard QT-PY NeoPixel for RX*/
-#ifdef enableQTPYneopixel
+#ifdef QTPY
 #define RX_NeoPin 11  //Built in NeoPixel, on the QT-PY
 #else
 #define RX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
@@ -241,7 +247,9 @@ long lastDisplayChange;
 void setup() {
 
   /* Set up PINs*/
-  //pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#ifdef XIAO
+  pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#endif
 
   /* OLED SETUP */
 #ifdef OLED_SSD1306
@@ -263,7 +271,9 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin(); // This initializes the NeoPixel library.
+#ifdef QTPY
   RX_pixel.begin();  // This initializes the NeoPixel library.
+#endif
   pixels.setBrightness(neoBrightness); // Global Brightness
   pixels.show(); // Turn off all Pixels
 
@@ -289,11 +299,17 @@ void loop() {
   activityChecker();
 #endif
 
-  /*Serial Activity LED */
-  //digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-  /* Serial Activity NeoPixel */
+
+#ifdef XIAO
+  /*XIAO Serial Activity LED */
+  digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+#endif
+
+#ifdef QTPY
+  /* QY-PY Serial Activity NeoPixel */
   RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
   RX_pixel.show();
+#endif
 
   /*change display screen*/
   if ((millis() - lastDisplayChange) > displayChangeDelay)
@@ -381,17 +397,22 @@ void serialEvent() {
       stringComplete = true;
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
-
-      /* Serial Activity LED */
-      //digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-
-      /* Serial Activity NeoPixel */
-      RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
-      RX_pixel.show();
-
+      
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
+      #ifdef XIAO
+      
+      /* XIAO Serial Activity LED */
+      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+#endif
+
+
+#ifdef QTPY
+      /* QT-PY Serial Activity NeoPixel */
+      RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+      RX_pixel.show();
+#endif
 
     }
   }
