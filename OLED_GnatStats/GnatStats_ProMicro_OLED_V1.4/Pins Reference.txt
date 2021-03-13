@@ -1,4 +1,7 @@
-----------------------------------
+
+https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+
+  ----------------------------------
   Pins Reference
   ----------------------------------
   ProMicro:    SDA: D2, SCL: D3
