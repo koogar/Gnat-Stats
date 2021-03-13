@@ -129,7 +129,7 @@
 //#define enableCustomThesholdtriggers
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
-#define enableNeopixelGauges //
+//#define enableNeopixelGauges //
 
 /* uVolume only,*/
 //#define uVol_enableThesholdtriggers
@@ -436,9 +436,20 @@ void splashScreen() {
   display.clearDisplay();
   display.display();
 
-  // USB Serial Screen
-  //display.startscrollleft(0x00, 0x0F);
-
-  //display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
-  //display.display();
+  display.setTextSize(3); //set background txt font size
+  display.setCursor(1, 1);
+  display.println(">");
+  display.display();
+  display.setTextSize(2);
+  display.setCursor(20, 30);
+  display.display();
+  display.println("0101010..");
+  display.display();
+  display.setTextSize(1);
+  display.setCursor(1, 54);
+  display.println("waiting for data.....");
+  display.display();
+  //delay(5000);
+  display.clearDisplay();
+  //display.display(); //note... not needed "main loop" will initiate this, when serial coms establish
 }
