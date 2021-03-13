@@ -118,10 +118,10 @@
 //----------------------------------- OLED Setup ----------------------------------------
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 /* Adafruit QT-PY*/
-//#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Seeeduino XIAO,*/
-#define XIAO
+//#define XIAO
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 #define OLED_SSD1306
@@ -410,7 +410,7 @@ void serialEvent() {
 
 #ifdef QTPY
       /* QT-PY Serial Activity NeoPixel */
-      RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+      RX_pixel.setPixelColor(0, 0, 0, 10 ); // turn built in NeoPixel on
       RX_pixel.show();
 #endif
 

@@ -439,6 +439,6 @@ void splashScreen() {
   // USB Serial Screen
   //display.startscrollleft(0x00, 0x0F);
 
-  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
-  display.display();
+  //display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
+  //display.display();
 }
