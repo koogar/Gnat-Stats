@@ -1,0 +1,42 @@
+ 
+https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
+
+ eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
+
+  Adafruit QT-PY
+  ---------------------
+  ATSAMD21G18 @ 48MHz with 3.3V logic/power
+  256KB of FLASH + 32KB of RAM
+  ---------------------
+ (TFT)
+  CS     =  6  	(GND,1,2,3,4,5,6,7)  (or to GND to save a pin) 
+  RST    =  9  	(0 ,1,2,3,4,5,6,7,9 (MI))
+  DC     =  7  	(0 ,1,2,3,4,5,6,7,9 (MI))
+  SCLK   =  8
+  MOSI   =  10
+  MISO   =  9 	(*Not Required for Reference only!!!) 
+  
+  BLIGHT =  5
+  ---------------------
+  
+  Rotary Encoder
+  ---------------------
+  EncoderA = 4
+  EncoderB = 3
+  EncButton= 2
+  
+  ---------------------
+  i2c
+  ---------------------
+  SCL = 5  (*Not Required for Reference only!!!)
+  SDA = 4  (*Not Required for Reference only!!!)   
+  ---------------------
+  
+  Neopixel / LED's
+  ---------------------
+  Built in LED     =  None on the QT-PY
+  NeoPixel         =  1     (1,2,3,4,5,6)
+  Built in Neopixel = 11 or (12 to turn it off)
+
+
+==========================================================================================================
