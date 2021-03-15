@@ -539,7 +539,7 @@ void DisplayStyle_Portrait_NoBlink () {
     tft.setTextSize(1);
     tft.setCursor(120, 275); // (Left/Right, UP/Down)
     //tft.println(" RAMUsed / Total");
-    tft.println(" Total / RAMUsed");
+    tft.println(" Total  / RAM Used");
     tft.drawBitmap(16, 268, Trident2_RAM_BMP, 100, 40, ILI9341_YELLOW);
 
     tft.setCursor(125, 290); // (Left/Right, UP/Down)
