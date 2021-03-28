@@ -1,6 +1,6 @@
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
-#define CODE_VERS  "1.6.2"  // Code version number
+#define CODE_VERS  "1.6.3"  // Code version number
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 /*
   GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
@@ -13,6 +13,7 @@
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
   Search: Adafruit SAMD Boards
+  
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -23,7 +24,7 @@
 #include <SPI.h>
 
 
-#include <Adafruit_GFX.h> https://github.com/adafruit/Adafruit-GFX-Library
+#include <Adafruit_GFX.h>   //https://github.com/adafruit/Adafruit-GFX-Library
 #include <Fonts/Org_01.h>
 
 #include "Configuration_Settings.h" // load settings
@@ -33,52 +34,54 @@
 
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
-  Feather M0
+
+  Adafruit QT-PY
   ---------------------
   ATSAMD21G18 @ 48MHz with 3.3V logic/power
   256KB of FLASH + 32KB of RAM
   ---------------------
   (TFT)
-  CS     =  17-A3 /PB04
-  RST    =  18-A4 /PB05
-  DC     =  19-A5 /PB02
-  SCLK   =  24    /PB11
-  MOSI   =  23    /PB10
-  MISO   =  22    /PA12
-  
-  BLIGHT =  5     /PA15
+  CS     =  6    (GND,1,2,3,4,5,6,7)  (or to GND to save a pin)
+  RST    =  9    (0  ,1,2,3,4,5,6,7,9(MI))
+  DC     =  7    (0  ,1,2,3,4,5,6,7,9(MI))
+  SCLK   =  8
+  MOSI   =  10
+  MISO   =  9   (*Not Required for Reference only!!!)
+
+  B.LIGHT =  5
   ---------------------
-  
-  ---------------------
+
   Rotary Encoder
   ---------------------
-  EncoderA = 16-A2/PB09
-  EncoderB = 15-A1/PB08
-  EncButton= 14-A0/PB02
-  ---------------------
-  
+  EncoderA = 4
+  EncoderB = 3
+  EncButton= 2
+
   ---------------------
   i2c
   ---------------------
-  SCL = 27       /PA23
-  SDA = 26       /PA22
-  
+  SCL = 5  (*Not Required for Reference only!!!)
+  SDA = 4  (*Not Required for Reference only!!!)
   ---------------------
+
   Neopixel / LED's
   ---------------------
-  Built in LED (RED)   = 13
-  Built in NeoPixel    =  8 (Use Standard NeoPixel Library (APA102?))
-  Neopixel  M0 Express = 6 or 12 
-  
-  /*
-  
-  //---------------------------------------------------------------------------------------
-  /* NeoPixel Setup Feather M0 Express: pins 6, 12 and MOSI*.*/
-#include <Adafruit_NeoPixel_ZeroDMA.h>
+  Built in LED     =  None on the QT-PY
+  NeoPixel         =  1     (1,2,3,4,5,6)
+  Built in Neopixel = 11 or (12 to turn it off)
+  ==========================================================================================================
+*/
+
 #include <Adafruit_NeoPixel.h>
-#define NEOPIN      6
+#define NEOPIN      1 
 #define NUM_PIXELS 16
 
+/*onboard QT-PY NeoPixel for RX*/
+#ifdef enableQTPYneopixel
+#define RX_NeoPin 11  //Built in NeoPixel, on the QT-PY
+#else
+#define RX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
+#endif
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
 #define BLUE       0x0000FF
@@ -92,30 +95,28 @@
 
 //Adafruit_NeoPixel_ZeroDMA pixels(NUM_PIXELS, NEOPIN, NEO_GRB);
 Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
 //---------------------------------------------------------------------------------------
 
 /* ILI9321 TFT setup */
 #include <Adafruit_ILI9341.h>  // v1.5.6 Adafruit Standard
 
 /* ATSAMD21 SPi Hardware only for speed*/
-#define TFT_CS     17
-#define TFT_DC     19
-#define TFT_RST    18 // you can also connect this to the STM32 reset leave it undefined
+#define TFT_CS     6  
+#define TFT_DC     7  
+#define TFT_RST    9
 
 /* These pins do not have to be defined as they are hardware pins */
-//Connect TFT_SCLK to pin   24
-//Connect TFT_MOSI to pin   23
+//Connect TFT_SCLK to pin   8
+//Connect TFT_MOSI to pin   10
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardware SPI
 
 //---------------------------------------------------------------------------------------
 
-/* Standard onboard LED for RX*/
-#define RX_LEDPin 13
-
 /* Rotary Encoder*/
-#define encoderOutA 16// CLK
-#define encoderOutB 15// DT
+#define encoderOutA 4 // CLK
+#define encoderOutB 3 // DT
 
 int State;
 int old_State;
@@ -123,12 +124,11 @@ int PWM_Percent_Scale  = 100;    // start brightness Scale @ 100%
 
 /* Button pin*/
 int counter = 0;
-int switchPin = 14;
+int switchPin = 2; //0
 //---------------------------------------------------------------------------------------
 
 /* Screen TFT backlight brightness */
-int TFT_backlight_PIN = 9; //moved from pin 5(Due to flicker on standby)
-
+int TFT_backlight_PIN = 5;
 /* More Display stuff*/
 int displayDraw = 0;
 int displayOverride = 0;
@@ -183,22 +183,26 @@ void setup() {
   inputString.reserve(200);
 
   /* Set up the NeoPixel*/
-  pixels.begin(); // This initializes the NeoPixel library.
+  pixels.begin();    // This initializes the NeoPixel library.
+  RX_pixel.begin();  // This initializes the NeoPixel library.
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
+  /* Setup HID*/
+  // Sends a clean report to the host. This is important on any Arduino type.
+  // Consumer.begin();
 
   /* Set up PINs*/
   pinMode (encoderOutA, INPUT);
   pinMode (encoderOutB, INPUT);
   pinMode(switchPin, INPUT_PULLUP);
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
-  pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+  //pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
   backlightOFF();
 
   /* TFT SETUP */
 
-  //delay(1000); // Give the micro time to initiate the SPi bus
+  delay(1000); // Give the micro time to initiate the SPi bus
   tft.begin(); //ILI9341
   tft.setRotation(ASPECT);// Rotate the display :  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
@@ -212,23 +216,25 @@ void setup() {
   //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
   splashScreen();
   //splashScreenSumo();
-
 }
 
 /* End of Set up */
 
 void loop() {
 
-  /* STM32 Serial Activity LED */
-  digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  /*Serial Activity LED */
+  //digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  /* Serial Activity NeoPixel */
+  RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
+  RX_pixel.show();
 
-  pixels.show();
 
   /*Encoder Mode Button*/
   int switchVal = digitalRead(switchPin);
   if (switchVal == LOW)
 
   {
+    //Consumer.write(MEDIA_VOLUME_MUTE);
     delay(debounceEncButton); // Debounce Button
     counter ++;
 
@@ -322,7 +328,10 @@ void serialEvent() {
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
       /* Serial Activity LED */
-      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      //digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      /* Serial Activity NeoPixel */
+      RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+      RX_pixel.show();
 
     }
   }

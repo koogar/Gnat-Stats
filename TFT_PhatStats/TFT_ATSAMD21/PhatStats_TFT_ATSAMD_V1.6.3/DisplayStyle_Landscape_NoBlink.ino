@@ -58,6 +58,12 @@ void DisplayStyle_Landscape_NoBlink () {
     tft.fillRoundRect  (107, 210, 86, 20, 4, ILI9341_BLACK);   //
     tft.drawRoundRect  (106, 209, 88, 22, 4, ILI9341_SILVER); //
 
+    /* CPU  Freq Line */
+    tft.drawFastHLine(110, 50, 200,  ILI9341_SILVER);
+
+    /*GPU Memory Used Line */
+    tft.drawFastHLine(110, 170, 200, ILI9341_SILVER);
+
     //--------------------------------------Borders----------------------------------------
 
     /* (X  ,Y ,  W ,  H , Radius ,    Color*/
@@ -72,11 +78,7 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.drawRoundRect  (0, 124, 320, 116, 8,    ILI9341_GREEN);
 
-    /* CPU  Freq Line */
-    tft.drawFastHLine(110, 50, 200,  ILI9341_SILVER);
 
-    /*GPU Memory Used Line */
-    tft.drawFastHLine(110, 170, 200, ILI9341_SILVER);
     //------------------------------------CPU/GPU/RAM BMP IMAGES--------------------------------------------
 
     /* Blank CPU PCB BMP, */
@@ -234,14 +236,16 @@ void DisplayStyle_Landscape_NoBlink () {
     int cpuCoreClockEnd = inputString.indexOf("|", cpuCoreClockStart);
     String cpuClockString = inputString.substring(cpuCoreClockStart, cpuCoreClockEnd);
 
+    //Char erase and spacing adjust, MaDerer
+    while (cpuClockString.length() < 4) cpuClockString = " " + cpuClockString;
+
     /* CPU OVERCLOCK Freq Gain */
     double cpuOverclockGain = atof(cpuClockString.c_str());
     double  cpuOverclockSum = cpuOverclockGain - CPU_BOOST; //values in Mhz
 
     /* CPU OVERCLOCK Freq Gain in Percent, eg: 3700MHz/100 = 37MHz(1%)  , (OC Gain)895MHz / 37MHz(1%) = 24.19%,*/
-    double  cpuOverclockOnePercent     = CPU_BOOST / 100; // 1% of Stock CPU
-    double  cpuOverclockGainPercentSum = cpuOverclockSum / cpuOverclockOnePercent; // % of gain over Stock CPU
 
+    double cpuOverclockGainPercentSum = cpuOverclockSum / (CPU_BOOST / 100); // % of gain over Stock CPU
     /* CPU  Freq Display */
     tft.setTextSize(4);
     tft.setCursor(105, 55);// (Left/Right, UP/Down)
@@ -280,33 +284,32 @@ void DisplayStyle_Landscape_NoBlink () {
 
     //--------------------------------------- CPU FAN NOT WORKING!!!--------------------------------------------
 
-    /*CPU FAN String, Libre CFL{CpuFanSpeedLoad} 
-    int cpuFanStart = inputString.indexOf("CFL") + 3;
-    int cpuFanEnd = inputString.indexOf("|", cpuFanStart);
-    String cpuFanString = inputString.substring(cpuFanStart, cpuFanEnd);
-    //Char erase and spacing adjust, MaDerer
-    while (cpuFanString.length() < 3) cpuFanString = " " + cpuFanString;
-*/
+    /*CPU FAN String, Libre CFL{CpuFanSpeedLoad}
+      int cpuFanStart = inputString.indexOf("CF") + 2;
+      int cpuFanEnd = inputString.indexOf("|", cpuFanStart);
+      String cpuFanString = inputString.substring(cpuFanStart, cpuFanEnd);
+      //Char erase and spacing adjust, MaDerer
+      while (cpuFanString.length() < 3) cpuFanString = " " + cpuFanString;
+    */
     /*CPU FAN Display
-    tft.setTextSize(1);
-    tft.setCursor(215, 9);// (Left/Right, UP/Down)
-    tft.setTextSize(1);
-    tft.print("/ Fan Load");
+      tft.setTextSize(1);
+      tft.setCursor(215, 9);// (Left/Right, UP/Down)
+      tft.setTextSize(1);
+      tft.print("/ Fan Load");
 
-    tft.setTextSize(3);
-    tft.setCursor(245, 25);// (Left/Right, UP/Down)
-    //tft.print("49");
-    tft.print(cpuFanString); //CPU FAN NOT WORKING!!!
+      tft.setTextSize(3);
+      tft.setCursor(245, 25);// (Left/Right, UP/Down)
+      //tft.print("49");
+      tft.print(cpuFanString); //CPU FAN NOT WORKING!!!
 
-#ifdef  smallPercent
-    tft.setTextSize(2);
-    tft.print("%");
-#else
-    tft.setTextSize(3);
-    tft.print("%");
-#endif
-*/
-
+      #ifdef  smallPercent
+      tft.setTextSize(2);
+      tft.print("%");
+      #else
+      tft.setTextSize(3);
+      tft.print("%");
+      #endif
+    */
     //------------------------------------------ GPU Load/Temp -------------------------------------------------
 
     /* GPU Display String */
@@ -349,6 +352,8 @@ void DisplayStyle_Landscape_NoBlink () {
     tft.print("%");
 #endif
 
+
+
     //------------------------------------------ GPU Freq/Temp -------------------------------------------------
 
     /* GPU temp V's GPU freq to check for throttling and max 'GPU Boost' */
@@ -357,6 +362,9 @@ void DisplayStyle_Landscape_NoBlink () {
     int gpuCoreClockStart = inputString.indexOf("GCC") + 3;
     int gpuCoreClockEnd = inputString.indexOf("|", gpuCoreClockStart);
     String gpuCoreClockString = inputString.substring(gpuCoreClockStart, gpuCoreClockEnd);
+    
+    //Char erase and spacing adjust, MaDerer
+    while (gpuCoreClockString.length() < 4) gpuCoreClockString = " " + gpuCoreClockString;
 
     /* GPU VRAM Freq, */
     int gpuMemClockStart = inputString.indexOf("GMC") + 3;
@@ -372,9 +380,8 @@ void DisplayStyle_Landscape_NoBlink () {
     double gpuOverclockGain = atof(gpuCoreClockString.c_str());
     double  gpuOverclockSum = gpuOverclockGain - GPU_BOOST; //values in Mhz
 
-    /* GPU OVERCLOCK Freq Gain in Percent, eg: 1683MHz/100 = 16.83MHz(1%)  , (OC Gain)254MHz / 16.83MHz(1%) = 15.09%,*/
-    double  gpuOverclockOnePercent     = GPU_BOOST / 100; // 1% of Stock GPU
-    double  gpuOverclockGainPercentSum = gpuOverclockSum / gpuOverclockOnePercent; // % of gain over Stock GPU
+    /* GPU OVERCLOCK Freq Gain in Percent, eg: 1683MHz/100 = 16.83MHz(1%) , (OC Gain)254MHz / 16.83MHz(1%) = 15.09%,*/
+    double gpuOverclockGainPercentSum = gpuOverclockSum / (GPU_BOOST / 100); // % of gain over Stock GPU
 
 
 #ifdef  enable_ShowFrequencyGain
@@ -398,14 +405,6 @@ void DisplayStyle_Landscape_NoBlink () {
 
 #endif
 
-    tft.setTextSize(1);
-    tft.setCursor(200, 200);  // (Left/Right, UP/Down)
-    tft.print("Core     :");
-    tft.print(gpuCoreClockString);
-
-    tft.setTextSize(1);
-    tft.print("MHz");       // Centigrade Symbol
-
 
     tft.setCursor(200, 180);// (Left/Right, UP/Down)
     tft.setTextSize(1);
@@ -422,6 +421,14 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.setTextSize(1);
     tft.print("MHz");
+
+    tft.setTextSize(1);
+    tft.setCursor(200, 200);  // (Left/Right, UP/Down)
+    tft.print("Core     :");
+    tft.print(gpuCoreClockString);
+
+    tft.setTextSize(1);
+    tft.print("MHz");       // Centigrade Symbol
 
     //----------------------------------------------GPU Memory Total----------------------------------------------------------
 
@@ -561,12 +568,6 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.setCursor(220 , 80); // (Left/Right, UP/Down)
     tft.println("TOTAL / USED");
-
-    tft.setCursor(206, 94); // (Left/Right, UP/Down)
-    tft.setTextSize(2);
-    tft.print(intRamSum, 0) ; tft.setTextSize(0); tft.print("GB"); tft.print(" ");
-    tft.setTextSize(2);
-    tft.print(ramString)    ; tft.setTextSize(0); tft.print("GB");
 
     tft.setCursor(206, 94); // (Left/Right, UP/Down)
     tft.setTextSize(2);

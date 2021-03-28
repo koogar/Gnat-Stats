@@ -1,7 +1,4 @@
-  
-https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
-
-eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
+  eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
   ILI9341 320x240 PINOUT
   --------------
@@ -12,13 +9,11 @@ eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO
   SCLK   = PA5
   MOSI   = PA7
   BLIGHT = PB0
-
   Rotary Encoder
   ---------------
-  EncoderA = PA2
-  EncoderB = PA3
-
-  Button   = PA4
+  EncoderA = PB8
+  EncoderB = PB9
+  Button   = PB5
   ---------------
 
   i2c

@@ -89,7 +89,10 @@ v1.59.6:
   v1.6.2 :  
         Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
   
-  v1.6.2B : (STM32 Only) Change pins on the Encoder and Button 
+  v1.6.2B: (STM32 Only) Change pins on the Encoder and Button 
+
+  v1.6.3 :(STM32 Only) Change pins on the Encoder and Button to original.
+       Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
   
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -163,10 +166,10 @@ v1.59.6:
 /* Define your Backlight PWM, Uncomment only one choice, */
 
 /* PWM Using a Static fixed value, connected direct to the MCU PIN*/
-#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
+//#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
 
 /* PWM connected direct to the MCU PIN*/
-//#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
+#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
 /* PWM Using a Rotary Encoder with a PNP transistor*/
 /* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */

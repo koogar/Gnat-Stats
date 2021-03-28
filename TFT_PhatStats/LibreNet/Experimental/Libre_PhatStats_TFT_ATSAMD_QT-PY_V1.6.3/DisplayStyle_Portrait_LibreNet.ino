@@ -229,10 +229,13 @@ void DisplayStyle_Portrait_LibreNet () {
     int cpuCoreClockEnd = inputString.indexOf("|", cpuCoreClockStart);
     String cpuClockString = inputString.substring(cpuCoreClockStart, cpuCoreClockEnd);
 
+    //Char erase and spacing adjust, MaDerer
+    while (cpuClockString.length() < 4) cpuClockString = " " + cpuClockString;
+
     /* CPU OVERCLOCK Freq Gain in MHz, */
     double  cpuOverclockGain = atof(cpuClockString.c_str());
     double  cpuOverclockSum = cpuOverclockGain - CPU_BOOST; //values in Mhz    tft.print(cpuOverclockSum, 0);
-    
+
     /* CPU OVERCLOCK Freq Gain in Percent, eg: 3700MHz/100 = 37MHz(1%)  , (OC Gain)895MHz / 37MHz(1%) = 24.19%,*/
     double cpuOverclockGainPercentSum = cpuOverclockSum / (CPU_BOOST / 100); // % of gain over Stock GPU
 
@@ -342,7 +345,10 @@ void DisplayStyle_Portrait_LibreNet () {
     int gpuCoreClockStart = inputString.indexOf("GCC") + 3;
     int gpuCoreClockEnd = inputString.indexOf("|", gpuCoreClockStart);
     String gpuCoreClockString = inputString.substring(gpuCoreClockStart, gpuCoreClockEnd);
-
+    
+    //Char erase and spacing adjust, MaDerer
+    while (gpuCoreClockString.length() < 4) gpuCoreClockString = " " + gpuCoreClockString;
+    
     /* GPU VRAM Freq, */
     int gpuMemClockStart = inputString.indexOf("GMC") + 3;
     int gpuMemClockEnd = inputString.indexOf("|", gpuMemClockStart);

@@ -17,8 +17,6 @@
    Licence
    -------
    GPL v2
-   
-  https://creativecommons.org/licenses/
 
   https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX
   http://slemi.info/2020/03/19/custom-glcd-font-tutorial/
@@ -69,20 +67,24 @@
   V1.59:
         Rotary Encoder Brightness Control.
 
-v1.59.6:
+  v1.59.6:
         ADD: CPU Turbo & GPU Boost Clock Indicator with Overclock Frequency Gain Display
 
         Minimise Screen Refresh Blinking using "tft.setTextColor(Text, Background);"
         and "Magic Digit Eraser" Function for digits that gain in length.
         (the above only works for the default font!!! (This is a limitation of the GRFX library)
-        
+
   v1.6.1 :
 
         ADD: ATSAMD21 Support
         ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
-        
-  v1.6.2 :  
+
+  v1.6.2 :
         Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
+
+  v1.6.3 :
+        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
+
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -106,11 +108,6 @@ v1.59.6:
 //-------------------------------------------------------
 
 //HardwareSerialMonitor does not require OpenHardwareMonitor to aquire data for GnatStats
-
-//-------------------------------------------------------
-
-int NeoBrightness = 20;         //Global Brightness
-#define enableQTPYneopixel      // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU
@@ -150,7 +147,7 @@ int NeoBrightness = 20;         //Global Brightness
 
 //#define CPU_OverClocked           // Uncomment if your CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator
 
-#define enable_ShowFrequencyGain 
+#define enable_ShowFrequencyGain
 
 /* Uncomment only one of the below,*/
 //#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
@@ -160,6 +157,7 @@ int NeoBrightness = 20;         //Global Brightness
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
+int NeoBrightness = 5;           //Global Brightness
 //-------------------------------------------------------
 
 /* Define your Backlight PWM, Uncomment only one choice, */
@@ -200,6 +198,11 @@ int TFT_brightness = 155;
 
 //------------------------------------------------------------------------------------------------------------
 
+
+
+
+
+
 /* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
 int ASPECT = 0; //Do not adjust,
 
@@ -207,12 +210,10 @@ int ASPECT = 0; //Do not adjust,
 int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
-int Serial_eventDelay = 0; //
-
-
+int Serial_eventDelay = 5; //
 
 
 /* Uncomment below, to enable positive and negative screen cycler not much use on a TFT */
-//#define enableInvertscreen
+#define enableInvertscreen
 /* How long before inverting the display */
-//long invertDelay = 6000; // 60 sec  delay
+long invertDelay = 6000; // 60 sec  delay
