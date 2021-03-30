@@ -500,7 +500,7 @@ void splashScreen() {
   delay(3000);
 
   tft.fillScreen(ST7735_BLACK);
-  tft.drawBitmap(26, 2, WaitingDataBMP2_90, 76, 154, RED);
+  tft.drawBitmap(0, 50, WaitingDataBMP, 128, 64, RED);
 
   delay(1000);
   /* Clear Screen*/
