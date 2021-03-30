@@ -1,4 +1,3 @@
-
 https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
 
@@ -28,5 +27,4 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide
   ----------------------------------
   UNO/NANO : Atmel ATMega 328 Chips
   are not supported!!!!!
-  Use Leonardo/ProMicro (Atmel 32u4)
   ----------------------------------

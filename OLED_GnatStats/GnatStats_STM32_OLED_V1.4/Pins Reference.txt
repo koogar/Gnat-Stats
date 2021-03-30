@@ -1,7 +1,6 @@
-
 https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
-  ----------------------------------
+
   Pins Reference
   ----------------------------------
   ProMicro:    SDA: D2, SCL: D3
@@ -9,13 +8,24 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide
   NeoPixel:    D10
   ----------------------------------
   QT-PY   :    SDA: D4, SCL: D5
-  NeoPixel:    A1
-  Built in NeoPixel: 11
-  
+  NeoPixel:    A3
+  Built in NeoPixel: 11 Reference only
+
   XIAO    :    SDA: D4, SCL: D5
   NeoPixel:    A1
-  Built in LED: 13
+  Built in LED:13
+  ----------------------------------
+  ESP32 LOLIN32: SDA: 21, SCL: 22
+  NeoPixel    : 19 
+  Built in LED: 5 Reference only
+  ----------------------------------
+  STM32 BluePill: SDA: PB7, SCL: PB6
+  NeoPixel  :  PA7 (MOSI)
   ----------------------------------
   uVolume :    SDA: D2, SCL: D3
   NeoPixel:    D5
+  ----------------------------------
+  UNO/NANO : Atmel ATMega 328 Chips
+  are not supported!!!!!
+  Use Leonardo/ProMicro (Atmel 32u4)
   ----------------------------------
