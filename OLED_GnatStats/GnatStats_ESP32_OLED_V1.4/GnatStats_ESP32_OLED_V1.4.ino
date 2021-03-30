@@ -39,7 +39,7 @@
     Version 1.33  : Add i2c Address change option
                     Add RotateScreen option
                     Add Neopixel Global Brightness
-                    
+
     Version 1.4  :  Add Some HardwareSerialMonitor v1.3 Features
 
     ---------------------------------------------------------------
@@ -65,10 +65,12 @@
   Adafruit SSD1306 library
   https://github.com/adafruit/Adafruit_SSD1306
 
-  SH1106 library : Not supported
- 
+  SH1106 library :
+  https://github.com/koogar/Adafruit_SH1106_ESP32
+
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
+  
   Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
 */
@@ -92,7 +94,7 @@
    | (_) |  _/ | |  | | (_) | .` \__ \
     \___/|_|   |_| |___\___/|_|\_|___/
 
-https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
 
   Pins Reference
@@ -110,13 +112,13 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide
   Built in LED:13
   ----------------------------------
   ESP32 LOLIN32: SDA: 21, SCL: 22
-  NeoPixel    : 19 
+  NeoPixel    : 19
   Built in LED: 5 Reference only
   ----------------------------------
   STM32 BluePill: SDA: PB7, SCL: PB6
-  NeoPixel  :  PA7 (MOSI)
+  NeoPixel      : PA7 (MOSI)
   ----------------------------------
-  uVolume :    SDA: D2, SCL: D3
+  uVolume :    SDA: D2, SCL: D3 
   NeoPixel:    D5
   ----------------------------------
   UNO/NANO : Atmel ATMega 328 Chips
@@ -128,10 +130,13 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide
 //----------------------------------- OLED Setup ----------------------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
+#define OLED_SDA 21 // LOLIN32
+#define OLED_SCL 22 // LOLIN32
 
 //#define OLED_SSD1306
 
-#define OLED_SH1106 // not supported on ESP32
+#define OLED_SH1106 
+
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -202,8 +207,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #include <Adafruit_SH1106_ESP32.h> // i2C not SPI
 #define SH1106_128_64
 //Adafruit_SH1106_ESP32 display(12, 14);
-#define OLED_SDA 21
-#define OLED_SCL 22
 Adafruit_SH1106_ESP32 display(OLED_SDA, OLED_SCL); //(SDA, SCL)
 #endif
 
