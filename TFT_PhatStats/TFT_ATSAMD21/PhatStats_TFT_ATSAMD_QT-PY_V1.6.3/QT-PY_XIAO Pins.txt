@@ -9,12 +9,12 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-u
   256KB of FLASH + 32KB of RAM
   ---------------------
  (TFT)
-  CS     =  6  	(GND,1,2,3,4,5,6,7)  (or to GND to save a pin) 
-  RST    =  9  	(0 ,1,2,3,4,5,6,7,9 (MI))
-  DC     =  7  	(0 ,1,2,3,4,5,6,7,9 (MI))
+  CS     =  6  	
+  RST    =  9  	
+  DC     =  7  	
   SCLK   =  8
   MOSI   =  10
-  MISO   =  9 	(*Not Required for Reference only!!!) 
+  
   
   BLIGHT =  5
   ---------------------
@@ -26,17 +26,12 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-u
   EncButton= 2
   
   ---------------------
-  i2c
-  ---------------------
-  SCL = 5  (*Not Required for Reference only!!!)
-  SDA = 4  (*Not Required for Reference only!!!)   
-  ---------------------
   
   Neopixel / LED's
   ---------------------
-  Built in LED     =  None on the QT-PY
-  NeoPixel         =  1     (1,2,3,4,5,6)
-  Built in Neopixel = 11 or (12 to turn it off)
+  Built in LED     =  XIAO  (None on the QT-PY)  
+  Built in Neopixel = 11 or (12 to turn it off) QT-PY
 
+  NeoPixel         =  1    
 
 ==========================================================================================================
