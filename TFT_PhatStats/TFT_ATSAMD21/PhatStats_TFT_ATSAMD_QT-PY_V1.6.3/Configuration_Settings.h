@@ -18,25 +18,23 @@
    -------
    GPL v2
 
-  https://creativecommons.org/licenses/
-
   https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX
   http://slemi.info/2020/03/19/custom-glcd-font-tutorial/
 
 
-
-  Notes:
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-
-  https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/adafruit2-pinouts
-
-  Board Manager
-  -------------
-
+  Board Manager QY-PY
+  -------------------
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
 
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32 based boards such as the Blue Pill or ESP variants, due to there large memory.
+  Board Manager XIAO
+  -------------------
+  https://wiki.seeedstudio.com/Seeeduino-XIAO/
+
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+
 
   The Windows application "HardwareSerialMonitor v1.3"  uses the OpenHardwareMonitorLib.dll to detect the hardware, OpenHardwareMonitor is not required!!  http://openhardwaremonitor.org/
 
@@ -114,7 +112,7 @@
 //-------------------------------------------------------
 
 int NeoBrightness = 20;         //Global Brightness
-#define enableQTPYneopixel      // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+//#define enableQTPYneopixel      // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU

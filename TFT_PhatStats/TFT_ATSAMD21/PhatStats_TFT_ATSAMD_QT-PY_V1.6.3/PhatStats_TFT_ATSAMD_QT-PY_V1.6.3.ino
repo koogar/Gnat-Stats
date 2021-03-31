@@ -6,14 +6,22 @@
   GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
   http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-  https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/adafruit2-pinouts
-  Board Manager
-  -------------
+ 
+  https://learn.adafruit.com/adafruit-qt-py
+  Board Manager QY-PY
+  -------------------
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
-  Search: Adafruit SAMD Boards
+
   
+  https://wiki.seeedstudio.com/Seeeduino-XIAO/
+  Board Manager XIAO
+  -------------------
+ 
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
