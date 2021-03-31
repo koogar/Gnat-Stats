@@ -128,15 +128,13 @@
   ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!*/
 
 //----------------------------------- OLED Setup ----------------------------------------
-
-/*Uncomment the correct OLED display type, uncomment only one!!!*/
+/* Define hardware i2c pins for SH1106 only */
 #define OLED_SDA 21 // LOLIN32
 #define OLED_SCL 22 // LOLIN32
 
-//#define OLED_SSD1306
-
-#define OLED_SH1106 
-
+/*Uncomment the correct OLED display type, uncomment only one!!!*/
+#define OLED_SSD1306
+//#define OLED_SH1106 
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's

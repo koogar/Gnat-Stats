@@ -1,0 +1,39 @@
+   ESP32 (LOLIN32 V1)
+  ----------------------
+  ILI9341 320x240 PINOUT
+  ----------------------
+  eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
+
+  ESP32 Lolin32 v1
+  ---------------------
+ (TFT)
+
+  SCLK   =  18
+  MOSI   =  23
+
+  MISO   =  19 (*Not Required for Reference only!!!)
+
+  DC     =  16     (2)
+  CS     =  17     (15) 
+  RST    =  19     (-1)
+ 
+  B.LIGHT =  4    (0, 13)
+  ---------------------
+
+  Rotary Encoder
+  ---------------------
+  EncoderA = 2    (4)
+  EncoderB = 15   (16)
+  
+  EncButton= 0    (17)
+  ---------------------
+  i2c
+  ---------------------
+  SCL = 22  (*Not Required for Reference only!!!)
+  SDA = 21  (*Not Required for Reference only!!!)
+  ---------------------
+
+  Neopixel / LED's
+  ---------------------
+  Built in LED =  5
+  Neopixel     =  32
