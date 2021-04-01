@@ -1,22 +1,36 @@
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 #define CODE_VERS  "1.6.3"  // Code version number
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 /*
-  GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
+  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+  Rupert Hirst & Colin Conway © 2016 - 2018
+  http://tallmanlabs.com
+  http://runawaybrainz.blogspot.com/
+
+  Licence
+  --------
+  GPL v2
+
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
+  UNO / NANO / MINI are not supported!!!
 
   Board Manager ESP32 Core
-  -------------------------
-  https://github.com/espressif/arduino-esp32
-
-  This repo is available as a package usable with Arduino Boards Manager.
+  -------------------
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+  
   Use this link in the "Additional Boards Managers URLs" field:
   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 
-   _    ___ ___ ___    _
+  Libraries
+  ---------
+  Adafruit Neopixel
+  https://github.com/adafruit/Adafruit_NeoPixel
+
+  Adafruit GFX Library
+  https://github.com/adafruit/Adafruit-GFX-Library
+
+  Adafruit ILI9341
+  https://github.com/adafruit/Adafruit_ILI9341
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
@@ -26,11 +40,8 @@
 
 #include <Wire.h>
 #include <SPI.h>
-
-
 #include <Adafruit_GFX.h>   //https://github.com/adafruit/Adafruit-GFX-Library
 #include <Fonts/Org_01.h>
-
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_large.h"
@@ -39,13 +50,12 @@
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
-  ESP32 Lolin32 v1
-  ---------------------
-  (TFT)
-  CS     =  17     (15) 
+  ESP32 Lolin32 v1 (Tested)
+  -------------------------
+  CS     =  17     (15)
   RST    =  19     (-1)
   DC     =  16     (2)
-  
+
   SCLK   =  18
   MOSI   =  23
 
@@ -58,7 +68,7 @@
   ---------------------
   EncoderA = 2  (4)
   EncoderB = 15 (16)
-  
+
   EncButton= 0  (17)
   ---------------------
   i2c
@@ -79,7 +89,6 @@
 #include <Adafruit_NeoPixel.h>
 #define NEOPIN     32
 #define NUM_PIXELS 16
-
 
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
@@ -128,7 +137,7 @@ int switchPin = 0; // SW
 
 /* Screen TFT backlight brightness */
 //Note: analogWrite() PWM is not supported in the ESP32 Core
-int TFT_backlight_PIN = 4;  //13; 
+int TFT_backlight_PIN = 4;  //13;
 
 /* More Display stuff*/
 int displayDraw = 0;
@@ -327,7 +336,7 @@ void serialEvent() {
 
       /* Serial Activity LED */
       digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-   
+
     }
   }
 }
@@ -377,11 +386,11 @@ void activityChecker() {
 
 void backlightON () {
   //analogWrite(TFT_backlight_PIN, TFT_brightness); // TFT turn on backlight
-      digitalWrite(TFT_backlight_PIN, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  digitalWrite(TFT_backlight_PIN, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
 }
 
 void backlightOFF () {
-digitalWrite(TFT_backlight_PIN, LOW);    // turn the LED off HIGH(OFF) LOW (ON)
+  digitalWrite(TFT_backlight_PIN, LOW);    // turn the LED off HIGH(OFF) LOW (ON)
 
 #ifdef Encoder_PWM_PNP
   //analogWrite(TFT_backlight_PIN, 255);       // TFT turn off backlight  PWM 3906 Transitor 5v ,

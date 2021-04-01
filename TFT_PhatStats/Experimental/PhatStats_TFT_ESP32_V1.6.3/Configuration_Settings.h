@@ -7,41 +7,6 @@
 
   /*
 
-   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst & Colin Conway © 2016-2018
-
-   http://tallmanlabs.com
-   http://runawaybrainz.blogspot.com/
-   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
-
-   Licence
-   -------
-   GPL v2
-
-  https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX
-  http://slemi.info/2020/03/19/custom-glcd-font-tutorial/
-
-  Notes:
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-
-  Board Manager ESP32 Core 
-  -------------------------
-  https://github.com/espressif/arduino-esp32
-
-  This repo is available as a package usable with Arduino Boards Manager.
-  Use this link in the "Additional Boards Managers URLs" field:
-  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-
-   _    ___ ___ ___    _
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32 based boards such as the Blue Pill or ESP variants, due to there large memory.
-
-  The Windows application "HardwareSerialMonitor v1.3"  uses the OpenHardwareMonitorLib.dll to detect the hardware, OpenHardwareMonitor is not required!!  http://openhardwaremonitor.org/
-
-  This Sketch Requires HardwareSerialMonitor v1.3 or higher
-
-  "Hardware Serial Monitor" Was inspired by the Visual Studio project kindly shared by psyrax see: https://github.com/psyrax/SerialMonitor
-
-
   V1.58:  STM32 ( / ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
 
           Button to change between portrait and landscape mode.

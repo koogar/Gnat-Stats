@@ -1,48 +1,66 @@
-
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 #define CODE_VERS  "1.6.3"  // Code version number
 
 /*
-  GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
+  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+  Rupert Hirst & Colin Conway © 2016 - 2018
+  http://tallmanlabs.com
+  http://runawaybrainz.blogspot.com/
+
+  Licence
+  --------
+  GPL v2
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
+  UNO / NANO / MINI are not supported!!!
 
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
+  Board Core
+  ------------
+  Link Below for the STM32 Bootloader and Arduino Core
+  (you may have to install the Arduino Due core also for the compiler.)
 
-  Link Below for the STM32 Bootloader and Arduino Core (you may have to install the Arduino Due core also for the compiler.)
+  https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
 
   https://github.com/rogerclarkmelbourne/Arduino_STM32
 
+  Bootloader:
   https://github.com/rogerclarkmelbourne/STM32duino-bootloader/tree/master/binaries
 
   BluePill_generic_boot20_pc13.bin  (On the "Bluepill" bootloader "_pc13" refers to the LED pin. )
 
-  https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
 
   USB Issues:
   https://www.onetransistor.eu/2017/11/stm32-bluepill-arduino-ide.html
 
-  Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
-  Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
+  Libraries
+  ---------
+  Adafruit Neopixel:
+  Not Supported On STM32
+
+  Adafruit GFX Library:
+  NOTE: Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
+  Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.Libraries
+
+  https://github.com/adafruit/Adafruit-GFX-Library
+
+  Adafruit ILI9341
+  https://github.com/adafruit/Adafruit_ILI9341
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 */
+
 
 #include <Wire.h>
 #include <SPI.h>
 
-/*Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards (STM32Duino.com) -
+/*Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.*/
-#include <Adafruit_GFX.h> // V1.4.7 / v1.7.0 / v1.7.5 Work  https://github.com/adafruit/Adafruit-GFX-Library
-#include <Fonts/Org_01.h>
 
+#include <Adafruit_GFX.h>
+#include <Fonts/Org_01.h>
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_STM32.h"
@@ -65,7 +83,7 @@
   ---------------
   EncoderA = PB8
   EncoderB = PB9
-  
+
   Button   = PB5
   ---------------
   /*
@@ -337,7 +355,7 @@ void backlightOFF () {
 void splashScreenSumo() {
 
   /* Initial Boot Screen, */
-  
+
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
   tft.setFont(&Org_01);
@@ -388,7 +406,7 @@ void splashScreenSumo() {
 
   delay(3000);
 
-  
+
   tft.fillScreen(ILI9341_BLACK);
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);

@@ -7,45 +7,6 @@
 
   /*
 
-   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst & Colin Conway © 2016-2018
-
-   http://tallmanlabs.com
-   http://runawaybrainz.blogspot.com/
-   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
-
-   Licence
-   -------
-   GPL v2
-
-  https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX
-  http://slemi.info/2020/03/19/custom-glcd-font-tutorial/
-
-
-
-  Notes:
-  Link Below for the STM32 Bootloader and Arduino Core (you may have to install the Arduino Due core also for the compiler.
-
-  https://github.com/rogerclarkmelbourne/Arduino_STM32
-
-  https://github.com/rogerclarkmelbourne/STM32duino-bootloader/tree/master/binaries
-
-  BluePill_generic_boot20_pc13.bin  (On the "Bluepill" bootloader "_pc13" refers to the LED pin. )
-
-  https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
-
-    Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
-  Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
-
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-
-  The Windows application "HardwareSerialMonitor v1.3"  uses the OpenHardwareMonitorLib.dll to detect the hardware, OpenHardwareMonitor is not required!!  http://openhardwaremonitor.org/
-
-  This Sketch Requires HardwareSerialMonitor v1.3 or higher
-
-  "Hardware Serial Monitor" Was inspired by the Visual Studio project kindly shared by psyrax see: https://github.com/psyrax/SerialMonitor
-
-
   V1.58:  STM32 ( / ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
 
           Button to change between portrait and landscape mode.
@@ -166,10 +127,10 @@ v1.59.6:
 /* Define your Backlight PWM, Uncomment only one choice, */
 
 /* PWM Using a Static fixed value, connected direct to the MCU PIN*/
-//#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
+#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
 
 /* PWM connected direct to the MCU PIN*/
-#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
+//#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
 /* PWM Using a Rotary Encoder with a PNP transistor*/
 /* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */

@@ -1,28 +1,42 @@
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 #define CODE_VERS  "1.6.3B"  // Code version number
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 /*
-  GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
-  This Sketch Requires HardwareSerialMonitor v1.3 or higher
+  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+  Rupert Hirst & Colin Conway © 2016 - 2021
+  http://tallmanlabs.com
+  http://runawaybrainz.blogspot.com/
 
-  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
- 
-  https://learn.adafruit.com/adafruit-qt-py
+  Licence
+  --------
+  GPL v2
+
+  This Sketch Requires HardwareSerialMonitor v1.3 or higher
+  UNO / NANO / MINI are not supported!!!
+
   Board Manager QY-PY
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
 
-  
-  https://wiki.seeedstudio.com/Seeeduino-XIAO/
   Board Manager XIAO
   -------------------
- 
+  https://wiki.seeedstudio.com/Seeeduino-XIAO/
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+  https://files.seeedstudio.com/arduino/package_seeeduino_board
+  
+  Libraries
+  ---------
+  Adafruit Neopixel
+  https://github.com/adafruit/Adafruit_NeoPixel
+
+  Adafruit GFX Library
+  https://github.com/adafruit/Adafruit-GFX-Library
+
+  Adafruit ILI9341
+  https://github.com/adafruit/Adafruit_ILI9341
+ 
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
@@ -32,11 +46,8 @@
 
 #include <Wire.h>
 #include <SPI.h>
-
-
-#include <Adafruit_GFX.h>   //https://github.com/adafruit/Adafruit-GFX-Library
+#include <Adafruit_GFX.h>
 #include <Fonts/Org_01.h>
-
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_large.h"
@@ -51,16 +62,15 @@
   256KB of FLASH + 32KB of RAM
   ---------------------
   (TFT)
-  CS     =  6 
-  RST    =  9    
-  DC     =  7    
+  CS     =  6
+  RST    =  9
+  DC     =  7
   SCLK   =  8
   MOSI   =  10
   MISO   =  9    (*Not Required for Reference only!!!)
 
   B.LIGHT =  5
   ---------------------
-
   Rotary Encoder
   ---------------------
   EncoderA = 4
@@ -79,12 +89,12 @@
   XIAO Built in LED       =  13  None on the QT-PY     (*Not Required for Reference only!!!)
   QT-PY Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
 
-  NeoPixel         =  1     
+  NeoPixel         =  1
   ==========================================================================================================
 */
 
 #include <Adafruit_NeoPixel.h>
-#define NEOPIN      1 
+#define NEOPIN      1
 #define NUM_PIXELS 16
 
 /*onboard XIAO BUILD in LED for RX*/
@@ -118,8 +128,8 @@ Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
 #include <Adafruit_ILI9341.h>  // v1.5.6 Adafruit Standard
 
 /* ATSAMD21 SPi Hardware only for speed*/
-#define TFT_CS     6  
-#define TFT_DC     7  
+#define TFT_CS     6
+#define TFT_DC     7
 #define TFT_RST    9
 
 /* These pins do not have to be defined as they are hardware pins */
@@ -200,11 +210,11 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
-  
-  #ifdef Adafruit_QTPY
+
+#ifdef Adafruit_QTPY
   RX_pixel.begin();  // This initializes the NeoPixel library.
-  #endif
-  
+#endif
+
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
@@ -217,11 +227,11 @@ void setup() {
   pinMode (encoderOutB, INPUT);
   pinMode(switchPin, INPUT_PULLUP);
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
-  
-  #ifdef Seeeduino_XIAO
+
+#ifdef Seeeduino_XIAO
   pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-  #endif
-  
+#endif
+
   backlightOFF();
 
   /* TFT SETUP */
@@ -247,15 +257,15 @@ void setup() {
 void loop() {
 
   /*Serial Activity LED */
-  #ifdef Seeeduino_XIAO
+#ifdef Seeeduino_XIAO
   digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-  #endif
-  
+#endif
+
   /* Serial Activity NeoPixel */
-  #ifdef Adafruit_QTPY
+#ifdef Adafruit_QTPY
   RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
   RX_pixel.show();
-  #endif
+#endif
 
 
   /*Encoder Mode Button*/
@@ -357,15 +367,15 @@ void serialEvent() {
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
       /* Serial Activity LED */
-      #ifdef Seeeduino_XIAO
+#ifdef Seeeduino_XIAO
       digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-      #endif
-      
+#endif
+
       /* Serial Activity NeoPixel */
-      #ifdef Adafruit_QTPY
+#ifdef Adafruit_QTPY
       RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
       RX_pixel.show();
-      #endif
+#endif
 
     }
   }

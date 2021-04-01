@@ -7,42 +7,6 @@
 
   /*
 
-   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst & Colin Conway © 2016-2018
-
-   http://tallmanlabs.com
-   http://runawaybrainz.blogspot.com/
-   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
-   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
-
-   Licence
-   -------
-   GPL v2
-
-  https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX
-  http://slemi.info/2020/03/19/custom-glcd-font-tutorial/
-
-
-  Board Manager QY-PY
-  -------------------
-  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  Install Arduino ATSAMD then ADD
-  https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
-
-  Board Manager XIAO
-  -------------------
-  https://wiki.seeedstudio.com/Seeeduino-XIAO/
-
-  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
-
-
-  The Windows application "HardwareSerialMonitor v1.3"  uses the OpenHardwareMonitorLib.dll to detect the hardware, OpenHardwareMonitor is not required!!  http://openhardwaremonitor.org/
-
-  This Sketch Requires HardwareSerialMonitor v1.3 or higher
-
-  "Hardware Serial Monitor" Was inspired by the Visual Studio project kindly shared by psyrax see: https://github.com/psyrax/SerialMonitor
-
 
   V1.58:  STM32 ( / ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
 

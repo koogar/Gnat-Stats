@@ -1,18 +1,39 @@
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 #define CODE_VERS  "1.6.3"  // Code version number
 
 /*
-  GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
-  http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
+  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+  Rupert Hirst & Colin Conway © 2016 - 2018
+  http://tallmanlabs.com
+  http://runawaybrainz.blogspot.com/
+
+  Licence
+  --------
+  GPL v2
+
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-  https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/adafruit2-pinouts
+  UNO / NANO / MINI are not supported!!!
+
   Board Manager
   -------------
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+
   Search: Adafruit SAMD Boards
+  https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/adafruit2-pinouts
+
+  Libraries
+  ---------
+  Adafruit Neopixel
+  https://github.com/adafruit/Adafruit_NeoPixel
+
+  Adafruit GFX Library
+  https://github.com/adafruit/Adafruit-GFX-Library
+
+  Adafruit ILI9341
+  https://github.com/adafruit/Adafruit_ILI9341
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
+
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -21,11 +42,8 @@
 
 #include <Wire.h>
 #include <SPI.h>
-
-
-#include <Adafruit_GFX.h> https://github.com/adafruit/Adafruit-GFX-Library
+#include <Adafruit_GFX.h>
 #include <Fonts/Org_01.h>
-
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_large.h"
@@ -45,33 +63,31 @@
   SCLK   =  24    /PB11
   MOSI   =  23    /PB10
   MISO   =  22    /PA12
-  
+
   BLIGHT =  5     /PA15
-  ---------------------
-  
+
   ---------------------
   Rotary Encoder
   ---------------------
   EncoderA = 16-A2/PB09
   EncoderB = 15-A1/PB08
   EncButton= 14-A0/PB02
-  ---------------------
-  
+
   ---------------------
   i2c
   ---------------------
   SCL = 27       /PA23
   SDA = 26       /PA22
-  
+
   ---------------------
   Neopixel / LED's
   ---------------------
   Built in LED (RED)   = 13
   Built in NeoPixel    =  8 (Use Standard NeoPixel Library (APA102?))
-  Neopixel  M0 Express = 6 or 12 
-  
+  Neopixel  M0 Express = 6 or 12
+
   /*
-  
+
   //---------------------------------------------------------------------------------------
   /* NeoPixel Setup Feather M0 Express: pins 6, 12 and MOSI*.*/
 #include <Adafruit_NeoPixel_ZeroDMA.h>
