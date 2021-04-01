@@ -1,11 +1,13 @@
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-#define CODE_VERS  "1.6.3"  // Code version number
+#define CODE_VERS  "1.6.3B"  // Code version number
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 /*
   GNAT-STATS & PHAT-STATS PC Performance Monitor - Version 1.x  Rupert Hirst & Colin Conway © 2016
   http://tallmanlabs.com  & http://runawaybrainz.blogspot.com/
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
  
   https://learn.adafruit.com/adafruit-qt-py
   Board Manager QY-PY
@@ -43,18 +45,18 @@
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
-  Adafruit QT-PY
+  Adafruit QT-PY / XIAO
   ---------------------
   ATSAMD21G18 @ 48MHz with 3.3V logic/power
   256KB of FLASH + 32KB of RAM
   ---------------------
   (TFT)
-  CS     =  6    (GND,1,2,3,4,5,6,7)  (or to GND to save a pin)
-  RST    =  9    (0  ,1,2,3,4,5,6,7,9(MI))
-  DC     =  7    (0  ,1,2,3,4,5,6,7,9(MI))
+  CS     =  6 
+  RST    =  9    
+  DC     =  7    
   SCLK   =  8
   MOSI   =  10
-  MISO   =  9   (*Not Required for Reference only!!!)
+  MISO   =  9    (*Not Required for Reference only!!!)
 
   B.LIGHT =  5
   ---------------------
@@ -74,9 +76,10 @@
 
   Neopixel / LED's
   ---------------------
-  Built in LED     =  None on the QT-PY
-  NeoPixel         =  1     (1,2,3,4,5,6)
-  Built in Neopixel = 11 or (12 to turn it off)
+  XIAO Built in LED       =  13  None on the QT-PY     (*Not Required for Reference only!!!)
+  QT-PY Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
+
+  NeoPixel         =  1     
   ==========================================================================================================
 */
 
@@ -84,8 +87,13 @@
 #define NEOPIN      1 
 #define NUM_PIXELS 16
 
+/*onboard XIAO BUILD in LED for RX*/
+#ifdef Seeeduino_XIAO
+#define RX_LEDPin 13
+#endif
+
 /*onboard QT-PY NeoPixel for RX*/
-#ifdef enableQTPYneopixel
+#ifdef Adafruit_QTPY
 #define RX_NeoPin 11  //Built in NeoPixel, on the QT-PY
 #else
 #define RX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
@@ -192,7 +200,11 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
+  
+  #ifdef Adafruit_QTPY
   RX_pixel.begin();  // This initializes the NeoPixel library.
+  #endif
+  
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
@@ -205,7 +217,11 @@ void setup() {
   pinMode (encoderOutB, INPUT);
   pinMode(switchPin, INPUT_PULLUP);
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
-  //pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+  
+  #ifdef Seeeduino_XIAO
+  pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+  #endif
+  
   backlightOFF();
 
   /* TFT SETUP */
@@ -231,10 +247,15 @@ void setup() {
 void loop() {
 
   /*Serial Activity LED */
-  //digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  #ifdef Seeeduino_XIAO
+  digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  #endif
+  
   /* Serial Activity NeoPixel */
+  #ifdef Adafruit_QTPY
   RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
   RX_pixel.show();
+  #endif
 
 
   /*Encoder Mode Button*/
@@ -336,10 +357,15 @@ void serialEvent() {
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
       /* Serial Activity LED */
-      //digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      #ifdef Seeeduino_XIAO
+      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      #endif
+      
       /* Serial Activity NeoPixel */
+      #ifdef Adafruit_QTPY
       RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
       RX_pixel.show();
+      #endif
 
     }
   }

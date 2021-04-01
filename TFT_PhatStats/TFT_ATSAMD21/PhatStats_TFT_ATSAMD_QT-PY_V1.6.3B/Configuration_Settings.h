@@ -13,6 +13,7 @@
    http://tallmanlabs.com
    http://runawaybrainz.blogspot.com/
    https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
+   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
 
    Licence
    -------
@@ -110,9 +111,10 @@
 //HardwareSerialMonitor does not require OpenHardwareMonitor to aquire data for GnatStats
 
 //-------------------------------------------------------
+/* Uncomment your Micro Processor,*/
+//#define Adafruit_QTPY
+#define Seeeduino_XIAO
 
-int NeoBrightness = 20;         //Global Brightness
-//#define enableQTPYneopixel      // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU
@@ -161,6 +163,7 @@ int NeoBrightness = 20;         //Global Brightness
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
+int NeoBrightness = 20;         //Global Brightness
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
 //-------------------------------------------------------
 
