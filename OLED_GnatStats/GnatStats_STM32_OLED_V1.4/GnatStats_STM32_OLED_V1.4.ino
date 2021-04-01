@@ -39,7 +39,7 @@
     Version 1.33  : Add i2c Address change option
                     Add RotateScreen option
                     Add Neopixel Global Brightness
-                    
+
     Version 1.4  :  Add Some HardwareSerialMonitor v1.3 Features
 
     ---------------------------------------------------------------
@@ -73,6 +73,8 @@
   https://github.com/adafruit/Adafruit-GFX-Library
   Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
   Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 */
 
 #include <SPI.h>

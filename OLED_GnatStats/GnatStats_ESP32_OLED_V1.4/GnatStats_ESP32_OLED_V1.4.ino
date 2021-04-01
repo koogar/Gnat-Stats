@@ -4,7 +4,7 @@
     | | | |\/| | |__/ _` | '_ (_-<___| (_ | ' \/ _` |  _\__ \  _/ _` |  _(_-<
     |_| |_|  |_|____\__,_|_.__/__/    \___|_||_\__,_|\__|___/\__\__,_|\__/__/
 
-   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
    Rupert Hirst & Colin Conway © 2016-2018
 
    http://tallmanlabs.com
@@ -70,9 +70,8 @@
 
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
-  
-  Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
-  Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 */
 
 #include <SPI.h>
@@ -118,7 +117,7 @@
   STM32 BluePill: SDA: PB7, SCL: PB6
   NeoPixel      : PA7 (MOSI)
   ----------------------------------
-  uVolume :    SDA: D2, SCL: D3 
+  uVolume :    SDA: D2, SCL: D3
   NeoPixel:    D5
   ----------------------------------
   UNO/NANO : Atmel ATMega 328 Chips
@@ -134,7 +133,7 @@
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 #define OLED_SSD1306
-//#define OLED_SH1106 
+//#define OLED_SH1106
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's

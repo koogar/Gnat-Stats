@@ -14,7 +14,7 @@
    Licence
    -------
    GPL v2
-   
+
   Notes:
   UNO/NANO are not supported!!! use this sketch with Atmel 32u4 based boards such as, the Leonardo or ProMicro, due to to its native USB support.
   The Windows application "HardwareSerialMonitor v1.1 & V1.3"  uses the OpenHardwaremonitor  OpenHardwareMonitorLib.dll to detect the hardware.  http://openhardwaremonitor.org/
@@ -39,7 +39,7 @@
     Version 1.33  : Add i2c Address change option
                     Add RotateScreen option
                     Add Neopixel Global Brightness
-                    
+
     Version 1.4  :  Add Some HardwareSerialMonitor v1.3 Features
 
     ---------------------------------------------------------------
@@ -60,11 +60,11 @@
   Adafruit library ported to the SH1106
   https://github.com/badzz/Adafruit_SH1106      Currently used library in this sketch!!!
 
-  https://github.com/wonho-maker/Adafruit_SH1106
-  https://github.com/shondll/Adafruit_SSD1306
-
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+
 */
 #include <SPI.h>
 #include <Wire.h>

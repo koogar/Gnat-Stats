@@ -1,15 +1,16 @@
+#define CODE_VERS  "1.4"  // Code version number 
+
 /*
    _____ __  __ _         _            ___           _   ___ _        _
   |_   _|  \/  | |   __ _| |__ ______ / __|_ _  __ _| |_/ __| |_ __ _| |_ ___
     | | | |\/| | |__/ _` | '_ (_-<___| (_ | ' \/ _` |  _\__ \  _/ _` |  _(_-<
     |_| |_|  |_|____\__,_|_.__/__/    \___|_||_\__,_|\__|___/\__\__,_|\__/__/
 
-   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
    Rupert Hirst & Colin Conway © 2016-2018
 
    http://tallmanlabs.com
    http://runawaybrainz.blogspot.com/
-   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
 
    Licence
    -------
@@ -63,12 +64,21 @@
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
 
-  Board Manager
-  -------------
+  Board Manager QY-PY
+  -------------------
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
-  Search: Adafruit SAMD Boards
 
+  Board Manager XIAO
+  -------------------
+  https://wiki.seeedstudio.com/Seeeduino-XIAO/
+
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+  https://files.seeedstudio.com/arduino/package_seeeduino_board
+
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 */
 #include <SPI.h>
 #include <Wire.h>
@@ -76,9 +86,6 @@
 #include <Adafruit_GFX.h>
 #include "bitmap.h"
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#define CODE_VERS  "1.4"  // Code version number 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*--------------------------------------------------------------------------------------
     ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
    / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
@@ -109,7 +116,6 @@
   ----------------------------------
   UNO/NANO : Atmel ATMega 328 Chips
   are not supported!!!!!
-  Use Leonardo/ProMicro (Atmel 32u4)
   ----------------------------------
 
   ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!*/
@@ -118,10 +124,10 @@
 //----------------------------------- OLED Setup ----------------------------------------
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 /* Adafruit QT-PY*/
-#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+//#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Seeeduino XIAO,*/
-//#define XIAO
+#define XIAO
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 #define OLED_SSD1306
@@ -397,12 +403,12 @@ void serialEvent() {
       stringComplete = true;
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
-      
+
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
-      #ifdef XIAO
-      
+#ifdef XIAO
+
       /* XIAO Serial Activity LED */
       digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
 #endif
