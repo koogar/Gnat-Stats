@@ -136,10 +136,6 @@ int NeoBrightness = 20;         //Global Brightness
 /* PWM connected direct to the MCU PIN*/
 #define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
-/* PWM Using a Rotary Encoder with a PNP transistor*/
-/* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */
-/*#define Encoder_PWM_PNP */ // use rotary encoder for PWM screen brightness control with NPN Transistor 5v.
-
 //---------------------------------------------------------------------------------------
 /* Option to disable IR*/
 #define enableIR
@@ -151,7 +147,7 @@ int NeoBrightness = 20;         //Global Brightness
 
 //---------------------------------------------------------------------------------------
 
-/* Uncomment below to blank the screen on serial timeout to retain info eg: PC crash fault diagnostics  */
+/* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
 #define enableActivityChecker
 
 /* How long the display takes to timeout due to inactive serial data from the windows application */

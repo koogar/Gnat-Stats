@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.6.3.IR"  // Code version number
+#define CODE_VERS  "1.6.4.IR"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -281,6 +281,7 @@ void setup() {
   /* InfraRed */
   irrecv.enableIRIn(); // Enable Infra Red
 
+
   /* Setup HID*/
   // Sends a clean report to the host. This is important on any Arduino type.
   Consumer.begin();
@@ -326,12 +327,21 @@ void setup() {
   splashScreen();
   //splashScreenSumo();
 
-
 }
 
 /* End of Set up */
 
 void loop() {
+
+  serialEvent();     // Check for Serial Activity
+
+#ifdef enableIR
+  infraRed ();       // Media Control Function
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker(); // Turn off screen when no activity
+#endif
 
   /*Serial Activity LED */
 #ifdef Seeeduino_XIAO
@@ -359,7 +369,7 @@ void loop() {
     tft.fillScreen(ILI9341_BLACK);
 
     /* Reset count if over max mode number, */
-    if (counter == 4) // Number of screens available when button pressed
+    if (counter == 2) // Number of screens available when button pressed
     {
       counter = 0;
     }
@@ -383,31 +393,27 @@ void loop() {
         DisplayStyle_Landscape_NoBlink ();
 
         break;
+        /*
+              case 2: // 3rd SCREEN
+                //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 3 C2");
+                DisplayStyle_Portrait_NoBlink();
 
-      case 2: // 3rd SCREEN
-        //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 3 C2");
-        DisplayStyle_Portrait_NoBlink();
+                break;
 
-        break;
+              case 3: // 4th SCREEN
+                //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 4 C3");
+                DisplayStyle_Landscape_NoBlink();
 
-      case 3: // 4th SCREEN
-        //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 4 C3");
-        DisplayStyle_Landscape_NoBlink();
-
-        break;
-
+                break;
+        */
     }
 
 #ifdef Encoder_PWM
   PWM_Encoder ();
 #endif
 
-#ifdef Encoder_PWM_PNP
-  PWM_Encoder_PNP ();
-#endif
-
 #ifdef enableIR
-  infraRed ();
+  //infraRed ();
 #endif
 }
 
@@ -468,7 +474,6 @@ void serialEvent() {
 void activityChecker() {
 
 
-
   if (millis() - lastActiveConn > lastActiveDelay)
 
     activeConn = false;
@@ -479,6 +484,7 @@ void activityChecker() {
 
     /* Turn off display when there is no activity, */
     backlightOFF ();
+
 
     if (invertedStatus)
 
@@ -503,8 +509,11 @@ void activityChecker() {
     tft.fillScreen(ILI9341_BLACK);
     backlightOFF ();
     displayDraw = 0;
+
   }
+
 }
+
 
 
 //-------------------------------------------  TFT Backlight  -------------------------------------------------------------
@@ -648,6 +657,6 @@ void inverter() {
     invertedStatus = 0;
   } else {
     invertedStatus = 1;
-  };
+  }
   tft.invertDisplay(invertedStatus);
 }
