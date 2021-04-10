@@ -11,7 +11,7 @@
   NOTE DO NOT REPEAT DEFINE OR IR CODES IN HERE, OR YOU WILL GET AN ERROR
   HENCE THE CONSECUTIVE NUMBERED PLACEHOLDERS 0x00000000, 0x00000001, 0x00000002, ETC FOR UNUSED FUNCTIONS IN THE "void loop()" !
 
-  Apple White Plastic Remote Codes
+  Apple White Remote Codes
   -------------------------------
 */
 #define Next_Button       0x77E1606D: // Apple Right Button 
@@ -31,7 +31,7 @@
 //#define Vol_Up_Button       0x00000003:
 //#define Vol_Down_Button     0x00000004:
 //#define Mute_Button         0x00000005:
-//#define PlayPause_Button    0x00000006:
+//#define PlayPause_Button   0x00000006:
 #define Pause_Button          0x00000007:
 #define Play_Button           0x00000008:
 #define Repeat_Button         0x00000009:

@@ -18,6 +18,10 @@
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+  
+  Drivers
+  ------------
+  https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
 
   Board Manager XIAO
   -------------------
@@ -56,13 +60,15 @@
 #include <Adafruit_GFX.h>
 #include <Fonts/Org_01.h>
 
+#include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
+#include <IRremote.h>
+
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_large.h"
 #include "Sumo_bitmap.h"
 
-#include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
-#include <IRremote.h>
+
 
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
@@ -108,6 +114,13 @@
   ==========================================================================================================
 */
 //----------------------      InfraRed      ------------------------------
+/* Option to disable IR*/
+#define enableIR
+
+/*Remote code Selection*/
+#define IR_BOSE        // Set Bose Remote Codes
+//#define IR_AppleAlu    // Set Apple Aluminium Remote Codes
+//#define IR_AppleWhite  // Set Apple White Plastic Remote Codes
 
 /*include Defined Remote Codes*/
 #ifdef IR_AppleAlu
@@ -323,9 +336,6 @@ void setup() {
 
 void loop() {
 
-#ifdef enableIR
-  infraRed ();
-#endif
 
   /*Serial Activity LED */
 #ifdef Seeeduino_XIAO
@@ -398,6 +408,11 @@ void loop() {
 #ifdef Encoder_PWM_PNP
   PWM_Encoder_PNP ();
 #endif
+
+#ifdef enableIR
+  infraRed ();
+#endif
+
 }
 
 /* END of Main Loop */

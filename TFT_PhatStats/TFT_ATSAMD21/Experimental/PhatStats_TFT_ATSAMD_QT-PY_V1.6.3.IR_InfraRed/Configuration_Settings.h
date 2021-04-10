@@ -73,8 +73,8 @@
 //HardwareSerialMonitor does not require OpenHardwareMonitor to aquire data for GnatStats
 //---------------------------------------------------------------------------------------
 /* Uncomment your Micro Processor,*/
-//#define Adafruit_QTPY
-#define Seeeduino_XIAO
+#define Adafruit_QTPY
+//#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU
@@ -128,23 +128,16 @@ int NeoBrightness = 20;         //Global Brightness
 /* Define your Backlight PWM, Uncomment only one choice, */
 
 /* PWM Using a Static fixed value, connected direct to the MCU PIN*/
-//#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
+#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
 
 /* PWM connected direct to the MCU PIN*/
-#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
+//#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
 /* PWM Using a Rotary Encoder with a PNP transistor*/
 /* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */
 /*#define Encoder_PWM_PNP */ // use rotary encoder for PWM screen brightness control with NPN Transistor 5v.
 
 //---------------------------------------------------------------------------------------
-/* Option to disable IR*/
-#define enableIR
-
-/*Remote code Selection*/
-#define IR_BOSE        // Set Bose Remote Codes
-//#define IR_AppleAlu    // Set Apple Aluminium Remote Codes
-//#define IR_AppleWhite  // Set Apple White Plastic Remote Codes
 
 //---------------------------------------------------------------------------------------
 

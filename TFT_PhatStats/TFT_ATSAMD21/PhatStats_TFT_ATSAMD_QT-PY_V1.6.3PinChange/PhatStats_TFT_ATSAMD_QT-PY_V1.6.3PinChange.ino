@@ -19,6 +19,11 @@
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
 
+  Drivers
+  ------------
+  https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
+
+
   Board Manager XIAO
   -------------------
   https://wiki.seeedstudio.com/Seeeduino-XIAO/

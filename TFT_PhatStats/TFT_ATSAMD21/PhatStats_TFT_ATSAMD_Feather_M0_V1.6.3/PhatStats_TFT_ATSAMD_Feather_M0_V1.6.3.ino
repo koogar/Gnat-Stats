@@ -20,7 +20,11 @@
 
   Search: Adafruit SAMD Boards
   https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/adafruit2-pinouts
-
+  
+  Drivers
+  ------------
+  https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
+  
   Libraries
   ---------
   Adafruit Neopixel
