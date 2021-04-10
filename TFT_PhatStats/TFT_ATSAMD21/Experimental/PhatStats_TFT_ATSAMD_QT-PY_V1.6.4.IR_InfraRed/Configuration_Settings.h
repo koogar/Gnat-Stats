@@ -50,8 +50,15 @@
   v1.6.3 :
        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
 
-  v1.6.3.IR :
-       Add InfraRed Media Control (experimental)
+  v1.6.3.IR :(experimental)
+       Add InfraRed Media Control
+
+  v1.6.4.IR:(experimental)
+       QT-PY Only: Optimise Pins (changes from previous)
+       Remove PWM_Encoder_PNP option
+       Move ActivityChecker and Serialevent back to main loop,
+       Add option to disable ActivityChecker to retain last info before PC crash ETC
+
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
