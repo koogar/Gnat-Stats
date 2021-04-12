@@ -142,7 +142,7 @@ int NeoBrightness = 5;           //Global Brightness
 
 /* Direct MCU connection start-up level. Predefined Brightness Start-UP Level,*/
 #ifdef Static_PWM
-int TFT_brightness = 255; // 0 - 255
+int TFT_brightness = 130; // 0 - 255
 #endif
 
 /* Do not adjust, it will affect the GUI % value */

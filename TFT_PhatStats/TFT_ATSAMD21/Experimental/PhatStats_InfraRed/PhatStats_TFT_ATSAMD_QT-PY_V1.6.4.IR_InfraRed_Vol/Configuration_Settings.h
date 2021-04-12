@@ -50,11 +50,15 @@
   v1.6.3 :
        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
 
-  v1.6.4:
+  v1.6.3.IR :(experimental)
+       Add InfraRed Media Control
+
+  v1.6.4.IR:(experimental)
        QT-PY Only: Optimise Pins (changes from previous)
        Remove PWM_Encoder_PNP option
-       Move ActivityChecker and Serialevent back to main loop, 
+       Move ActivityChecker and Serialevent back to main loop,
        Add option to disable ActivityChecker to retain last info before PC crash ETC
+
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -73,18 +77,14 @@
   --------------------------------------------------------------------------------------
 */
 
-
 /* Debug Screen, Update Erasers, */
 //#define Debug
-//-------------------------------------------------------
-
+//---------------------------------------------------------------------------------------
 //HardwareSerialMonitor does not require OpenHardwareMonitor to aquire data for GnatStats
-
-//-------------------------------------------------------
+//---------------------------------------------------------------------------------------
 /* Uncomment your Micro Processor,*/
-//#define Adafruit_QTPY
-#define Seeeduino_XIAO
-
+#define Adafruit_QTPY
+//#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU
@@ -94,7 +94,7 @@
 #define NVIDIA_GRAPHICS
 //#define AMD_GRAPHICS
 
-//-------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 /* CPU & GPU Thermal Junction Max Temperature before throttling,*/
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
@@ -109,7 +109,7 @@
 #define enable_gpuFanStats%
 #define enable_gpuFanStatsRPM
 
-//-------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 #define noDegree      // lose the "o"
 #define smallPercent  // Use small percent symbol
@@ -118,9 +118,7 @@
 #define cpuNameStartLength 10
 #define gpuNameStartLength 11
 
-//-------------------------------------------------------
-
-/* Uncomment below to enable custom triggers,*/
+//---------------------------------------------------------------------------------------
 
 //#define CPU_OverClocked           // Uncomment if your CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator
 
@@ -135,7 +133,7 @@
 
 int NeoBrightness = 20;         //Global Brightness
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
-//-------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 /* Define your Backlight PWM, Uncomment only one choice, */
 
@@ -145,18 +143,16 @@ int NeoBrightness = 20;         //Global Brightness
 /* PWM connected direct to the MCU PIN*/
 //#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
-//-------------------------------------------------------
+//---------------------------------------------------------------------------------------
+/* Option to disable IR*/
+#define enableIR
 
-/* Direct MCU connection start-up level. Predefined Brightness Start-UP Level,*/
-#ifdef Static_PWM
-int TFT_brightness = 130; // 0 - 255
-#endif
+/*Remote code Selection*/
+#define IR_BOSE        // Set Bose Remote Codes
+//#define IR_AppleAlu    // Set Apple Aluminium Remote Codes
+//#define IR_AppleWhite  // Set Apple White Plastic Remote Codes
 
-/* Do not adjust, it will affect the GUI % value */
-#ifdef Encoder_PWM
-int TFT_brightness = 100;
-#endif
-//-------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 /* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
 #define enableActivityChecker
@@ -164,25 +160,10 @@ int TFT_brightness = 100;
 /* How long the display takes to timeout due to inactive serial data from the windows application */
 #define lastActiveDelay 8000
 
-//------------------------------------------------------------------------------------------------------------
-
-/* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
-int ASPECT = 0; //Do not adjust,
+//-----------------------------------------------------------------------------------------
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
 int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //
-
-
-
-
-
-
-
-
-/* Uncomment below, to enable positive and negative screen cycler not much use on a TFT 
-#define enableInvertscreen*/
-/* How long before inverting the display 
-long invertDelay = 6000; // 60 sec  delay*/

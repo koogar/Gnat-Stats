@@ -1,7 +1,7 @@
-#define CODE_VERS  "1.6.4"  // Code version number
+#define CODE_VERS  "1.6.4.IR"  // Code version number
 
 /*
-  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+  uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
   Rupert Hirst & Colin Conway © 2016 - 2021
   http://tallmanlabs.com
   http://runawaybrainz.blogspot.com/
@@ -23,7 +23,6 @@
   ------------
   https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
 
-
   Board Manager XIAO
   -------------------
   https://wiki.seeedstudio.com/Seeeduino-XIAO/
@@ -41,6 +40,13 @@
   Adafruit ILI9341
   https://github.com/adafruit/Adafruit_ILI9341
 
+  HID-Project
+  https://github.com/NicoHood/HID/wiki/Consumer-API
+
+  IRremote
+  https://github.com/z3t0/Arduino-IRremote
+
+  Hookup Guide
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -53,10 +59,17 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Fonts/Org_01.h>
+
+#include <TML_ErriezRotaryFullStep.h>
+#include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
+#include <IRremote.h>
+
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_large.h"
 #include "Sumo_bitmap.h"
+
+
 
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
@@ -83,6 +96,10 @@
   EncButton= 1
 
   ---------------------
+
+  InfraRed = 0
+
+  ---------------------
   i2c
   ---------------------
   SCL = 5  (*Not Required for Reference only!!!)
@@ -97,7 +114,32 @@
   NeoPixel         =  6
   ==========================================================================================================
 */
+//----------------------      InfraRed      ------------------------------
+/* Option to disable IR*/
+#define enableIR
 
+/*IR Setup */
+int RECEIVE_PIN      = 0;    // InfraRed Signal Pin
+IRrecv irrecv(RECEIVE_PIN);
+decode_results results;
+
+/*IR Mute LED */
+int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
+
+/*include Defined Remote Codes*/
+#ifdef IR_AppleAlu
+#include "AppleIRcodes.h"         // this is not a library its a local header Files (TAB)
+#endif
+
+#ifdef IR_AppleWhite
+#include "AppleWhiteIRcodes.h"    // this is not a library its a local header Files (TAB)
+#endif
+
+#ifdef IR_BOSE
+#include "BoseSoundDock1.h"       // this is not a library its a local header Files (TAB)
+#endif
+
+//---------------------------------------------------------------------------------------
 #include <Adafruit_NeoPixel.h>
 #define NEOPIN      6
 #define NUM_PIXELS 16
@@ -149,6 +191,11 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardwar
 #define encoderOutA 3 // CLK
 #define encoderOutB 2 // DT
 
+RotaryFullStep rotary(encoderOutA, encoderOutB);
+// Forward declaration
+void rotaryInterrupt();
+
+
 int State;
 int old_State;
 int PWM_Percent_Scale  = 100;    // start brightness Scale @ 100%
@@ -158,11 +205,32 @@ int counter = 0;
 int switchPin = 1; //0 //encoder button
 //---------------------------------------------------------------------------------------
 
+/* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
+int ASPECT = 0; //Do not adjust,
+
 /* Screen TFT backlight brightness */
 int TFT_backlight_PIN = 4;
+
+/* Direct MCU connection start-up level. Predefined Brightness Start-UP Level,*/
+#ifdef Static_PWM
+int TFT_brightness = 120; // 0 - 255
+#endif
+
+/* Do not adjust, it will affect the GUI % value */
+#ifdef Encoder_PWM
+int TFT_brightness = 100;
+#endif
+
+
 /* More Display stuff*/
 int displayDraw = 0;
 int displayOverride = 0;
+
+/* Uncomment below, to enable positive and negative screen cycler not much use on a TFT */
+//#define enableInvertscreen
+/* How long before inverting the display */
+//long invertDelay = 6000; // 60 sec  delay
+//---------------------------------------------------------------------------------------
 
 /* Timer for active connection to host*/
 boolean activeConn = false;
@@ -209,9 +277,20 @@ int  invertedStatus = 1;
 
 
 void setup() {
+  
+  // Initialize pin change interrupt on both rotary encoder pins
+  attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
 
-  Serial.begin(9600); //  USB Serial Baud Rate
-  inputString.reserve(200);
+  Serial.begin(9600);  //  USB Serial Baud Rate
+  inputString.reserve(200); // String Buffer
+
+  /* InfraRed */
+  irrecv.enableIRIn(); // Enable Infra Red
+
+  /* Setup HID*/
+  // Sends a clean report to the host. This is important on any Arduino type.
+  Consumer.begin();
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
@@ -223,13 +302,14 @@ void setup() {
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
-  /* Setup HID*/
-  // Sends a clean report to the host. This is important on any Arduino type.
-  // Consumer.begin();
 
-  /* Set up PINs*/
+  /* Set up PINs*/ 
+  #ifdef Encoder_PWM
+  //Old Encoder Function
   pinMode (encoderOutA, INPUT);
   pinMode (encoderOutB, INPUT);
+  #endif
+  
   pinMode(switchPin, INPUT_PULLUP);
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
 
@@ -255,6 +335,7 @@ void setup() {
   //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
   splashScreen();
   //splashScreenSumo();
+
 }
 
 /* End of Set up */
@@ -262,6 +343,10 @@ void setup() {
 void loop() {
 
   serialEvent();     // Check for Serial Activity
+
+#ifdef enableIR
+  infraRed ();       // Media Control Function
+#endif
 
 #ifdef  enableActivityChecker
   activityChecker(); // Turn off screen when no activity
@@ -278,7 +363,6 @@ void loop() {
   RX_pixel.show();
 #endif
 
-
   /*Encoder Mode Button*/
   int switchVal = digitalRead(switchPin);
   if (switchVal == LOW)
@@ -292,7 +376,7 @@ void loop() {
     tft.fillScreen(ILI9341_BLACK);
 
     /* Reset count if over max mode number, */
-    if (counter == 4) // Number of screens available when button pressed
+    if (counter == 2) // Number of screens available when button pressed
     {
       counter = 0;
     }
@@ -312,23 +396,23 @@ void loop() {
 
       case 1: // 2nd SCREEN
         //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 2 C1");
-        
+
         DisplayStyle_Landscape_NoBlink ();
 
         break;
+        /*
+              case 2: // 3rd SCREEN
+                //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 3 C2");
+                DisplayStyle_Portrait_NoBlink();
 
-      case 2: // 3rd SCREEN
-        //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 3 C2");
-        DisplayStyle_Portrait_NoBlink();
+                break;
 
-        break;
+              case 3: // 4th SCREEN
+                //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 4 C3");
+                DisplayStyle_Landscape_NoBlink();
 
-      case 3: // 4th SCREEN
-        //tft.setTextSize(3); tft.setCursor(0, 0); tft.println("SCREEN 4 C3");
-        DisplayStyle_Landscape_NoBlink();
-
-        break;
-
+                break;
+        */
     }
 
 #ifdef Encoder_PWM
@@ -360,6 +444,7 @@ void allNeoPixelsRED() {
   delay response. Multiple bytes of data may be available.
 */
 void serialEvent() {
+
   while (Serial.available()) {
     //while (Serial.available() > 0) {
     // get the new byte:
@@ -430,6 +515,7 @@ void activityChecker() {
 }
 
 
+
 //-------------------------------------------  TFT Backlight  -------------------------------------------------------------
 
 void backlightON () {
@@ -437,7 +523,6 @@ void backlightON () {
 }
 
 void backlightOFF () {
-
   analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight fixed / no transistor 3.3v PWM ,
   //digitalWrite(TFT_backlight_PIN, LOW);       // turn the Backlight LOW to stop PWM idle flicker on ATSAMD
 }
@@ -565,6 +650,6 @@ void inverter() {
     invertedStatus = 0;
   } else {
     invertedStatus = 1;
-  };
+  }
   tft.invertDisplay(invertedStatus);
 }
