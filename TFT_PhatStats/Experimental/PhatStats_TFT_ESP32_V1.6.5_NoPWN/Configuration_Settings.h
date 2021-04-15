@@ -59,7 +59,7 @@
        Move encoder modes in its own function tab
        Rename switchpin to encoder_Button
        Clean up old stuff
-       
+
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -76,6 +76,7 @@
   --------------------------------------------------------------------------------------
 */
 
+//Note: When uploading the sketch to the ESP32 disconnect Pin 2. Or it may fail to upload
 /* Uncomment your CPU,*/
 //#define AMD_CPU
 #define INTEL_CPU
@@ -139,8 +140,7 @@ int NeoBrightness = 20;         //Global Brightness
 int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
-int Serial_eventDelay = 15; //
-
+int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip
 
 
 /* Debug Screen, Update Erasers, */
