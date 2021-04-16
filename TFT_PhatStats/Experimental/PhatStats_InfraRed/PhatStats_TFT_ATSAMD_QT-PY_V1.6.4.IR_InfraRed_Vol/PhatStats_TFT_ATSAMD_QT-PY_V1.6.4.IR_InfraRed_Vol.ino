@@ -43,8 +43,8 @@
   HID-Project
   https://github.com/NicoHood/HID/wiki/Consumer-API
 
-  IRremote
-  https://github.com/z3t0/Arduino-IRremote
+  IRremote NOTE: ( Only use Version 2.8!!!!!)
+  https://github.com/z3t0/Arduino-IRremote  
 
   Hookup Guide
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
