@@ -1,4 +1,3 @@
-
 /*
       ____  __  _____  ______   ______________  ___________    __________________
      / __ \/ / / /   |/_  __/  / ___/_  __/   |/_  __/ ___/   /_  __/ ____/_  __/
@@ -7,45 +6,6 @@
   /_/   /_/ /_/_/  |_/_/     /____//_/ /_/  |_/_/  /____/    /_/ /_/     /_/
 
   /*
-
-   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst & Colin Conway © 2016-2018
-
-   http://tallmanlabs.com
-   http://runawaybrainz.blogspot.com/
-   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
-
-   Licence
-   -------
-   GPL v2
-
-
-  https://rop.nl/truetype2gfx/   //truetype2gfx - Converting fonts from TrueType to Adafruit GFX
-  http://slemi.info/2020/03/19/custom-glcd-font-tutorial/
-
-
-
-  Notes:
-  Link Below for the STM32 Bootloader and Arduino Core (you may have to install the Arduino Due core also for the compiler.
-
-  https://github.com/rogerclarkmelbourne/Arduino_STM32
-
-  https://github.com/rogerclarkmelbourne/STM32duino-bootloader/tree/master/binaries
-
-  BluePill_generic_boot20_pc13.bin  (On the "Bluepill" bootloader "_pc13" refers to the LED pin. )
-
-  https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
-
-    Adafruit_GFX Version 1.8.0 and higher doesn't compile for ESP8266 & STM32 Boards -
-  Downgrade to Adafruit_GFX Version 1.7.5 in the library manager.
-
-  UNO/NANO/MINI are not supported!!! use this sketch with STM32/ESP8622/ATSAMD21 based boards , due to larger memory.
-
-  The Windows application "HardwareSerialMonitor v1.3"  uses the OpenHardwareMonitorLib.dll to detect the hardware, OpenHardwareMonitor is not required!!  http://openhardwaremonitor.org/
-
-  This Sketch Requires HardwareSerialMonitor v1.3 or higher
-
-  "Hardware Serial Monitor" Was inspired by the Visual Studio project kindly shared by psyrax see: https://github.com/psyrax/SerialMonitor
 
 
   V1.58:  STM32 ( / ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
@@ -72,24 +32,34 @@
   V1.59:
         Rotary Encoder Brightness Control.
 
-v1.59.6:
+  v1.59.6:
         ADD: CPU Turbo & GPU Boost Clock Indicator with Overclock Frequency Gain Display
 
         Minimise Screen Refresh Blinking using "tft.setTextColor(Text, Background);"
         and "Magic Digit Eraser" Function for digits that gain in length.
         (the above only works for the default font!!! (This is a limitation of the GRFX library)
 
-   v1.6:
-
-        ADD: Tweaks
-
   v1.6.1 :
-  
+
         ADD: ATSAMD21 Support
         ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
-  
-  v1.6.2 :  
+
+  v1.6.2 :
         Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
+
+  v1.6.3 :
+       Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
+
+  v1.6.4:
+       QT-PY Only: Optimise Pins (changes from previous)
+       Remove PWM_Encoder_PNP option
+       Move ActivityChecker and Serialevent back to main loop,
+       Add option to disable ActivityChecker to retain last info before PC crash ETC
+
+  v1.6.5:
+       Move encoder modes in its own function tab
+       Rename switchpin to encoder_Button
+       Clean up old stuff
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -104,13 +74,11 @@ v1.59.6:
    | (_) |  _/ | |  | | (_) | .` \__ \
     \___/|_|   |_| |___\___/|_|\_|___/
 
-  --------------------------------------------------------------------------------------
-*/
+  --------------------------------------------------------------------------------------*/
 
-
-/* Debug Screen, Update Erasers, */
-//#define Debug
-//-------------------------------------------------------
+/* Uncomment your Micro Processor,*/
+#define Adafruit_QTPY
+//#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU
@@ -126,7 +94,7 @@ v1.59.6:
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
 #define GPU_TJMAX 83   //  TJ Max for the Nvidia GTX1080 = 83c
 
-/* CPU & GPU Turbo/Boost Frequency Values */
+/* CPU & GPU Turbo/Boost Frequency Values in Mhz */
 #define CPU_BOOST 3700  //  Intel Core i9600k = 3700MHz Turbo to 4600MHz
 #define GPU_BOOST 1683  //  MSi GamingX 1080 = 1683MHz
 
@@ -134,10 +102,7 @@ v1.59.6:
 #define enable_gpuPowerStats // Nvidia Specific???
 #define enable_gpuFanStats%
 #define enable_gpuFanStatsRPM
-
-/* Reserved,*/
-#define enable_LibreNet       // experimental
-
+#define enable_LibreNet
 //-------------------------------------------------------
 
 #define noDegree      // lose the "o"
@@ -152,64 +117,42 @@ v1.59.6:
 /* Uncomment below to enable custom triggers,*/
 
 //#define CPU_OverClocked           // Uncomment if your CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator
-
-#define enable_ShowFrequencyGain 
+#define enable_ShowFrequencyGain
 
 /* Uncomment only one of the below,*/
-#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
-//#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
+//#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
+#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
 
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
+int NeoBrightness = 20;         //Global Brightness
+#define enableNeopixelGauges     // NeoPixel ring bargraph example
 //-------------------------------------------------------
 
 /* Define your Backlight PWM, Uncomment only one choice, */
 
-/* PWM Using a Static fixed value, connected direct to the MCU PIN*/
+/* PWM Using a Static fixed value, Backlight connected direct to the MCU PIN*/
 //#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
 
-/* PWM connected direct to the MCU PIN*/
+/* Rotary encoder adjustable PWM, Backlight connected direct to the MCU PIN */
 #define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
 
-/* PWM Using a Rotary Encoder with a PNP transistor*/
-/* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */
-//#define Encoder_PWM_PNP // use rotary encoder for PWM screen brightness control with NPN Transistor 5v.
-
 //-------------------------------------------------------
 
-/* Direct MCU connection start-up level. Predefined Brightness Start-UP Level,*/
-#ifdef Static_PWM
-int TFT_brightness = 255; // 0 - 255
-#endif
-
-/* Do not adjust, it will affect the GUI % value */
-#ifdef Encoder_PWM
-int TFT_brightness = 100;
-
-#endif
-/* Do not adjust, it will affect the GUI % value */
-#ifdef Encoder_PWM_PNP
-int TFT_brightness = 155;
-#endif
-
-//-------------------------------------------------------
-
-/* Uncomment below to blank the screen on serial timeout to retain info eg: PC crash fault diagnostics  */
+/* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
 #define enableActivityChecker
 
 /* How long the display takes to timeout due to inactive serial data from the windows application */
-#define lastActiveDelay 10000
+#define lastActiveDelay 8000
 
 //------------------------------------------------------------------------------------------------------------
 
-/* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
-int ASPECT = 0; //Do not adjust,
-
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //
 
-//------------------------------------------------------------------------------------------------------------
+/* Debug Screen, Update Erasers, */
+//#define Debug
