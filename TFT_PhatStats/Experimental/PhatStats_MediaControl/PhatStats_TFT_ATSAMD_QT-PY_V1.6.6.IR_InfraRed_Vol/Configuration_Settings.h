@@ -50,8 +50,30 @@
   v1.6.3 :
        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
 
-  v1.6.3.IR :
-       Add InfraRed Media Control (experimental)
+  v1.6.3.IR :(experimental)
+       Add InfraRed Media Control (Only works when Phat-Stats is active)
+
+  v1.6.4.IR:(experimental)
+       QT-PY Only: Optimise Pins (changes from previous)
+       Remove PWM_Encoder_PNP option
+       Move ActivityChecker and Serialevent back to main loop,
+       Add option to disable ActivityChecker to retain last info before PC crash ETC
+
+  v1.6.5.IR:(experimental)
+       Move encoder modes in its own function tab
+       Rename switchpin to encoder_Button
+       Clean up old stuff
+
+  v1.6.6.IR:(experimental)
+       Add HID Volume control using the rotary encoder (runs all the time and is non-blocking)
+       Remove Static_PWM define.
+
+                 If "//Encoder_PWM" is commented(disabled) it will default to a fixed PWM value,
+                 and the encoder will act as a volume control.
+
+                 If "Encoder_PWM" is uncommeted(active) the rotary encoder
+                 will adjust the backlight PWM
+
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -70,24 +92,28 @@
   --------------------------------------------------------------------------------------
 */
 
-/* Debug Screen, Update Erasers, */
-//#define Debug
-//---------------------------------------------------------------------------------------
-//HardwareSerialMonitor does not require OpenHardwareMonitor to aquire data for GnatStats
-//---------------------------------------------------------------------------------------
+//--------------------------- Micro Controller Selection---------------------------------
+
 /* Uncomment your Micro Processor,*/
-//#define Adafruit_QTPY
+#define Adafruit_QTPY
 //#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU
 #define INTEL_CPU
 
+//--------------------------- CPU/GPU Display Settings -----------------------------------
+
 /* Uncomment your GPU,*/
 #define NVIDIA_GRAPHICS
 //#define AMD_GRAPHICS
 
-//---------------------------------------------------------------------------------------
+/* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
+#define cpuNameStartLength 10
+#define gpuNameStartLength 11
+
+/* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
+//#define CPU_OverClocked
 
 /* CPU & GPU Thermal Junction Max Temperature before throttling,*/
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
@@ -103,44 +129,38 @@
 #define enable_gpuFanStatsRPM
 
 //---------------------------------------------------------------------------------------
-
-#define noDegree      // lose the "o"
-#define smallPercent  // Use small percent symbol
-
-/* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
-#define cpuNameStartLength 10
-#define gpuNameStartLength 11
-
-//---------------------------------------------------------------------------------------
-
-//#define CPU_OverClocked           // Uncomment if your CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator
-
+/* Uncomment to show Frequency gain MHz or Percent,*/
 #define enable_ShowFrequencyGain
 
 /* Uncomment only one of the below,*/
 //#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
 #define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
 
+//---------------------------------------------------------------------------------------
+
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-int NeoBrightness = 20;         //Global Brightness
+#define noDegree      // lose the "o"
+#define smallPercent  // Use small percent symbol
+
+//-------------------------------- Phat-Tacho Gauge -------------------------------------
+
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
-//---------------------------------------------------------------------------------------
+
+int NeoBrightness = 20;         //Global Brightness
+
+//----------------------------- Rotary Encoder Usage ------------------------------------
 
 /* Define your Backlight PWM, Uncomment only one choice, */
 
-/* PWM Using a Static fixed value, connected direct to the MCU PIN*/
-//#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
+/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
+#define Encoder_PWM // use rotary encoder for PWM screen brightness control  3.3v . initial start brightness
 
-/* PWM connected direct to the MCU PIN*/
-#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
+/* Use the Rotary Encoder for HID Volume Control*/
+#define Encoder_HID // use rotary encoder for PWM screen brightness control  3.3v . initial start brightness
 
-/* PWM Using a Rotary Encoder with a PNP transistor*/
-/* 3906 PNP Transitor - VCC ((E)Emitter) - ((B)Base) MCU PIN Through Series Resistor 1k+ ((C)Collector)  TFT Back Light+ */
-/*#define Encoder_PWM_PNP */ // use rotary encoder for PWM screen brightness control with NPN Transistor 5v.
-
-//---------------------------------------------------------------------------------------
+//---------------------------- InfraRed Media Control-------------------------------------
 /* Option to disable IR*/
 #define enableIR
 
@@ -149,18 +169,23 @@ int NeoBrightness = 20;         //Global Brightness
 //#define IR_AppleAlu    // Set Apple Aluminium Remote Codes
 //#define IR_AppleWhite  // Set Apple White Plastic Remote Codes
 
-//---------------------------------------------------------------------------------------
+//-------------------------- Display Activity Shutdown -----------------------------------
 
-/* Uncomment below to blank the screen on serial timeout to retain info eg: PC crash fault diagnostics  */
+/* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
 #define enableActivityChecker
 
 /* How long the display takes to timeout due to inactive serial data from the windows application */
 #define lastActiveDelay 8000
 
-//-----------------------------------------------------------------------------------------
+//-------------------------------- Misco Setting -----------------------------------------
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //
+
+//----------------------------- Debug Screen Erasers ---------------------------------------
+
+/* Debug Screen, Update Erasers, */
+//#define Debug

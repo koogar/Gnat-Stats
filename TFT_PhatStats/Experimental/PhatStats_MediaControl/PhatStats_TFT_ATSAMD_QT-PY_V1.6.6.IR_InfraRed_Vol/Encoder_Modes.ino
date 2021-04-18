@@ -1,8 +1,8 @@
 
 
-/*New Encoder Mode Button*/
-void encoder_Modes() {
+/*New Encoder Mode Button Function*/
 
+void encoder_Modes() {
 
   int enc_buttonVal = digitalRead(encoder_Button);
   if (enc_buttonVal == LOW)

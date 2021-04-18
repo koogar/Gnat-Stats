@@ -1,4 +1,6 @@
-
+ 
+ /*Encoder HID Volume Function*/
+ 
 void rotaryInterrupt()
 {
   int rotaryState;
@@ -21,7 +23,8 @@ Consumer.write(MEDIA_VOLUME_UP);
   }
 }
 
-
+ /*Encoder PWM Function */
+ 
 //https://electropeak.com/learn/rotary-encoder-how-it-works-how-to-use-with-arduino/
 
 #ifdef Encoder_PWM
@@ -91,5 +94,4 @@ void PWM_Encoder () {
 
   analogWrite(TFT_backlight_PIN , TFT_brightness  );
 }
-
 #endif
