@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.6.6.IR"  // Code version number
+#define CODE_VERS  "1.6.8.IR"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -45,6 +45,9 @@
 
   IRremote NOTE: ( Only use Version 2.8!!!!!)
   https://github.com/z3t0/Arduino-IRremote
+
+  Rotary encoder
+  https://github.com/koogar/ErriezRotaryEncoderFullStep
 
   Hookup Guide
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
@@ -186,43 +189,26 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardwar
 //---------------------------------------------------------------------------------------
 
 /* Rotary Encoder*/
-#define encoderOutA 3 // CLK
-#define encoderOutB 2 // DT
+#define encoderOutA 2 // CLK
+#define encoderOutB 3 // DT
 
 RotaryFullStep rotary(encoderOutA, encoderOutB);
-// Forward declaration
-//void rotaryInterrupt();
 
-int PWM_Percent_Scale  = 100;    // start brightness Scale @ 100%
-int State;     // old encoder
-int old_State; // old encoder
+/* Encoder Button pin*/
+int encoder_Button     = 1;
+int enc_Button_counter = 0;
 
-/* Button pin*/
-int encoder_Button = 1;  //old encoder button pin
-int enc_Button_counter = 0;  //old encoder button counter
+/* Screen TFT backlight Pin */
+int TFT_backlight_PIN = 4;
+
+/* Encoder TFT Brightness*/
+volatile int brightness_count = 120; // Start Up PWM Brightness
+int brightness_countLast      = 0;   // Store Last PWM Value
+
 //---------------------------------------------------------------------------------------
 
 /* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
 int ASPECT = 0; //Do not adjust,
-
-/* Screen TFT backlight brightness */
-int TFT_backlight_PIN = 4;
-
-/* Direct MCU connection. Encoder_PWM Brightness Start-UP Level,*/
-/* Do not adjust, it will affect the GUI % value */
-#ifdef Encoder_PWM
-int TFT_brightness = 100; // PWM Start Brightness. Do not adjust, it will affect the GUI % value
-#else
-int TFT_brightness = 150; //  if Encoder_PWM  is not used, use a fixed PWM value(0 - 255)
-#endif
-
-/* Direct MCU connection start-up level. Predefined Brightness Start-UP Level,*/
-/* Use the Rotary Encoder for PWM Using a Static fixed value, connected direct to the MCU PIN
-  #define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
-  #ifdef Static_PWM
-  int TFT_brightness = 120; // 0 - 255 Static_PWM value
-  #endif
-*/
 
 /* More Display stuff*/
 int displayDraw = 0;
@@ -239,12 +225,6 @@ boolean bootMode = true;
 String inputString = "";
 boolean stringComplete = false;
 
-/* No longer used,Inverted timers for display
-  //#define enableInvertscreen
-  long invertDelay = 60000; // move setting to config tab
-  long lastInvertTime = 0;
-  int  invertedStatus = 1;
-*/
 //-----------------------------   TFT Colours  ---------------------------------
 
 #define ILI9341_TEST        0x6A4E
@@ -283,6 +263,12 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
 #endif
 
+#ifdef Encoder_PWM2
+  // Initialize pin change interrupt on both rotary encoder pins
+  attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt_PWM2, CHANGE);
+#endif
+
   Serial.begin(9600);  //  USB Serial Baud Rate
   inputString.reserve(200); // String Buffer
 
@@ -304,14 +290,7 @@ void setup() {
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
-
   /* Set up PINs*/
-#ifdef Encoder_PWM
-  //Old Encoder Function
-  pinMode (encoderOutA, INPUT);
-  pinMode (encoderOutB, INPUT);
-#endif
-
   pinMode(encoder_Button, INPUT_PULLUP);
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
 
@@ -334,7 +313,6 @@ void setup() {
   tft.fillScreen(ILI9341_BLACK);
   tft.setTextColor(ILI9341_WHITE);
 
-  //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
   splashScreen();
   //splashScreenSumo();
 
@@ -350,8 +328,8 @@ void loop() {
   activityChecker();      // Turn off screen when no activity
 #endif
 
-#ifdef Encoder_PWM
-  PWM_Encoder ();         // Variable PWM Backlight Control Function
+#ifdef Encoder_PWM2
+  void rotaryInterrupt_PWM();
 #endif
 
 #ifdef Encoder_HID
@@ -361,9 +339,6 @@ void loop() {
 #ifdef enableIR
   infraRed ();            // HID IR Media Control Function, only runs when Phat-Stats is active
 #endif
-
-
-
 
   /*Serial Activity LED */
 #ifdef Seeeduino_XIAO
@@ -384,7 +359,6 @@ void loop() {
 }
 
 /* END of Main Loop */
-
 
 
 //-------------------------------------------  NeoPixels  -------------------------------------------------------------
@@ -480,12 +454,10 @@ void activityChecker() {
 
 }
 
-
-
 //-------------------------------------------  TFT Backlight  -------------------------------------------------------------
 
 void backlightON () {
-  analogWrite(TFT_backlight_PIN, TFT_brightness); // TFT turn on backlight
+  analogWrite(TFT_backlight_PIN, brightness_count); // TFT turn on backlight
 }
 
 void backlightOFF () {
@@ -608,16 +580,3 @@ void splashScreen() {
 
   delay(1000);
 }
-
-//-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
-
-/*
-  void inverter() {
-  if ( invertedStatus == 1 ) {
-    invertedStatus = 0;
-  } else {
-    invertedStatus = 1;
-  }
-  tft.invertDisplay(invertedStatus);
-  }
-*/

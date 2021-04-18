@@ -74,7 +74,8 @@
                  If "Encoder_PWM" is uncommeted(active) the rotary encoder
                  will adjust the backlight PWM
 
-
+  v1.6.7.IR:(experimental)
+      Volume and PWM now use a non blocking interrupt
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -152,13 +153,13 @@ int NeoBrightness = 20;         //Global Brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
 
-/* Define your Backlight PWM, Uncomment only one choice, */
+/* Uncomment only one option, */
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-#define Encoder_PWM // use rotary encoder for PWM screen brightness control  3.3v . initial start brightness
+#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v 
 
 /* Use the Rotary Encoder for HID Volume Control*/
-#define Encoder_HID // use rotary encoder for PWM screen brightness control  3.3v . initial start brightness
+//#define Encoder_HID 
 
 //---------------------------- InfraRed Media Control-------------------------------------
 /* Option to disable IR*/
