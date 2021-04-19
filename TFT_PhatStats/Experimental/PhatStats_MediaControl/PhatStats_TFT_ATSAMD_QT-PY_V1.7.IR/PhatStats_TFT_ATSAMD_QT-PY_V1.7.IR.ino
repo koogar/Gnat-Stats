@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.6.8.IR"  // Code version number
+#define CODE_VERS  "1.7.IR"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -65,14 +65,12 @@
 
 #include <TML_ErriezRotaryFullStep.h>
 #include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
-#include <IRremote.h> //Requires IrRemote Version 2.8 only
+#include <IRremote.h>     //Only Use IrRemote Version 2.8!!!
 
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
 #include "bitmap_large.h"
 #include "Sumo_bitmap.h"
-
-
 
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
@@ -167,7 +165,6 @@ int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
 #define WHITE      0xFFFFFF
 #define BLACK      0x000000 // OFF
 
-//Adafruit_NeoPixel_ZeroDMA pixels(NUM_PIXELS, NEOPIN, NEO_GRB);
 Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
 //---------------------------------------------------------------------------------------
@@ -251,11 +248,20 @@ boolean stringComplete = false;
 #define ILI9341_MAROON      0x7800
 #define ILI9341_PURPLE      0x780F
 #define ILI9341_OLIVE       0x7BE0
-
 //------------------------------------------------------------------------------------------------------------
 
-
 void setup() {
+
+  Serial.begin(9600);  //  USB Serial Baud Rate
+  inputString.reserve(200); // String Buffer
+
+  /* Setup HID*/
+  // Sends a clean report to the host. This is important on any Arduino type.
+  Consumer.begin();
+
+  /* InfraRed */
+  irrecv.enableIRIn(); // Enable Infra Red
+  //irrecv.blink13(true); // Enable feedback LED
 
 #ifdef Encoder_HID
   // Initialize pin change interrupt on both rotary encoder pins
@@ -268,17 +274,6 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt_PWM2, CHANGE);
 #endif
-
-  Serial.begin(9600);  //  USB Serial Baud Rate
-  inputString.reserve(200); // String Buffer
-
-  /* InfraRed */
-  irrecv.enableIRIn(); // Enable Infra Red
-  //irrecv.blink13(true); // Enable feedback LED
-
-  /* Setup HID*/
-  // Sends a clean report to the host. This is important on any Arduino type.
-  Consumer.begin();
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
@@ -410,7 +405,6 @@ void serialEvent() {
 
     }
   }
-
 }
 
 //------------------------------------------- ActivityChecker  -----------------------------------------------------------
@@ -461,9 +455,7 @@ void backlightON () {
 }
 
 void backlightOFF () {
-  analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight fixed / no transistor 3.3v PWM ,
-  //digitalWrite(TFT_backlight_PIN, LOW);       // turn the Backlight LOW to stop PWM idle flicker on ATSAMD
-
+  analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
 }
 
 //--------------------------------------------- Splash Screens --------------------------------------------------------
@@ -514,6 +506,8 @@ void splashScreenSumo() {
   tft.print("Use HardwareSerialMonitor v1.3 Upward");
 
   backlightON();
+
+  FeatureSet_Indicator (); // Display Icons for enabled features
 
   delay(3000);
 
@@ -570,7 +564,9 @@ void splashScreen() {
   tft.print("Use HardwareSerialMonitor v1.3 Upward");
 
   backlightON();
-
+  
+  FeatureSet_Indicator (); // Display Icons for enabled features
+  
   delay(3000);
 
   allNeoPixelsRED();

@@ -74,8 +74,11 @@
                  If "Encoder_PWM" is uncommeted(active) the rotary encoder
                  will adjust the backlight PWM
 
-  v1.6.7.IR:(experimental)
-      Volume and PWM now use a non blocking interrupt
+  v1.6.8.IR:(experimental)
+      Volume and PWM Brightness now use a non blocking interrupt
+
+  v1.6.9.IR:(experimental)
+      Add Feature indicator to display enables features on splash screen
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -159,16 +162,16 @@ int NeoBrightness = 20;         //Global Brightness
 #define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v 
 
 /* Use the Rotary Encoder for HID Volume Control*/
-//#define Encoder_HID 
+#define Encoder_HID
 
 //---------------------------- InfraRed Media Control-------------------------------------
 /* Option to disable IR*/
 #define enableIR
 
 /*Remote code Selection*/
-#define IR_BOSE        // Set Bose Remote Codes
-//#define IR_AppleAlu    // Set Apple Aluminium Remote Codes
-//#define IR_AppleWhite  // Set Apple White Plastic Remote Codes
+#define IR_BOSE        // Set Bose Remote Codes                  (Sends repeat codes)
+//#define IR_AppleWhite  // Set Apple White Plastic Remote Codes  (Does not send repeat codes)
+//#define IR_AppleAlu    // Set Apple Aluminium Remote Codes      (Does not send repeat codes)
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
