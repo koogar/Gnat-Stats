@@ -15,7 +15,6 @@
 
 void DisplayStyle_Landscape_NoBlink () {
 
-
   /* TFT DRAW STATS */
   if (stringComplete) {
 

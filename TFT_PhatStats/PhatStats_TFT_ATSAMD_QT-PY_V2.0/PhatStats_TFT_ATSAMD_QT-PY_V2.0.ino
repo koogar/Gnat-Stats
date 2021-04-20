@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.7.3R"  // Code version number
+#define CODE_VERS  "2.0.0"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -11,8 +11,7 @@
   GPL v2
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
-  UNO / NANO / MINI are not supported!!!
-
+ 
   Board Manager QY-PY
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
@@ -43,9 +42,6 @@
   HID-Project
   https://github.com/NicoHood/HID/wiki/Consumer-API
 
-  IRremote NOTE: ( Only use Version 2.8!!!!!)
-  https://github.com/z3t0/Arduino-IRremote
-
   Rotary encoder
   https://github.com/koogar/ErriezRotaryEncoderFullStep
 
@@ -65,7 +61,7 @@
 
 #include <TML_ErriezRotaryFullStep.h>
 #include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
-#include <IRremote.h>     //Only Use IrRemote Version 2.8!!!
+
 
 #include "Configuration_Settings.h" // load settings
 #include "Bitmaps.h"
@@ -115,27 +111,6 @@
   ==========================================================================================================
 */
 
-
-/*IR Setup Requires IrRemote Version 2.8 only.txt*/
-int RECEIVE_PIN      = 0;    // InfraRed Signal Pin
-IRrecv irrecv(RECEIVE_PIN);
-decode_results results;
-
-/*IR Mute LED */
-int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
-
-/*include Defined Remote Codes*/
-#ifdef IR_AppleAlu
-#include "AppleIRcodes.h"         // this is not a library its a local header Files (TAB)
-#endif
-
-#ifdef IR_AppleWhite
-#include "AppleWhiteIRcodes.h"    // this is not a library its a local header Files (TAB)
-#endif
-
-#ifdef IR_BOSE
-#include "BoseSoundDock1.h"       // this is not a library its a local header Files (TAB)
-#endif
 
 //---------------------------------------------------------------------------------------
 #include <Adafruit_NeoPixel.h>
@@ -257,9 +232,7 @@ void setup() {
   // Sends a clean report to the host. This is important on any Arduino type.
   Consumer.begin();
 
-  /* InfraRed */
-  irrecv.enableIRIn(); // Enable Infra Red
-  //irrecv.blink13(true); // Enable feedback LED
+
 
 #ifdef Encoder_HID
   // Initialize pin change interrupt on both rotary encoder pins
@@ -329,10 +302,6 @@ void loop() {
   void rotaryInterrupt(); // HID Volume Control Function, runs all the time regardless of Phat-Stats being Active.
 #endif
 
-#ifdef enableIR
-  infraRed ();            // HID IR Media Control Function, only runs when Phat-Stats is active
-#endif
-
   /*Serial Activity LED */
 #ifdef Seeeduino_XIAO
   digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
@@ -344,7 +313,7 @@ void loop() {
   RX_pixel.show();
 #endif
 
-//-----------------------------
+  //-----------------------------
 
   /*Encoder Mode Button, moved to its own tab*/
   encoder_Modes();
@@ -527,11 +496,16 @@ void splashScreen() {
   tft.fillScreen(ILI9341_BLACK);
 
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-  tft.drawBitmap(84, 56, JustGnatBMP, 64, 64, ILI9341_YELLOW);
 
+  //tft.drawBitmap(84, 56, JustGnatBMP, 64, 64, ILI9341_YELLOW);
+  
+  tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
+  tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
+  tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
+  
   tft.setTextSize(3);
   tft.setCursor(86, 140);
-  tft.setTextColor(ILI9341_SILVER);
+  tft.setTextColor(ILI9341_WHITE);
   tft.println("PHAT ");
   tft.setTextSize(3);
   tft.setCursor(78, 160);
@@ -562,9 +536,9 @@ void splashScreen() {
   tft.print("Use HardwareSerialMonitor v1.3 Upward");
 
   backlightON();
-  
+
   FeatureSet_Indicator2(); // Display Icons for enabled features
-  
+
   delay(6000);
 
   allNeoPixelsRED();

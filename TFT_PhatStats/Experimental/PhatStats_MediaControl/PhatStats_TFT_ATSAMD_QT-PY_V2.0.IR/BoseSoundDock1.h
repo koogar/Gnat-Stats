@@ -31,7 +31,7 @@
 //#define Vol_Up_Button       0x00000003:
 //#define Vol_Down_Button     0x00000004:
 //#define Mute_Button         0x00000005:
-//#define PlayPause_Button   0x00000006:
+//#define PlayPause_Button    0x00000006:
 #define Pause_Button          0x00000007:
 #define Play_Button           0x00000008:
 #define Repeat_Button         0x00000009:

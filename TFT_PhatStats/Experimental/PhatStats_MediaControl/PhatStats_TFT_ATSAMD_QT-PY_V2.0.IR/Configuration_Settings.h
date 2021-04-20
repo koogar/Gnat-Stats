@@ -80,7 +80,7 @@
   v1.6.9.IR:(experimental)
       Add Feature indicator to display enables features on splash screen
 
-  v1.7.IR:(experimental)
+  v2.0.IR:(experimental)
       Reduce the amount of header files.
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -106,14 +106,14 @@
 //#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
-#define AMD_CPU
-//#define INTEL_CPU
+//#define AMD_CPU
+#define INTEL_CPU
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
 /* Uncomment your GPU,*/
-//#define NVIDIA_GRAPHICS
-#define AMD_GRAPHICS
+#define NVIDIA_GRAPHICS
+//#define AMD_GRAPHICS
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
@@ -122,18 +122,18 @@
 /* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
 //#define CPU_OverClocked
 
-/* CPU & GPU Thermal Junction Max Temperature before throttling,*/
+/* CPU & GPU Thermal Junction Max Temperature in "c" before throttling,*/
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
 #define GPU_TJMAX 83   //  TJ Max for the Nvidia GTX1080 = 83c
 
 /* CPU & GPU Turbo/Boost Frequency Values in Mhz */
-#define CPU_BOOST 3700  //  Intel Core i9600k = 3700MHz Turbo to 4600MHz
-#define GPU_BOOST 1683  //  MSi GamingX 1080 = 1683MHz
+#define CPU_BOOST 3700  //  Enter Stock CPU Frequency eg. Intel Core i9600k = 3700MHz
+#define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-#define enable_gpuPowerStats // Nvidia Specific???
-#define enable_gpuFanStats%
-#define enable_gpuFanStatsRPM
+//#define enable_gpuPowerStats // Nvidia Specific???
+//#define enable_gpuFanStats%
+//#define enable_gpuFanStatsRPM
 
 //---------------------------------------------------------------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -162,7 +162,7 @@ int NeoBrightness = 20;         //Global Brightness
 /* Uncomment only one option, */
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-//#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v 
+//#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
 
 /* Use the Rotary Encoder for HID Volume Control*/
 #define Encoder_HID

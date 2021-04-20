@@ -14,7 +14,6 @@
 
 void DisplayStyle_Portrait_NoBlink () {
 
-
   /* TFT DRAW STATS, */
   if (stringComplete) {
 
