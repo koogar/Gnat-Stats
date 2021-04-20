@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.7.IR"  // Code version number
+#define CODE_VERS  "1.7.3R"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -68,9 +68,8 @@
 #include <IRremote.h>     //Only Use IrRemote Version 2.8!!!
 
 #include "Configuration_Settings.h" // load settings
-#include "bitmap.h"
-#include "bitmap_large.h"
-#include "Sumo_bitmap.h"
+#include "Bitmaps.h"
+
 
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
@@ -167,7 +166,7 @@ int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
 
 Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
-//---------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 /* ILI9321 TFT setup */
 #include <Adafruit_ILI9341.h>  // v1.5.6 Adafruit Standard
@@ -183,7 +182,7 @@ Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardware SPI
 
-//---------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 /* Rotary Encoder*/
 #define encoderOutA 2 // CLK
@@ -202,16 +201,15 @@ int TFT_backlight_PIN = 4;
 volatile int brightness_count = 120; // Start Up PWM Brightness
 int brightness_countLast      = 0;   // Store Last PWM Value
 
-//---------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 /* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
 int ASPECT = 0; //Do not adjust,
 
 /* More Display stuff*/
 int displayDraw = 0;
-//int displayOverride = 0;
 
-//---------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 /* Timer for active connection to host*/
 boolean activeConn = false;
@@ -222,7 +220,7 @@ boolean bootMode = true;
 String inputString = "";
 boolean stringComplete = false;
 
-//-----------------------------   TFT Colours  ---------------------------------
+//-----------------------------  TFT Colours  ---------------------------------
 
 #define ILI9341_TEST        0x6A4E
 #define ILI9341_BLACK       0x0000
@@ -248,7 +246,7 @@ boolean stringComplete = false;
 #define ILI9341_MAROON      0x7800
 #define ILI9341_PURPLE      0x780F
 #define ILI9341_OLIVE       0x7BE0
-//------------------------------------------------------------------------------------------------------------
+//--------------------------------
 
 void setup() {
 
@@ -346,7 +344,7 @@ void loop() {
   RX_pixel.show();
 #endif
 
-  //--------------------------------------------------------------------------
+//-----------------------------
 
   /*Encoder Mode Button, moved to its own tab*/
   encoder_Modes();
@@ -356,7 +354,7 @@ void loop() {
 /* END of Main Loop */
 
 
-//-------------------------------------------  NeoPixels  -------------------------------------------------------------
+//-----------------------------  NeoPixels  -----------------------------------
 void allNeoPixelsOff() {
   for ( int i = 0; i < NUM_PIXELS; i++ ) {
     pixels.setPixelColor(i, 0, 0, 0 );
@@ -370,7 +368,7 @@ void allNeoPixelsRED() {
   }
   pixels.show();
 }
-//-------------------------------------------  Serial Events -------------------------------------------------------------
+//-----------------------------  Serial Events -------------------------------
 /*
   SerialEvent occurs whenever a new data comes in the hardware serial RX. This
   routine is run between each time loop() runs, so using delay inside loop can
@@ -407,7 +405,7 @@ void serialEvent() {
   }
 }
 
-//------------------------------------------- ActivityChecker  -----------------------------------------------------------
+//----------------------------- ActivityChecker  -------------------------------
 void activityChecker() {
 
   if (millis() - lastActiveConn > lastActiveDelay)
@@ -448,7 +446,7 @@ void activityChecker() {
 
 }
 
-//-------------------------------------------  TFT Backlight  -------------------------------------------------------------
+//----------------------------- TFT Backlight  -------------------------------
 
 void backlightON () {
   analogWrite(TFT_backlight_PIN, brightness_count); // TFT turn on backlight
@@ -458,7 +456,7 @@ void backlightOFF () {
   analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
 }
 
-//--------------------------------------------- Splash Screens --------------------------------------------------------
+//----------------------------- Splash Screens --------------------------------
 void splashScreenSumo() {
 
   /* Initial Boot Screen, */
@@ -565,9 +563,9 @@ void splashScreen() {
 
   backlightON();
   
-  FeatureSet_Indicator (); // Display Icons for enabled features
+  FeatureSet_Indicator2(); // Display Icons for enabled features
   
-  delay(3000);
+  delay(6000);
 
   allNeoPixelsRED();
   tft.fillScreen(ILI9341_BLACK);

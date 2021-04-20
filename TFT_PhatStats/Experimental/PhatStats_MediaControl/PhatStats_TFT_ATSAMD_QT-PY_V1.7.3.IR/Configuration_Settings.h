@@ -80,6 +80,9 @@
   v1.6.9.IR:(experimental)
       Add Feature indicator to display enables features on splash screen
 
+  v1.7.IR:(experimental)
+      Reduce the amount of header files.
+
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -103,14 +106,14 @@
 //#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
-//#define AMD_CPU
-#define INTEL_CPU
+#define AMD_CPU
+//#define INTEL_CPU
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
 /* Uncomment your GPU,*/
-#define NVIDIA_GRAPHICS
-//#define AMD_GRAPHICS
+//#define NVIDIA_GRAPHICS
+#define AMD_GRAPHICS
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
@@ -159,7 +162,7 @@ int NeoBrightness = 20;         //Global Brightness
 /* Uncomment only one option, */
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v 
+//#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v 
 
 /* Use the Rotary Encoder for HID Volume Control*/
 #define Encoder_HID
