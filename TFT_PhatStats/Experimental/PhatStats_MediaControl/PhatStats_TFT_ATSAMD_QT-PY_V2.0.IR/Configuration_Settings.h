@@ -154,7 +154,6 @@
 //-------------------------------- Phat-Tacho Gauge -------------------------------------
 
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
-
 int NeoBrightness = 20;         //Global Brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
@@ -163,6 +162,7 @@ int NeoBrightness = 20;         //Global Brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
 //#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
+volatile int brightness_count = 150; // Start Up TFT PWM Brightness
 
 /* Use the Rotary Encoder for HID Volume Control*/
 #define Encoder_HID

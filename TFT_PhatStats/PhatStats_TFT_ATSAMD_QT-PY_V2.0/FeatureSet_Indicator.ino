@@ -20,11 +20,11 @@ void FeatureSet_Indicator2 () {
   
   // Show default TFT backlight brightness setting
   tft.setTextColor(ILI9341_WHITE); tft.setCursor(31 + X_Offset, 78 + Y_Offset); tft.print(brightness_count);
-  tft.setTextColor(ILI9341_WHITE); tft.setCursor(29 + X_Offset, 68 + Y_Offset); tft.print("PWM");
+  tft.setTextColor(ILI9341_WHITE); tft.setCursor(31 + X_Offset, 68 + Y_Offset); tft.print("PWM");
 
 #else
   tft.drawBitmap(20 + X_Offset, 24 + Y_Offset, PWM_BL_BMP, 36, 36, ILI9341_GREY);
-  tft.setTextColor(ILI9341_GREY); tft.setCursor(29 + X_Offset, 68 + Y_Offset); tft.print("Off");
+  tft.setTextColor(ILI9341_GREY); tft.setCursor(31 + X_Offset, 68 + Y_Offset); tft.print("Off");
 #endif
   delay(featureDelay);
 

@@ -173,7 +173,7 @@ int enc_Button_counter = 0;
 int TFT_backlight_PIN = 4;
 
 /* Encoder TFT Brightness*/
-volatile int brightness_count = 120; // Start Up PWM Brightness
+//volatile int brightness_count = 150; // Start Up PWM Brightness, moved to CFG!!!
 int brightness_countLast      = 0;   // Store Last PWM Value
 
 //-----------------------------------------------------------------------------

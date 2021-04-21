@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.0.3R"  // Code version number
+#define CODE_VERS  "2.0.0.IR"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -197,7 +197,7 @@ int enc_Button_counter = 0;
 int TFT_backlight_PIN = 4;
 
 /* Encoder TFT Brightness*/
-volatile int brightness_count = 120; // Start Up PWM Brightness
+//volatile int brightness_count = 120; // Start Up PWM Brightness, moved to CFG!!!!
 int brightness_countLast      = 0;   // Store Last PWM Value
 
 //-----------------------------------------------------------------------------
