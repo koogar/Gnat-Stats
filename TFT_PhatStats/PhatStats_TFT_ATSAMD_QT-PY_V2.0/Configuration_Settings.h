@@ -62,6 +62,8 @@
         Clean up old stuff
 
   v1.6.6 :
+        STM32 BluePill is no longer supported!!!
+        ----------------------------------------
         Add HID Volume control using the rotary encoder (runs all the time and is non-blocking)
         Remove Static_PWM define.
 
