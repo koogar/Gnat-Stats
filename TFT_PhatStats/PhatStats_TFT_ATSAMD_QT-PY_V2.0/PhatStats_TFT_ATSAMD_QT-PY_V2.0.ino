@@ -250,7 +250,7 @@ void setup() {
   pixels.begin();    // This initializes the NeoPixel library.
 
 #ifdef Adafruit_QTPY
-  RX_pixel.begin();  // This initializes the NeoPixel library.
+  RX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
 #endif
 
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
@@ -473,8 +473,6 @@ void splashScreenSumo() {
   tft.print("Use HardwareSerialMonitor v1.3 Upward");
 
   backlightON();
-
-  FeatureSet_Indicator (); // Display Icons for enabled features
 
   delay(3000);
 

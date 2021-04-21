@@ -41,11 +41,11 @@
 
   v1.6.1 :
 
-        ADD: ATSAMD21 Support
-        ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
+       ADD: ATSAMD21 Support
+       ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
 
   v1.6.2 :
-        Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
+       Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
 
   v1.6.3 :
        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
@@ -82,6 +82,7 @@
 
   v2.0.IR:(experimental)
       Reduce the amount of header files.
+      Change Boot Logo.
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -119,6 +120,11 @@
 #define cpuNameStartLength 10
 #define gpuNameStartLength 11
 
+#define noDegree      // lose the "o"
+#define smallPercent  // Use small percent symbol
+
+//---------------------------------------------------------------------------------------
+
 /* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
 //#define CPU_OverClocked
 
@@ -131,11 +137,11 @@
 #define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
+#define enable_gpuPowerStats // Nvidia Specific???
+#define enable_gpuFanStats%
+#define enable_gpuFanStatsRPM
 
-//---------------------------------------------------------------------------------------
+//---------------------------Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
 #define enable_ShowFrequencyGain
 
@@ -143,35 +149,33 @@
 //#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
 #define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
 
-//---------------------------------------------------------------------------------------
+//----------------------------- Throttle/Boost Indicator --------------------------------
 
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-#define noDegree      // lose the "o"
-#define smallPercent  // Use small percent symbol
-
 //-------------------------------- Phat-Tacho Gauge -------------------------------------
 
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
-int NeoBrightness = 20;         //Global Brightness
+int NeoBrightness = 20;          //Global Brightness
 
-//----------------------------- Rotary Encoder Usage ------------------------------------
+//----------------------------==- Rotary Encoder Usage ----------------------------------
 
 /* Uncomment only one option, */
 
-/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-//#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
-volatile int brightness_count = 150; // Start Up TFT PWM Brightness
-
 /* Use the Rotary Encoder for HID Volume Control*/
-#define Encoder_HID
+//#define Encoder_HID
+/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
+#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
+
+
+volatile int brightness_count = 150; // Start Up TFT PWM Brightness
 
 //---------------------------- InfraRed Media Control-------------------------------------
 /* Option to disable IR*/
 #define enableIR
 
-/*Remote code Selection*/
+/*Remote code Selection, uncomment only one of the below,*/
 #define IR_BOSE        // Set Bose Remote Codes                  (Sends repeat codes)
 //#define IR_AppleWhite  // Set Apple White Plastic Remote Codes  (Does not send repeat codes)
 //#define IR_AppleAlu    // Set Apple Aluminium Remote Codes      (Does not send repeat codes)

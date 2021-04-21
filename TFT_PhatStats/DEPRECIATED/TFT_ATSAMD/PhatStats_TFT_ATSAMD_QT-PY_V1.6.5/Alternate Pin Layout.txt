@@ -1,7 +1,4 @@
-/*
-  eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
-
-  Adafruit QT-PY / XIAO
+Adafruit QT-PY / XIAO
   ---------------------
   ATSAMD21G18 @ 48MHz with 3.3V logic/power
   256KB of FLASH + 32KB of RAM
@@ -12,7 +9,7 @@
   DC     =  7
   SCLK   =  8
   MOSI   =  10
-
+  
 
   B.LIGHT =  4
   ---------------------
@@ -21,10 +18,6 @@
   EncoderA = 3
   EncoderB = 2
   EncButton= 1
-
-  ---------------------
-
-  InfraRed = 0
 
   ---------------------
   i2c
@@ -39,5 +32,3 @@
   QT-PY Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
 
   NeoPixel         =  6
-  ==========================================================================================================
-*/

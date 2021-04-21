@@ -42,7 +42,7 @@ void CPU_loadGauge(int cpuUsage ) {
   float CPUloadfactor = cpuUsage ;
 
   if (CPUloadfactor >= 0 ) {
-    pixels.setPixelColor(15, 229, 193, 0); // 1st Pixel
+    pixels.setPixelColor(15, 229, 193, 0);
   }
   if (CPUloadfactor >= 12.5 ) {
     pixels.setPixelColor(14, 230, 165, 1);
@@ -79,7 +79,7 @@ void CPU_tempGauge(int cpuDegree ) {
   float CPUtempfactor = cpuDegree ;
 
   if (CPUtempfactor >= 0 ) {
-    pixels.setPixelColor(0, 229, 193, 0); // 1st Pixel
+    pixels.setPixelColor(0, 229, 193, 0);
   }
   if (CPUtempfactor >= 12.5 ) {
     pixels.setPixelColor(1, 230, 165, 1);
@@ -119,7 +119,7 @@ void GPU_loadGauge(int gpuUsage ) {
   float GPUloadfactor = gpuUsage ;
 
   if (GPUloadfactor >= 0 ) {
-    pixels.setPixelColor(0, 229, 193, 0); // 1st Pixel
+    pixels.setPixelColor(0, 229, 193, 0);
   }
   if (GPUloadfactor >= 12.5 ) {
     pixels.setPixelColor(1, 230, 165, 1);
@@ -156,7 +156,7 @@ void GPU_tempGauge(int gpuDegree ) {
   float GPUtempfactor = gpuDegree ;
 
   if (GPUtempfactor >= 0 ) {
-    pixels.setPixelColor(0, 229, 193, 0); // 1st Pixel
+    pixels.setPixelColor(0, 229, 193, 0);
   }
   if (GPUtempfactor >= 12.5 ) {
     pixels.setPixelColor(1, 230, 165, 1);
