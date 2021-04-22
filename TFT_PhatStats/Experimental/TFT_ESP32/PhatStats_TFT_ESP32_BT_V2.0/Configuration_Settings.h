@@ -8,7 +8,7 @@
   /*
 
 
-  V1.58:  STM32 ( / ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
+  V1.58:  ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
 
           Button to change between portrait and landscape mode.
 
@@ -41,32 +41,31 @@
 
   v1.6.1 :
 
-       ADD: ATSAMD21 Support
-       ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
+        ADD: ATSAMD21 Support
+        ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
 
   v1.6.2 :
-       Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
+        Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
 
   v1.6.3 :
-       Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
+        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
 
-  v1.6.3.IR :(experimental)
-       Add InfraRed Media Control (Only works when Phat-Stats is active)
+  v1.6.4 :
+        QT-PY Only: Optimise Pins (changes from previous)
+        Remove PWM_Encoder_PNP option
+        Move ActivityChecker and Serialevent back to main loop,
+        Add option to disable ActivityChecker to retain last info before PC crash ETC
 
-  v1.6.4.IR:(experimental)
-       QT-PY Only: Optimise Pins (changes from previous)
-       Remove PWM_Encoder_PNP option
-       Move ActivityChecker and Serialevent back to main loop,
-       Add option to disable ActivityChecker to retain last info before PC crash ETC
+  v1.6.5 :
+        Move encoder modes in its own function tab
+        Rename switchpin to encoder_Button
+        Clean up old stuff
 
-  v1.6.5.IR:(experimental)
-       Move encoder modes in its own function tab
-       Rename switchpin to encoder_Button
-       Clean up old stuff
-
-  v1.6.6.IR:(experimental)
-       Add HID Volume control using the rotary encoder (runs all the time and is non-blocking)
-       Remove Static_PWM define.
+  v1.6.6 :
+        STM32 BluePill is no longer supported!!!
+        ----------------------------------------
+        Add HID Volume control using the rotary encoder (runs all the time and is non-blocking)
+        Remove Static_PWM define.
 
                  If "//Encoder_PWM" is commented(disabled) it will default to a fixed PWM value,
                  and the encoder will act as a volume control.
@@ -74,15 +73,15 @@
                  If "Encoder_PWM" is uncommeted(active) the rotary encoder
                  will adjust the backlight PWM
 
-  v1.6.8.IR:(experimental)
-      Volume and PWM Brightness now use a non blocking interrupt
+  v1.6.8 :
+       Volume and PWM Brightness now use a non blocking interrupt
 
-  v1.6.9.IR:(experimental)
-      Add Feature indicator to display enables features on splash screen
+  v1.6.9:
+       Add Feature indicator to display enables features on splash screen
 
-  v2.0.IR:(experimental)
-      Reduce the amount of header files.
-      Change Boot Logo.
+  v2.0.0:
+       Reduce the amount of header files.
+       Change Boot Logo.
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -103,7 +102,7 @@
 //--------------------------- Micro Controller Selection---------------------------------
 
 /* Uncomment your Micro Processor,*/
-#define Adafruit_QTPY
+//#define Adafruit_QTPY
 //#define Seeeduino_XIAO
 
 /* Uncomment your CPU,*/
@@ -137,11 +136,11 @@
 #define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-#define enable_gpuPowerStats // Nvidia Specific???
-#define enable_gpuFanStats%
-#define enable_gpuFanStatsRPM
+//#define enable_gpuPowerStats // Nvidia Specific???
+//#define enable_gpuFanStats%
+//#define enable_gpuFanStatsRPM
 
-//---------------------------Throttle/Boost Gains MHZ or % ------------------------------
+//--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
 #define enable_ShowFrequencyGain
 
@@ -156,29 +155,20 @@
 
 //-------------------------------- Phat-Tacho Gauge -------------------------------------
 
-#define enableNeopixelGauges     // NeoPixel ring bargraph example
+//#define enableNeopixelGauges     // NeoPixel ring bargraph example
 int NeoBrightness = 20;          //Global Brightness
 
-//----------------------------==- Rotary Encoder Usage ----------------------------------
+//----------------------------- Rotary Encoder Usage ------------------------------------
 
 /* Uncomment only one option, */
 
 /* Use the Rotary Encoder for HID Volume Control*/
-#define Encoder_HID
+//#define Encoder_HID
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-//#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
+#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
 
 
-volatile int brightness_count = 150; // Start Up TFT PWM Brightness
-
-//---------------------------- InfraRed Media Control-------------------------------------
-/* Option to disable IR*/
-#define enableIR
-
-/*Remote code Selection, uncomment only one of the below,*/
-#define IR_BOSE        // Set Bose Remote Codes                  (Sends repeat codes)
-//#define IR_AppleWhite  // Set Apple White Plastic Remote Codes  (Does not send repeat codes)
-//#define IR_AppleAlu    // Set Apple Aluminium Remote Codes      (Does not send repeat codes)
+volatile int brightness_count = 150; // Start Up PWM Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
