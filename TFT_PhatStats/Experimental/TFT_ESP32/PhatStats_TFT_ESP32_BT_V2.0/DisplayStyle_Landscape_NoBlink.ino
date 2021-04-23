@@ -15,6 +15,16 @@
 
 void DisplayStyle_Landscape_NoBlink () {
 
+#ifdef Serial_BT
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#else //USB
+  serialEvent();     // Check for USB Serial Activity
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker();      // Turn off screen when no activity
+#endif
+
   /* TFT DRAW STATS */
   if (stringComplete) {
 
@@ -163,10 +173,18 @@ void DisplayStyle_Landscape_NoBlink () {
 
     //------------------------------------------------------RX indicator---------------------------------------------------
 
+
+#ifdef Serial_BT
+    tft.setCursor(284, 9);
+    tft.print("BT");
+    tft.fillCircle(306, 12, 7, ILI9341_BLUE);// Landscape Flash RX top right corner when updating
+    tft.drawCircle(306, 12, 8, ILI9341_WHITE);
+#else
     tft.setCursor(284, 9);
     tft.print("RX");
-    tft.fillCircle(306, 12, 7, ILI9341_RED);// Landscape Flash RX top right corner when updating
+    tft.fillCircle(306, 12, 7, ILI9341_RED); // Landscape Flash RX top right corner when updating
     tft.drawCircle(306, 12, 8, ILI9341_WHITE);
+#endif
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
@@ -359,7 +377,7 @@ void DisplayStyle_Landscape_NoBlink () {
     int gpuCoreClockStart = inputString.indexOf("GCC") + 3;
     int gpuCoreClockEnd = inputString.indexOf("|", gpuCoreClockStart);
     String gpuCoreClockString = inputString.substring(gpuCoreClockStart, gpuCoreClockEnd);
-    
+
     //Char erase and spacing adjust, MaDerer
     while (gpuCoreClockString.length() < 4) gpuCoreClockString = " " + gpuCoreClockString;
 

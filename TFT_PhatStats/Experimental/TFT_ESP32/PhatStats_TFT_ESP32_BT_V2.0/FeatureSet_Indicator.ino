@@ -3,7 +3,7 @@
 void FeatureSet_Indicator2 () {
 
   // Feature Indicator Test
-  //#define BT   // Reserved
+  //#define Serial_BT   // Reserved
 
 #define X_Offset 0
 #define Y_Offset 210
@@ -71,7 +71,7 @@ void FeatureSet_Indicator2 () {
 
 
   //------ 5 BT
-#ifdef BT // Reserved
+#ifdef Serial_BT // Reserved
   tft.drawBitmap(188 + X_Offset, 24 + Y_Offset, BT_BMP, 36, 36, ILI9341_BLUE);
   tft.setTextColor(ILI9341_GREY); tft.setCursor(200 + X_Offset, 68 + Y_Offset); tft.print("BT");
 #else
@@ -83,19 +83,6 @@ void FeatureSet_Indicator2 () {
   delay(featureDelay);
   tft.setFont(); // Set Default Adafruit GRFX Font
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

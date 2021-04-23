@@ -14,6 +14,16 @@
 
 void DisplayStyle_Portrait_NoBlink () {
 
+#ifdef Serial_BT
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#else // USB
+  serialEvent();     // Check for USB Serial Activity
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker();      // Turn off screen when no activity
+#endif
+
   /* TFT DRAW STATS, */
   if (stringComplete) {
 
@@ -153,11 +163,21 @@ void DisplayStyle_Portrait_NoBlink () {
       tft.println(gpuName);
     }
 
-    //------------------------------------------------------RX indicator---------------------------------------------------
+    //------------------------------------------------------RX/BT indicator---------------------------------------------------
+
+
+#ifdef Serial_BT
+    tft.setCursor(203, 11);
+    tft.println("BT");
+    tft.fillCircle(226, 14, 6, ILI9341_BLUE);// Flash top right corner when updating  //see "serialEvent();" loop
+    tft.drawCircle(226, 14, 7, ILI9341_WHITE);
+#else
     tft.setCursor(203, 11);
     tft.println("RX");
     tft.fillCircle(226, 14, 6, ILI9341_RED);// Flash top right corner when updating  //see "serialEvent();" loop
     tft.drawCircle(226, 14, 7, ILI9341_WHITE);
+#endif
+
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 

@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.0"  // Code version number
+#define CODE_VERS  "2.0.0.BT"  // Code version number
 
 
 /*
@@ -12,7 +12,7 @@
   GPL v2
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
- 
+
   Board Manager QY-PY
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
@@ -40,9 +40,6 @@
   Adafruit ILI9341
   https://github.com/adafruit/Adafruit_ILI9341
 
-  HID-Project
-  https://github.com/NicoHood/HID/wiki/Consumer-API
-
   Rotary encoder
   https://github.com/koogar/ErriezRotaryEncoderFullStep
 
@@ -61,8 +58,6 @@
 #include <Fonts/Org_01.h>
 
 #include <TML_ErriezRotaryFullStep.h>
-//#include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
-
 
 #include "Configuration_Settings.h" // load settings
 #include "Bitmaps.h"
@@ -113,18 +108,7 @@ BluetoothSerial SerialBT;
 #include <Adafruit_NeoPixel.h>
 #define NEOPIN      32
 #define NUM_PIXELS  16
-
-/*onboard XIAO BUILD in LED for RX*/
-#ifdef Seeeduino_XIAO
-#define RX_LEDPin 5
-#endif
-
-/*onboard QT-PY NeoPixel for RX*/
-#ifdef Adafruit_QTPY
-#define RX_NeoPin 11  //Built in NeoPixel, on the QT-PY
-#else
-#define RX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
-#endif
+Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
 #define BLUE       0x0000FF
@@ -136,8 +120,9 @@ BluetoothSerial SerialBT;
 #define WHITE      0xFFFFFF
 #define BLACK      0x000000 // OFF
 
-Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
+/*onboard BUILD in LED for RX*/
+#define RX_LEDPin 5
+
 //----------------------------------------------------------------------------
 
 /* ILI9321 TFT setup */
@@ -169,7 +154,7 @@ int enc_Button_counter = 0;
 /* Screen TFT backlight Pin */
 int TFT_backlight_PIN = 4;
 
-/* Encoder TFT Brightness*/
+/* Encoder TFT Brightness*/ //Reserved!!! not supported on ESP32 Reserved
 //volatile int brightness_count = 150; // Start Up PWM Brightness, moved to CFG!!!
 int brightness_countLast      = 0;   // Store Last PWM Value
 
@@ -222,23 +207,29 @@ boolean stringComplete = false;
 
 void setup() {
 
-  Serial.begin(9600);  //  USB Serial Baud Rate
+#ifdef Serial_USB
+
+#endif
+
+#ifdef Serial_BT
   SerialBT.begin();
+#else //USB
+  Serial.begin(9600);  //  USB Serial Baud Rate
+#endif
+
   inputString.reserve(200); // String Buffer
 
   /* Setup HID*/
   // Sends a clean report to the host. This is important on any Arduino type.
-  //Consumer.begin();
 
 
-
-#ifdef Encoder_HID
+#ifdef Encoder_HID // not supported on ESP32 Reserved
   // Initialize pin change interrupt on both rotary encoder pins
   attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
 #endif
 
-#ifdef Encoder_PWM2
+#ifdef Encoder_PWM2 //PWM is not supported on ESP32 Reserved
   // Initialize pin change interrupt on both rotary encoder pins
   attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt_PWM2, CHANGE);
@@ -246,21 +237,13 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
-
-#ifdef Adafruit_QTPY
-  RX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
-#endif
-
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
   /* Set up PINs*/
   pinMode(encoder_Button, INPUT_PULLUP);
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
-
-#ifdef Seeeduino_XIAO
   pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
 
   backlightOFF();
 
@@ -278,7 +261,6 @@ void setup() {
   tft.setTextColor(ILI9341_WHITE);
 
   splashScreen();
-  //splashScreenSumo();
 
 }
 
@@ -286,30 +268,17 @@ void setup() {
 
 void loop() {
 
-  serialEvent();          // Check for Serial Activity
 
-#ifdef  enableActivityChecker
-  activityChecker();      // Turn off screen when no activity
-#endif
-
-#ifdef Encoder_PWM2
+#ifdef Encoder_PWM2 // Reserved!!! PWM is not supported on ESP32 Reserved
   void rotaryInterrupt_PWM();
 #endif
 
-#ifdef Encoder_HID
-  void rotaryInterrupt(); // HID Volume Control Function, runs all the time regardless of Phat-Stats being Active.
+#ifdef Encoder_HID // Reserved!!! runs all the time regardless of Phat-Stats being Active.
+  void rotaryInterrupt();
 #endif
 
-  /*Serial Activity LED */
-#ifdef Seeeduino_XIAO
+  /*ESP Activity LED */
   digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-#endif
-
-  /* Serial Activity NeoPixel */
-#ifdef Adafruit_QTPY
-  RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
-  RX_pixel.show();
-#endif
 
   //-----------------------------
 
@@ -321,7 +290,7 @@ void loop() {
 /* END of Main Loop */
 
 
-//-----------------------------  NeoPixels  -----------------------------------
+//-----------------------------  NeoPixels RGB  -----------------------------------
 void allNeoPixelsOff() {
   for ( int i = 0; i < NUM_PIXELS; i++ ) {
     pixels.setPixelColor(i, 0, 0, 0 );
@@ -335,19 +304,32 @@ void allNeoPixelsRED() {
   }
   pixels.show();
 }
+
+void allNeoPixelsGREEN() {
+  for ( int i = 0; i < NUM_PIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 255, 0 );
+  }
+    pixels.show();
+}
+  
+void allNeoPixelsBLUE() {
+  for ( int i = 0; i < NUM_PIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 255 );
+  }
+  pixels.show();
+}
 //-----------------------------  Serial Events -------------------------------
 /*
   SerialEvent occurs whenever a new data comes in the hardware serial RX. This
   routine is run between each time loop() runs, so using delay inside loop can
   delay response. Multiple bytes of data may be available.
 */
-/* BlueTooth */
-void serialBT.Event() {
 
-  while (Serial.available()) {
-    //while (Serial.available() > 0) {
-    // get the new byte:
-    char inChar = (char)Serial.read();
+/* BlueTooth */
+void serialBTEvent() {
+  while (SerialBT.available()) {
+
+    char inChar = (char)SerialBT.read();
     //Serial.print(inChar); // Debug Incoming Serial
 
     // add it to the inputString:
@@ -365,7 +347,8 @@ void serialBT.Event() {
   }
 }
 
-/* USB Serial */
+
+/* USB Serial*/
 void serialEvent() {
   while (Serial.available()) {
 
@@ -380,12 +363,14 @@ void serialEvent() {
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
-      /* Serial Activity LED */
-      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      /* Serial Activity LED*/
+      //digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
 
     }
   }
 }
+
+
 //----------------------------- ActivityChecker  -------------------------------
 void activityChecker() {
 
@@ -435,70 +420,13 @@ void backlightON () {
 
 }
 
-void backlightOFF () { 
+void backlightOFF () {
   //analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
-   digitalWrite(TFT_backlight_PIN, LOW);    // turn the LED off HIGH(OFF) LOW (ON)
+  digitalWrite(TFT_backlight_PIN, LOW);    // turn the LED off HIGH(OFF) LOW (ON)
 
 }
 
 //----------------------------- Splash Screens --------------------------------
-void splashScreenSumo() {
-
-  /* Initial Boot Screen, */
-  allNeoPixelsOff();
-  tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-
-  tft.setFont(&Org_01);
-
-  tft.fillScreen(ILI9341_BLACK);
-
-  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-  tft.drawBitmap(25, 20, SUMO_BMP, 190, 160, ILI9341_BROWN);
-  tft.drawBitmap(25, 20, SUMO_BMP2, 190, 160, ILI9341_YELLOW);
-
-  tft.setTextSize(3);
-  tft.setCursor(86, 190);
-  tft.setTextColor(ILI9341_SILVER);
-  tft.println("PHAT ");
-  tft.setTextSize(3);
-  tft.setCursor(78, 210);
-  tft.println("STATS");
-
-  tft.setTextSize(2);
-  tft.setCursor(22, 230);
-  tft.setTextColor(ILI9341_SILVER);
-  tft.print("PC Hardware Monitor");
-
-  tft.setTextSize(3);
-  tft.setCursor(22, 260);
-  tft.setTextColor(ILI9341_RED);
-  tft.print("tallmanlabs.com");
-
-  /* Set version */
-  tft.setFont(); // Set Default Adafruit GRFX Font
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(1);
-  tft.setCursor(140, 290);
-  tft.print("TFT: v");
-  tft.print (CODE_VERS);
-
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setFont(); // Set Default Adafruit GRFX Font
-  tft.setTextSize(1);
-  tft.setCursor(10, 305);
-  tft.print("Use HardwareSerialMonitor v1.3 Upward");
-
-  backlightON();
-
-  delay(3000);
-
-  allNeoPixelsRED();
-  tft.fillScreen(ILI9341_BLACK);
-  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);
-
-  delay(1000);
-}
 
 void splashScreen() {
 
@@ -512,11 +440,11 @@ void splashScreen() {
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
 
   //tft.drawBitmap(84, 56, JustGnatBMP, 64, 64, ILI9341_YELLOW);
-  
+
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
-  
+
   tft.setTextSize(3);
   tft.setCursor(86, 140);
   tft.setTextColor(ILI9341_WHITE);
@@ -555,10 +483,20 @@ void splashScreen() {
 
   delay(6000);
 
+#ifdef Serial_BT
+  allNeoPixelsBLUE();
+#else
   allNeoPixelsRED();
+#endif
   tft.fillScreen(ILI9341_BLACK);
+
+#ifdef Serial_BT
+  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
+  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_BLUE);
+#else // USB
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);
+#endif
 
-  delay(1000);
+  delay(3000);
 }

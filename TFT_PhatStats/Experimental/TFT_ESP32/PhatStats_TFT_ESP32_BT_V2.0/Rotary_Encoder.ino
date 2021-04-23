@@ -1,5 +1,11 @@
 
+
 #ifdef Encoder_PWM2
+
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+//ICACHE_RAM_ATTR
+#endif
+
 void rotaryInterrupt_PWM2() // TFT PWM Brightness Adjust
 {
   int rotaryState;
@@ -30,13 +36,13 @@ void rotaryInterrupt_PWM2() // TFT PWM Brightness Adjust
 
   if (brightness_countLast != brightness_count) {
     brightness_countLast = brightness_count;
-    analogWrite(TFT_backlight_PIN , brightness_count );
+    //analogWrite(TFT_backlight_PIN , brightness_count );// Reserved!!! not supported on ESP32 Reserved
   }
 }
 #endif
 
 //---------------------------------------------------
-#ifdef Encoder_HID
+#ifdef Encoder_HID // Reserved!!! not supported on ESP32 Reserved
 
 void rotaryInterrupt() // Volume control
 {
@@ -46,48 +52,15 @@ void rotaryInterrupt() // Volume control
   rotaryState = rotary.read();
 
   if (rotaryState < 0)  {
-
-    //Do Something Here
-    Consumer.write(MEDIA_VOLUME_DOWN);
-    Consumer.write(MEDIA_VOLUME_DOWN);
-
+    //Do Something Down
 
   } else {
 
     if (rotaryState > 0)  {
+      //Do Something UP
 
-      //Do Something Here
-      Consumer.write(MEDIA_VOLUME_UP);
-      Consumer.write(MEDIA_VOLUME_UP);
     }
   }
 }
 
-#endif
-
-
-
-
-#ifdef Debug
-void print_PWM()
-{
-  tft.setFont(&Org_01);
-  //tft.setTextColor(ILI9341_WHITE);
-  tft.fillRoundRect  (105, 55, 94, 30, 4, ILI9341_RED); // print brightness % over CPU Freq
-  tft.drawRoundRect  (105, 55, 94, 30, 4, ILI9341_WHITE);  // print brightness % over CPU Freq
-
-
-  tft.setCursor(114, 66);
-  tft.setTextSize(1);
-  tft.print("Back- ");
-  tft.setTextSize(1);
-  tft.setCursor(114, 75);
-  tft.print("Light");
-
-  tft.setCursor(144, 74);
-  tft.setTextSize(3);
-  tft.print(brightness_count); // Print Scale in human 0-100%
-  tft.setTextSize(2);
-  tft.println("%");
-}
 #endif

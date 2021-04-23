@@ -83,6 +83,9 @@
        Reduce the amount of header files.
        Change Boot Logo.
 
+  v2.0.0.BT:
+       ESP32 Bluetooth Communication
+
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -96,15 +99,14 @@
    | (_) |  _/ | |  | | (_) | .` \__ \
     \___/|_|   |_| |___\___/|_|\_|___/
 
-  --------------------------------------------------------------------------------------
-*/
+  --------------------------------------------------------------------------------------*/
 
-//--------------------------- Micro Controller Selection---------------------------------
 
-/* Uncomment your Micro Processor,*/
-//#define Adafruit_QTPY
-//#define Seeeduino_XIAO
+/*ESP32 Communication type, Uncomment for BT, else USB,*/
+#define Serial_BT  // enable Bluetooth connection
 
+#define enable_LibreNet // Experimental network stats
+//---------------------------------- CPU Selection----------------------------------------
 /* Uncomment your CPU,*/
 //#define AMD_CPU
 #define INTEL_CPU
@@ -136,9 +138,9 @@
 #define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
+#define enable_gpuPowerStats // Nvidia Specific???
+#define enable_gpuFanStats%
+#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -163,11 +165,13 @@ int NeoBrightness = 20;          //Global Brightness
 /* Uncomment only one option, */
 
 /* Use the Rotary Encoder for HID Volume Control*/
+// Reserved!!! not supported on ESP32 Reserved
 //#define Encoder_HID
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
+// Reserved!!! PWM is not supported on ESP32 Reserved
+//#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
 
-
+// Reserved!!! not supported on ESP32 Reserved
 volatile int brightness_count = 150; // Start Up PWM Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
@@ -183,8 +187,8 @@ volatile int brightness_count = 150; // Start Up PWM Brightness
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
 int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
-/* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
-int Serial_eventDelay = 0; //
+/* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
+int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip
 
 //----------------------------- Debug Screen Erasers ---------------------------------------
 

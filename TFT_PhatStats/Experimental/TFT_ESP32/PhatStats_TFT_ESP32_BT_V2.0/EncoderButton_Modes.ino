@@ -7,7 +7,7 @@ void encoder_Modes() {
   int enc_buttonVal = digitalRead(encoder_Button);
   if (enc_buttonVal == LOW)
 
-  {  
+  {
     delay(debounceEncButton); // Debounce Button
     enc_Button_counter ++;
 
@@ -15,7 +15,7 @@ void encoder_Modes() {
     tft.fillScreen(ILI9341_BLACK);
 
     /* Reset count if over max mode number, */
-    if (enc_Button_counter == 2) // Number of screens available when button pressed
+    if (enc_Button_counter == 4) // Number of screens available when button pressed
     {
       enc_Button_counter = 0;
     }
@@ -27,11 +27,19 @@ void encoder_Modes() {
     switch (enc_Button_counter) {
 
       case 0: // 1st SCREEN
-        DisplayStyle_Portrait_NoBlink();
+        DisplayStyle_Portrait_LibreNet();
         break;
 
       case 1: // 2nd SCREEN
-        DisplayStyle_Landscape_NoBlink ();
+        DisplayStyle_Landscape_LibreNet();
+        break;
+
+      case 2: // 3rd SCREEN
+        DisplayStyle_Portrait_NoBlink();
+        break;
+
+      case 3: // 4th SCREEN
+        DisplayStyle_Landscape_NoBlink();
         break;
 
     }
