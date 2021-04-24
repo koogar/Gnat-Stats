@@ -27,6 +27,12 @@
 
   BluePill_generic_boot20_pc13.bin  (On the "Bluepill" bootloader "_pc13" refers to the LED pin. )
 
+  Important Upload Note:
+  ----------------------- 
+  
+  If your "upload method" is STLink you will loose the ability to upload using the "STMduino Bootloader".
+  To use the STMduino Bootloader again, you will need to reflash the bootloader using a UART adaptor. 
+
 
   USB Issues:
   https://www.onetransistor.eu/2017/11/stm32-bluepill-arduino-ide.html
@@ -66,8 +72,6 @@
 #include <Fonts/Org_01.h>
 #include "Configuration_Settings.h" // load settings
 #include "bitmap.h"
-
-
 
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
