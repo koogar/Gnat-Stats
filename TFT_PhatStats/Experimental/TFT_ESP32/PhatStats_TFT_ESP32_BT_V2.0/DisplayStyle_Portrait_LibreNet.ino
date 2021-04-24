@@ -162,10 +162,18 @@ void DisplayStyle_Portrait_LibreNet () {
     }
 
     //------------------------------------------------------RX indicator---------------------------------------------------
+#ifdef Serial_BT
+    tft.setCursor(203, 11);
+    tft.println("BT");
+    tft.fillCircle(226, 14, 6, ILI9341_BLUE);// Flash top right corner when updating  //see "serialEvent();" loop
+    tft.drawCircle(226, 14, 7, ILI9341_WHITE);
+#else
     tft.setCursor(203, 11);
     tft.println("RX");
     tft.fillCircle(226, 14, 6, ILI9341_RED);// Flash top right corner when updating  //see "serialEvent();" loop
     tft.drawCircle(226, 14, 7, ILI9341_WHITE);
+#endif
+
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 

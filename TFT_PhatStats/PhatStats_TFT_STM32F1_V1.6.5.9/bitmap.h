@@ -7,11 +7,11 @@
 
 
 //SPLASH
-JustGnatBMP
-WaitingDataBMP2_90
-WaitingDataBMP90
-SUMO_BMP
-SUMO_BMP2
+
+WaitingDataBMP_USB
+HSM_BG2_BMP
+HSM_BG_BMP
+HSM_BMP
 
 //HARDWARE
 CPU3_BMP
@@ -29,6 +29,7 @@ Neo_Gauges_BMP
 Volume_BMP
 InfraRed_BMP
 BT_BMP
+RX_BT
 */
 
 #define RX_BT_BMP_width  10

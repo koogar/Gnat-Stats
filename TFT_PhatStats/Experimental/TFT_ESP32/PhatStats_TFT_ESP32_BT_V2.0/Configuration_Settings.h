@@ -105,6 +105,7 @@
 /*ESP32 Communication type, Uncomment for BT, else USB,*/
 #define Serial_BT  // enable Bluetooth connection
 
+
 #define enable_LibreNet // Experimental network stats
 //---------------------------------- CPU Selection----------------------------------------
 /* Uncomment your CPU,*/
@@ -185,7 +186,7 @@ volatile int brightness_count = 150; // Start Up PWM Brightness
 //-------------------------------- Misco Setting -----------------------------------------
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
 int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip

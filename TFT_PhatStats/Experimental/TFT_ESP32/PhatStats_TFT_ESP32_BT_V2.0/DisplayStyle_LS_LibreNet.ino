@@ -172,12 +172,20 @@ void DisplayStyle_Landscape_LibreNet() {
       tft.println(gpuName);
     }
 
-    //------------------------------------------------------RX indicator---------------------------------------------------
+ //------------------------------------------------------RX indicator---------------------------------------------------
 
+
+#ifdef Serial_BT
+    tft.setCursor(284, 9);
+    tft.print("BT");
+    tft.fillCircle(306, 12, 7, ILI9341_BLUE);// Landscape Flash RX top right corner when updating
+    tft.drawCircle(306, 12, 8, ILI9341_WHITE);
+#else
     tft.setCursor(284, 9);
     tft.print("RX");
-    tft.fillCircle(306, 12, 7, ILI9341_RED);// Landscape Flash RX top right corner when updating
+    tft.fillCircle(306, 12, 7, ILI9341_RED); // Landscape Flash RX top right corner when updating
     tft.drawCircle(306, 12, 8, ILI9341_WHITE);
+#endif
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
