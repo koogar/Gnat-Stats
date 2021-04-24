@@ -82,6 +82,7 @@
   v2.0.0:
        Reduce the amount of header files.
        Change Boot Logo.
+       Reduce the Size of the MHz font in the frequency gains display to allow for an extra digit.
 
   v2.0.0.BT:
        ESP32 Bluetooth Communication
@@ -148,8 +149,8 @@
 #define enable_ShowFrequencyGain
 
 /* Uncomment only one of the below,*/
-//#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
-#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
+#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
+//#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
 
 //----------------------------- Throttle/Boost Indicator --------------------------------
 

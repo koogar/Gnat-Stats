@@ -275,6 +275,7 @@ void DisplayStyle_Portrait_LibreNet () {
     tft.setTextSize(2);
     tft.print ("+");
     tft.print(cpuOverclockSum, 0); // Show Value in MHz
+    tft.setTextSize(1);
     tft.println ("MHz");
 #endif
 #ifdef ShowFrequencyGain%
@@ -389,6 +390,7 @@ void DisplayStyle_Portrait_LibreNet () {
     tft.setTextSize(2);
     tft.print ("+");
     tft.print(gpuOverclockSum, 0); // Show Value in MHZ
+    tft.setTextSize(1);
     tft.println ("MHz");
 #endif
 

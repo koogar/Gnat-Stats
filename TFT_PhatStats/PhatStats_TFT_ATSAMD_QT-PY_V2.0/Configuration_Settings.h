@@ -82,6 +82,7 @@
   v2.0.0:
        Reduce the amount of header files.
        Change Boot Logo.
+       Reduce the Size of the MHz font in the frequency gains display to allow for an extra digit.
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.

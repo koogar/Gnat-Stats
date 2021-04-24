@@ -124,8 +124,8 @@ v1.59.6:
 #define enable_ShowFrequencyGain 
 
 /* Uncomment only one of the below,*/
-#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
-//#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
+//#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
+#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
 
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
