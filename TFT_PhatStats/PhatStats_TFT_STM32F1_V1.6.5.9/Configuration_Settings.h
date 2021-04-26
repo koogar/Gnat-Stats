@@ -67,7 +67,9 @@ v1.59.6:
        Clean up old stuff
        NOTE: After 1.6.6 STM32 BluePill is no longer supported
 
-  
+  v1.6.5.9
+       ADD new visual features to bring it in line with v2
+       
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -84,6 +86,7 @@ v1.59.6:
   --------------------------------------------------------------------------------------
 */
 
+//--------------------------- CPU/GPU Display Settings -----------------------------------
 /* Uncomment your CPU,*/
 //#define AMD_CPU
 #define INTEL_CPU
@@ -92,40 +95,64 @@ v1.59.6:
 #define NVIDIA_GRAPHICS
 //#define AMD_GRAPHICS
 
-//-------------------------------------------------------
-
-/* CPU & GPU Thermal Junction Max Temperature before throttling,*/
-#define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
-#define GPU_TJMAX 83   //  TJ Max for the Nvidia GTX1080 = 83c
-
-/* CPU & GPU Turbo/Boost Frequency Values */
-#define CPU_BOOST 3700  //  Intel Core i9600k = 3700MHz Turbo to 4600MHz
-#define GPU_BOOST 1683  //  MSi GamingX 1080 = 1683MHz
-
-/* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
-//-------------------------------------------------------
-
-#define noDegree      // lose the "o"
-#define smallPercent  // Use small percent symbol
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
 #define gpuNameStartLength 11
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Manually name the  CPU,*/
+//#define Manual_cpuName
+String set_CPUname = "XXXXXXX";
+
+/* Manually name the GPU,*/
+//#define Manual_gpuName
+String set_GPUname = "XXXXXXX";
+
+/* Manually set GPU ram total,*/
+//#define Manual_gpuRam
+String set_GPUram = "XX";
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#define noDegree      // lose the "o"
+#define smallPercent  // Use small percent symbol
+
 //-------------------------------------------------------
 
-/* Uncomment below to enable custom triggers,*/
+//---------------------------------------------------------------------------------------
 
-//#define CPU_OverClocked           // Uncomment if your CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator
+/* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
+//#define CPU_OverClocked
 
-#define enable_ShowFrequencyGain 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+/* CPU & GPU Thermal Junction Max Temperature in "c" before throttling,*/
+#define CPU_TJMAX 100  //  TJ Max for the Intel 9600K    = 100c
+#define GPU_TJMAX 83   //  TJ Max for the Nvidia GTX1080 = 83c
+
+/* CPU & GPU Turbo/Boost Frequency Values in Mhz */
+#define CPU_BOOST 3700  //  Enter Stock CPU Frequency eg. Intel Core i9600k = 3700MHz
+#define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+/* Remove Specific GPU items Power/Fan RPM/Fan% */
+//#define enable_gpuPowerStats // Nvidia Specific???
+//#define enable_gpuFanStats%
+//#define enable_gpuFanStatsRPM
+
+//--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
+/* Uncomment to show Frequency gain MHz or Percent,*/
+#define enable_ShowFrequencyGain
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Uncomment only one of the below,*/
 //#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
 #define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
+
+//----------------------------- Throttle/Boost Indicator --------------------------------
 
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
@@ -151,7 +178,7 @@ v1.59.6:
 //------------------------------------------------------------------------------------------------------------
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND 
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //

@@ -390,7 +390,7 @@ void splashScreen() {
   FeatureSet_Indicator2(); // Display Icons for enabled features
 
   
-  delay(6000);
+  delay(4000);
 
   tft.fillScreen(ILI9341_BLACK);
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);

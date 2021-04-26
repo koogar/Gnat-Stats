@@ -13,7 +13,18 @@
 
 /*Optimised for ILI9341 320 x 240 in landscape*/
 
-void DisplayStyle_LibreNet_Landscape () {
+void DisplayStyle_Landscape_NoBlink () {
+
+  
+#ifdef Serial_BT
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#else //USB
+  serialEvent();     // Check for USB Serial Activity
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker();      // Turn off screen when no activity
+#endif
 
   /* TFT DRAW STATS */
   if (stringComplete) {
@@ -55,7 +66,11 @@ void DisplayStyle_LibreNet_Landscape () {
     tft.fillRoundRect  (107, 210, 86, 20, 4, ILI9341_BLACK);   //
     tft.drawRoundRect  (106, 209, 88, 22, 4, ILI9341_SILVER); //
 
+    /* CPU  Freq Line */
+    tft.drawFastHLine(110, 50, 200,  ILI9341_SILVER);
 
+    /*GPU Memory Used Line */
+    tft.drawFastHLine(110, 170, 200, ILI9341_SILVER);
 
     //--------------------------------------Borders----------------------------------------
 
@@ -71,11 +86,6 @@ void DisplayStyle_LibreNet_Landscape () {
 
     tft.drawRoundRect  (0, 124, 320, 116, 8,    ILI9341_GREEN);
 
-    /* CPU  Freq Line */
-    tft.drawFastHLine(110, 50, 200,  ILI9341_SILVER);
-
-    /*GPU Memory Used Line */
-    tft.drawFastHLine(110, 170, 200, ILI9341_SILVER);
 
     //------------------------------------CPU/GPU/RAM BMP IMAGES--------------------------------------------
 
@@ -123,7 +133,9 @@ void DisplayStyle_LibreNet_Landscape () {
 
     if (inputString.indexOf("CPU") > -1)
     {
+
       String cpuName = "";
+
       tft.setTextSize(1);
       tft.setCursor(16, 8);// (Left/Right, UP/Down)
       //tft.setCursor(-35, 1);
@@ -141,7 +153,14 @@ void DisplayStyle_LibreNet_Landscape () {
       }
       else
         cpuName = inputString.substring(cpuNameStart);
+
+      /* CPU Manual Name*/
+#ifdef Manual_cpuName
+      tft.println(set_CPUname);
+#else
+      /* CPU Auto Detect Name*/
       tft.println(cpuName);
+#endif
 
     }
     if (inputString.indexOf("GPU") > -1)
@@ -158,7 +177,16 @@ void DisplayStyle_LibreNet_Landscape () {
       }
 
       int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+
+      /* GPU Manual Name*/
+#ifdef Manual_gpuName
+      String gpuName = set_GPUname; // Name spacing test
+#else
+      /* GPU Auto Detect Name*/
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
+
       tft.println(gpuName);
     }
 
@@ -242,8 +270,8 @@ void DisplayStyle_LibreNet_Landscape () {
     double  cpuOverclockSum = cpuOverclockGain - CPU_BOOST; //values in Mhz
 
     /* CPU OVERCLOCK Freq Gain in Percent, eg: 3700MHz/100 = 37MHz(1%)  , (OC Gain)895MHz / 37MHz(1%) = 24.19%,*/
-    double cpuOverclockGainPercentSum = cpuOverclockSum / (CPU_BOOST / 100); // % of gain over Stock CPU
 
+    double cpuOverclockGainPercentSum = cpuOverclockSum / (CPU_BOOST / 100); // % of gain over Stock CPU
     /* CPU  Freq Display */
     tft.setTextSize(4);
     tft.setCursor(105, 55);// (Left/Right, UP/Down)
@@ -269,6 +297,7 @@ void DisplayStyle_LibreNet_Landscape () {
     tft.setTextSize(2);
     tft.print ("+");
     tft.print(cpuOverclockSum, 0);            // Show Value in MHz
+    tft.setTextSize(1);
     tft.println ("MHz");
 #endif
 #ifdef ShowFrequencyGain%
@@ -279,6 +308,35 @@ void DisplayStyle_LibreNet_Landscape () {
 #endif
 #endif
 
+
+    //--------------------------------------- CPU FAN NOT WORKING!!!--------------------------------------------
+
+    /*CPU FAN String, Libre CFL{CpuFanSpeedLoad}
+      int cpuFanStart = inputString.indexOf("CF") + 2;
+      int cpuFanEnd = inputString.indexOf("|", cpuFanStart);
+      String cpuFanString = inputString.substring(cpuFanStart, cpuFanEnd);
+      //Char erase and spacing adjust, MaDerer
+      while (cpuFanString.length() < 3) cpuFanString = " " + cpuFanString;
+    */
+    /*CPU FAN Display
+      tft.setTextSize(1);
+      tft.setCursor(215, 9);// (Left/Right, UP/Down)
+      tft.setTextSize(1);
+      tft.print("/ Fan Load");
+
+      tft.setTextSize(3);
+      tft.setCursor(245, 25);// (Left/Right, UP/Down)
+      //tft.print("49");
+      tft.print(cpuFanString); //CPU FAN NOT WORKING!!!
+
+      #ifdef  smallPercent
+      tft.setTextSize(2);
+      tft.print("%");
+      #else
+      tft.setTextSize(3);
+      tft.print("%");
+      #endif
+    */
     //------------------------------------------ GPU Load/Temp -------------------------------------------------
 
     /* GPU Display String */
@@ -321,6 +379,8 @@ void DisplayStyle_LibreNet_Landscape () {
     tft.print("%");
 #endif
 
+
+
     //------------------------------------------ GPU Freq/Temp -------------------------------------------------
 
     /* GPU temp V's GPU freq to check for throttling and max 'GPU Boost' */
@@ -350,6 +410,7 @@ void DisplayStyle_LibreNet_Landscape () {
     /* GPU OVERCLOCK Freq Gain in Percent, eg: 1683MHz/100 = 16.83MHz(1%) , (OC Gain)254MHz / 16.83MHz(1%) = 15.09%,*/
     double gpuOverclockGainPercentSum = gpuOverclockSum / (GPU_BOOST / 100); // % of gain over Stock GPU
 
+
 #ifdef  enable_ShowFrequencyGain
     /* GPU OVERCLOCK Display Freq Gain, */
     //tft.setCursor(225, 56);// (Left/Right, UP/Down)
@@ -360,6 +421,7 @@ void DisplayStyle_LibreNet_Landscape () {
     tft.setTextSize(2);
     tft.print ("+");
     tft.print(gpuOverclockSum, 0);            // Show Value in MHz
+    tft.setTextSize(1);
     tft.println ("MHz");
 #endif
 #ifdef ShowFrequencyGain%
@@ -371,8 +433,25 @@ void DisplayStyle_LibreNet_Landscape () {
 
 #endif
 
+
+    tft.setCursor(200, 180);// (Left/Right, UP/Down)
     tft.setTextSize(1);
-    tft.setCursor(200, 178);  // (Left/Right, UP/Down)
+    tft.print("VRAM     :");
+    tft.print(gpuMemClockString);
+
+    tft.setTextSize(1);
+    tft.print("MHz");
+
+    tft.setCursor(200, 190); // (Left/Right, UP/Down)
+    tft.setTextSize(1);
+    tft.print("Shader   :");
+    tft.print(gpuShaderClockString);
+
+    tft.setTextSize(1);
+    tft.print("MHz");
+
+    tft.setTextSize(1);
+    tft.setCursor(200, 200);  // (Left/Right, UP/Down)
     tft.print("Core     :");
     tft.print(gpuCoreClockString);
 
@@ -393,11 +472,17 @@ void DisplayStyle_LibreNet_Landscape () {
 
     tft.setTextSize(1);
     tft.setCursor(120, 130);  // Position GPU Total Memory
+
+#ifdef Manual_gpuRam
+    tft.print(set_GPUram);
+#else
     tft.print(totalGPUmemSumDP, 0); // Show Value in GB
+#endif
 
     tft.setTextSize(1);
     tft.print("GB");
     //----------------------------------------------GPU Memory Used----------------------------------------------------------
+
     /*GPU Memory Used */
     int gpuMemoryUsedStart = inputString.indexOf("GMU") + 3;
     int gpuMemoryUsedEnd = inputString.indexOf("|", gpuMemoryUsedStart);
@@ -435,7 +520,7 @@ void DisplayStyle_LibreNet_Landscape () {
     while (gpuPowerString.length() < 6) gpuPowerString = " " + gpuPowerString;
 
     tft.setTextSize(1);
-    tft.setCursor(200, 198);   // (Left/Right, UP/Down)
+    tft.setCursor(200, 222);   // (Left/Right, UP/Down)
     tft.print("Power    :");
     tft.print(gpuPowerString); //GPU Power Watts
 
@@ -476,47 +561,12 @@ void DisplayStyle_LibreNet_Landscape () {
 
     tft.setTextSize(1);
     //tft.setCursor(150, 120); // (Left/Right, UP/Down)
-    tft.setCursor(200, 188);   // (Left/Right, UP/Down)
+    tft.setCursor(200, 210);   // (Left/Right, UP/Down)
     tft.print("Fan Speed:");
     tft.print(gpuRPMString);   //GPU Fan RPM
 
     tft.setTextSize(1);
     tft.print("RPM");
-#endif
-
-    //-------------------------------------- ETHERNET USAGE Libre ----------------------------------------------
-
-    /* Reserved,*/
-
-#ifdef enable_LibreNet
-    /* Network Outline, */
-
-    //                 ( X  , Y ,  W , H , Radius ,    Color
-    tft.drawRoundRect  (196, 209, 120, 22, 2, ILI9341_RED); //
-
-    /* ETHERNET UP String,*/
-    int EthUpStringStart = inputString.indexOf("ETU") + 3;
-    int EthUpStringLimit = inputString.indexOf("|", EthUpStringStart);
-    String EthUpString   = inputString.substring(EthUpStringStart, EthUpStringLimit);
-    while (EthUpString.length() < 9) EthUpString = " " + EthUpString;
-
-    /* UP USAGE DISPLAY,*/
-    tft.setTextSize(1);
-    tft.setCursor(198, 212);
-    tft.print("Net UP  : ");
-    tft.println(EthUpString);
-
-    /* ETHERNET Down String,*/
-    int EthDownStringStart = inputString.indexOf("ETD") + 3;
-    int EthDownStringLimit = inputString.indexOf("|", EthDownStringStart);
-    String EthDownString   = inputString.substring(EthDownStringStart, EthDownStringLimit);
-    while (EthDownString.length() < 9) EthDownString = " " + EthDownString;
-
-    /* DOWN USAGE DISPLAY,*/
-    tft.setTextSize(1);
-    tft.setCursor(198, 221);
-    tft.print("Net DOWN: ");
-    tft.println(EthDownString);
 #endif
     //----------------------------------------SYSTEM RAM USAGE---------------------------------------------------
 
@@ -552,8 +602,6 @@ void DisplayStyle_LibreNet_Landscape () {
     tft.setCursor(220 , 80); // (Left/Right, UP/Down)
     tft.println("TOTAL / USED");
 
-    tft.drawFastHLine(206, 89, 102, ILI9341_SILVER);
-
     tft.setCursor(206, 94); // (Left/Right, UP/Down)
     tft.setTextSize(2);
     tft.print(intRamSum, 0) ; tft.setTextSize(0); tft.print("GB"); tft.print(" ");
@@ -571,13 +619,13 @@ void DisplayStyle_LibreNet_Landscape () {
     //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
 
 #ifdef enable_BoostIndicator
-    CustomTriggerCPU_BOOST_LS_LibreNet( cpuClockString.toInt     ()); // CPU Frequency
-    CustomTriggerGPU_BOOST_LS_LibreNet( gpuCoreClockString.toInt ()); // GPU Frequency
+    CustomTriggerCPU_BOOST_LSNB( cpuClockString.toInt     ()); // CPU Frequency
+    CustomTriggerGPU_BOOST_LSNB( gpuCoreClockString.toInt ()); // GPU Frequency
 #endif
 
 #ifdef enable_ThrottleIndicator
-    CustomTriggerCPU_ThrottleIndicator_LS_LibreNet( cpuString1.toInt() ); //  CPU TJMax/Throttle Incicator BMP
-    CustomTriggerGPU_ThrottleIndicator_LS_LibreNet( gpuString1.toInt() ); //  GPU TJMax/Throttle Incicator BMP
+    CustomTriggerCPU_ThrottleIndicator_LSNB( cpuString1.toInt() ); //  CPU TJMax/Throttle Incicator BMP
+    CustomTriggerGPU_ThrottleIndicator_LSNB( gpuString1.toInt() ); //  GPU TJMax/Throttle Incicator BMP
 #endif
 
 #ifdef enableNeopixelGauges
@@ -613,7 +661,7 @@ void DisplayStyle_LibreNet_Landscape () {
 
 // -------------------  CPU Throttle Indicator Event Landscape --------------------
 
-void CustomTriggerCPU_ThrottleIndicator_LS_LibreNet(int cpuDegree ) {  // i5-9600k TJMax is 100c
+void CustomTriggerCPU_ThrottleIndicator_LSNB(int cpuDegree ) {  // i5-9600k TJMax is 100c
   float CPUtempfactor = cpuDegree ;
 
   if (CPUtempfactor >= CPU_TJMAX ) {  // TJ Max for the Intel 9900K 100c
@@ -630,7 +678,7 @@ void CustomTriggerCPU_ThrottleIndicator_LS_LibreNet(int cpuDegree ) {  // i5-960
 
 // -------------------  GPU Throttle Indicator Event Landscape --------------------
 
-void CustomTriggerGPU_ThrottleIndicator_LS_LibreNet(int gpuDegree ) {
+void CustomTriggerGPU_ThrottleIndicator_LSNB(int gpuDegree ) {
   float GPUtempfactor = gpuDegree ;
 
   if (GPUtempfactor >= GPU_TJMAX ) {  //GTX 1080 TJMax = 83c
@@ -649,7 +697,7 @@ void CustomTriggerGPU_ThrottleIndicator_LS_LibreNet(int gpuDegree ) {
 
 // -------------------  CPU Turbo Boost Indicator Event Landscape --------------------
 
-void CustomTriggerCPU_BOOST_LS_LibreNet(int cpuClockString ) {
+void CustomTriggerCPU_BOOST_LSNB(int cpuClockString ) {
   float CPUboostfactor = cpuClockString;
 
   delay(350); // Small delay so Turbo frequency gains stay on screen longer
@@ -681,7 +729,7 @@ void CustomTriggerCPU_BOOST_LS_LibreNet(int cpuClockString ) {
 
 // -------------------  GPU Boost Clock Indicator Event Landscape --------------------
 
-void CustomTriggerGPU_BOOST_LS_LibreNet(int gpuCoreClockString ) {
+void CustomTriggerGPU_BOOST_LSNB(int gpuCoreClockString ) {
 
   float GPUboostfactor = gpuCoreClockString ;
 

@@ -1,5 +1,4 @@
-#define CODE_VERS  "2.0.0"  // Code version number
-
+#define CODE_VERS  "2.0.2.IR"  // Code version number
 
 /*
   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -43,6 +42,9 @@
   HID-Project
   https://github.com/NicoHood/HID/wiki/Consumer-API
 
+  IRremote NOTE: ( Only use Version 2.8!!!!!)
+  https://github.com/z3t0/Arduino-IRremote
+
   Rotary encoder
   https://github.com/koogar/ErriezRotaryEncoderFullStep
 
@@ -62,7 +64,7 @@
 
 #include <TML_ErriezRotaryFullStep.h>
 #include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
-
+#include <IRremote.h>     //Only Use IrRemote Version 2.8!!!
 
 #include "Configuration_Settings.h" // load settings
 #include "Bitmaps.h"
@@ -112,6 +114,27 @@
   ==========================================================================================================
 */
 
+
+/*IR Setup Requires IrRemote Version 2.8 only.txt*/
+int RECEIVE_PIN      = 0;    // InfraRed Signal Pin
+IRrecv irrecv(RECEIVE_PIN);
+decode_results results;
+
+/*IR Mute LED */
+int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
+
+/*include Defined Remote Codes*/
+#ifdef IR_AppleAlu
+#include "AppleIRcodes.h"         // this is not a library its a local header Files (TAB)
+#endif
+
+#ifdef IR_AppleWhite
+#include "AppleWhiteIRcodes.h"    // this is not a library its a local header Files (TAB)
+#endif
+
+#ifdef IR_BOSE
+#include "BoseSoundDock1.h"       // this is not a library its a local header Files (TAB)
+#endif
 
 //---------------------------------------------------------------------------------------
 #include <Adafruit_NeoPixel.h>
@@ -174,7 +197,7 @@ int enc_Button_counter = 0;
 int TFT_backlight_PIN = 4;
 
 /* Encoder TFT Brightness*/
-//volatile int brightness_count = 150; // Start Up PWM Brightness, moved to CFG!!!
+//volatile int brightness_count = 120; // Start Up PWM Brightness, moved to CFG!!!!
 int brightness_countLast      = 0;   // Store Last PWM Value
 
 //-----------------------------------------------------------------------------
@@ -233,19 +256,22 @@ void setup() {
   // Sends a clean report to the host. This is important on any Arduino type.
   Consumer.begin();
 
-
-
+  /* InfraRed */
+  irrecv.enableIRIn(); // Enable Infra Red
+  //irrecv.blink13(true); // Enable feedback LED
+  
+#ifdef Encoder_PWM2
+  // Initialize pin change interrupt on both rotary encoder pins
+  attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt_PWM2, CHANGE);
+#endif
 #ifdef Encoder_HID
   // Initialize pin change interrupt on both rotary encoder pins
   attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
 #endif
 
-#ifdef Encoder_PWM2
-  // Initialize pin change interrupt on both rotary encoder pins
-  attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt_PWM2, CHANGE);
-#endif
+
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
@@ -301,6 +327,10 @@ void loop() {
 
 #ifdef Encoder_HID
   void rotaryInterrupt(); // HID Volume Control Function, runs all the time regardless of Phat-Stats being Active.
+#endif
+
+#ifdef enableIR
+  infraRed ();            // HID IR Media Control Function, only runs when Phat-Stats is active
 #endif
 
   /*Serial Activity LED */
@@ -427,67 +457,12 @@ void backlightOFF () {
 }
 
 //----------------------------- Splash Screens --------------------------------
-void splashScreenSumo() {
 
-  /* Initial Boot Screen, */
-  allNeoPixelsOff();
-  tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-
-  tft.setFont(&Org_01);
-
-  tft.fillScreen(ILI9341_BLACK);
-
-  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-  tft.drawBitmap(25, 20, SUMO_BMP, 190, 160, ILI9341_BROWN);
-  tft.drawBitmap(25, 20, SUMO_BMP2, 190, 160, ILI9341_YELLOW);
-
-  tft.setTextSize(3);
-  tft.setCursor(86, 190);
-  tft.setTextColor(ILI9341_SILVER);
-  tft.println("PHAT ");
-  tft.setTextSize(3);
-  tft.setCursor(78, 210);
-  tft.println("STATS");
-
-  tft.setTextSize(2);
-  tft.setCursor(22, 230);
-  tft.setTextColor(ILI9341_SILVER);
-  tft.print("PC Hardware Monitor");
-
-  tft.setTextSize(3);
-  tft.setCursor(22, 260);
-  tft.setTextColor(ILI9341_RED);
-  tft.print("tallmanlabs.com");
-
-  /* Set version */
-  tft.setFont(); // Set Default Adafruit GRFX Font
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(1);
-  tft.setCursor(140, 290);
-  tft.print("TFT: v");
-  tft.print (CODE_VERS);
-
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setFont(); // Set Default Adafruit GRFX Font
-  tft.setTextSize(1);
-  tft.setCursor(10, 305);
-  tft.print("Use HardwareSerialMonitor v1.3 Upward");
-
-  backlightON();
-
-  delay(3000);
-
-  allNeoPixelsRED();
-  tft.fillScreen(ILI9341_BLACK);
-  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);
-
-  delay(1000);
-}
 
 void splashScreen() {
 
   /* Initial Boot Screen, */
+  
   allNeoPixelsOff();
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
@@ -497,11 +472,11 @@ void splashScreen() {
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
 
   //tft.drawBitmap(84, 56, JustGnatBMP, 64, 64, ILI9341_YELLOW);
-  
+
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
-  
+
   tft.setTextSize(3);
   tft.setCursor(86, 140);
   tft.setTextColor(ILI9341_WHITE);
@@ -540,10 +515,22 @@ void splashScreen() {
 
   delay(6000);
 
+#ifdef Serial_BT
+  allNeoPixelsBLUE();
+#else
   allNeoPixelsRED();
+#endif
   tft.fillScreen(ILI9341_BLACK);
-  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-  tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);
 
-  delay(1000);
+#ifdef Serial_BT
+  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
+  tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
+
+#else // USB
+  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
+  tft.drawBitmap(82, 62, WaitingDataBMP_USB, 76, 190, ILI9341_RED);
+#endif
+
+  delay(3000);
+ 
 }

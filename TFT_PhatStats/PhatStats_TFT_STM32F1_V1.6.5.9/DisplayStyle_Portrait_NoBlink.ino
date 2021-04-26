@@ -113,9 +113,17 @@ void DisplayStyle_Portrait_NoBlink () {
 
     /*CPU & GPU Hardware ID*/
 
+    /*CPU Manual Position Test*/
+
+
+
     if (inputString.indexOf("CPU") > -1)
     {
+
+
+      /* CPU Auto Detect Name*/
       String cpuName = "";
+
       tft.setTextSize(1);
       tft.setCursor(16, 8); // (Left/Right, UP/Down)
 
@@ -132,7 +140,15 @@ void DisplayStyle_Portrait_NoBlink () {
       }
       else
         cpuName = inputString.substring(cpuNameStart);
+
+      /* CPU Manual Name*/
+#ifdef Manual_cpuName
+      tft.println(set_CPUname);
+#else
+      /* CPU Auto Detect Name*/
       tft.println(cpuName);
+#endif
+
 
     }
     if (inputString.indexOf("GPU") > -1)
@@ -149,8 +165,16 @@ void DisplayStyle_Portrait_NoBlink () {
       }
 
       int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+      /* GPU Manual Name*/
+#ifdef Manual_gpuName
+      String gpuName = set_GPUname; // Name spacing test
+#else
+      /* GPU Auto Detect Name*/
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
       tft.println(gpuName);
+
     }
 
     //------------------------------------------------------RX indicator---------------------------------------------------
@@ -423,7 +447,12 @@ void DisplayStyle_Portrait_NoBlink () {
 
     tft.setCursor(120, 128);  // Position GPU Total Memory
     //tft.print(gpuMemoryString); // Show Value in MB
+
+#ifdef Manual_gpuRam
+    tft.print(set_GPUram);
+#else
     tft.print(totalGPUmemSumDP, 0); // Show Value in GB
+#endif
 
     tft.setTextSize(1);
     tft.print("GB");
@@ -436,8 +465,8 @@ void DisplayStyle_Portrait_NoBlink () {
     //Char erase and spacing adjust, MaDerer
     while (gpuMemoryUsedString.length() < 4) gpuMemoryUsedString = " " + gpuMemoryUsedString;
 
-    tft.setCursor(140, 129); //
-    tft.print(" / Used:");
+    tft.setCursor(146, 128); //
+    tft.print("/Used:");
     tft.print(gpuMemoryUsedString); //  show values in MB
     tft.setTextSize(1);
     tft.print("MB");

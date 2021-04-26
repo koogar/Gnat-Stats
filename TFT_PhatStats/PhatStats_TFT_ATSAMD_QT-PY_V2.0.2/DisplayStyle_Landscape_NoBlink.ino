@@ -15,7 +15,6 @@
 
 void DisplayStyle_Landscape_NoBlink () {
 
-
   /* TFT DRAW STATS */
   if (stringComplete) {
 
@@ -123,7 +122,9 @@ void DisplayStyle_Landscape_NoBlink () {
 
     if (inputString.indexOf("CPU") > -1)
     {
+
       String cpuName = "";
+
       tft.setTextSize(1);
       tft.setCursor(16, 8);// (Left/Right, UP/Down)
       //tft.setCursor(-35, 1);
@@ -141,7 +142,14 @@ void DisplayStyle_Landscape_NoBlink () {
       }
       else
         cpuName = inputString.substring(cpuNameStart);
+
+      /* CPU Manual Name*/
+#ifdef Manual_cpuName
+      tft.println(set_CPUname);
+#else
+      /* CPU Auto Detect Name*/
       tft.println(cpuName);
+#endif
 
     }
     if (inputString.indexOf("GPU") > -1)
@@ -158,7 +166,16 @@ void DisplayStyle_Landscape_NoBlink () {
       }
 
       int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+
+      /* GPU Manual Name*/
+#ifdef Manual_gpuName
+      String gpuName = set_GPUname; // Name spacing test
+#else
+      /* GPU Auto Detect Name*/
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
+
       tft.println(gpuName);
     }
 
@@ -269,6 +286,7 @@ void DisplayStyle_Landscape_NoBlink () {
     tft.setTextSize(2);
     tft.print ("+");
     tft.print(cpuOverclockSum, 0);            // Show Value in MHz
+    tft.setTextSize(1);
     tft.println ("MHz");
 #endif
 #ifdef ShowFrequencyGain%
@@ -360,7 +378,7 @@ void DisplayStyle_Landscape_NoBlink () {
     int gpuCoreClockStart = inputString.indexOf("GCC") + 3;
     int gpuCoreClockEnd = inputString.indexOf("|", gpuCoreClockStart);
     String gpuCoreClockString = inputString.substring(gpuCoreClockStart, gpuCoreClockEnd);
-    
+
     //Char erase and spacing adjust, MaDerer
     while (gpuCoreClockString.length() < 4) gpuCoreClockString = " " + gpuCoreClockString;
 
@@ -392,6 +410,7 @@ void DisplayStyle_Landscape_NoBlink () {
     tft.setTextSize(2);
     tft.print ("+");
     tft.print(gpuOverclockSum, 0);            // Show Value in MHz
+    tft.setTextSize(1);
     tft.println ("MHz");
 #endif
 #ifdef ShowFrequencyGain%
@@ -442,7 +461,12 @@ void DisplayStyle_Landscape_NoBlink () {
 
     tft.setTextSize(1);
     tft.setCursor(120, 130);  // Position GPU Total Memory
+
+#ifdef Manual_gpuRam
+    tft.print(set_GPUram);
+#else
     tft.print(totalGPUmemSumDP, 0); // Show Value in GB
+#endif
 
     tft.setTextSize(1);
     tft.print("GB");
