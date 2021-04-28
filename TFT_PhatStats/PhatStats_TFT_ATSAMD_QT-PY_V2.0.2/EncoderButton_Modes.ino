@@ -27,11 +27,11 @@ void encoder_Modes() {
     switch (enc_Button_counter) {
 
       case 0: // 1st SCREEN
-        DisplayStyle_Portrait_NoBlink();
+        DisplayStyle_Portrait_ATSAMD();
         break;
 
       case 1: // 2nd SCREEN
-        DisplayStyle_Landscape_NoBlink ();
+        DisplayStyle_Landscape_ATSAMD();
         break;
 
     }
