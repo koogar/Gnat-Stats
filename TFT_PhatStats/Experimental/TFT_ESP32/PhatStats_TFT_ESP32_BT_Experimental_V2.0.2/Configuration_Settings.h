@@ -84,8 +84,12 @@
        Change Boot Logo.
        Reduce the Size of the MHz font in the frequency gains display to allow for an extra digit.
 
-  v2.0.0.BT:
-       ESP32 Bluetooth Communication
+  v2.0.1.BT: (ESP32 ONLY)
+       ESP32 Bluetooth Communication (BT Classic not BLE)
+
+  v2.0.2.BT: (ESP32 ONLY)
+       Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
+
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -101,12 +105,17 @@
     \___/|_|   |_| |___\___/|_|\_|___/
 
   --------------------------------------------------------------------------------------*/
+/*    BT Limitations:
+  Currently when using BT you only have to connect the device to Windows, no pairing is needed.
+  When disconnected, you will need to manually reconnect in HardwareSerialMonitor by clicking
+  on the correct COM port “Standard Serial over Bluetooth link”.
 
+                Note: Once connected two “Standard Serial over Bluetooth link” will be visible , one is Send the other
+  is Receive. Once you know the correct port for Send, you can disable the other in Device Manager
+  so it does not to show up in HardwareSerialMonitor. */
 
-/*ESP32 Communication type, Uncomment for BT, else USB,*/
-#define Serial_BT  // enable Bluetooth connection
-#define enable_LibreNet // Experimental network stats
-
+/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
+#define enable_BT       // enable Bluetooth serial connection
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
@@ -117,24 +126,22 @@
 #define NVIDIA_GRAPHICS
 //#define AMD_GRAPHICS
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
 #define gpuNameStartLength 11
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 /* Manually name the  CPU,*/
-#define Manual_cpuName
-//String set_CPUname = "Core i9-9900k";
+//#define Manual_cpuName
 String set_CPUname = "Ryzen 9 5950x";
 
 /* Manually name the GPU,*/
-#define Manual_gpuName
+//#define Manual_gpuName
 String set_GPUname = "GeForce RTX 3090";
 
 /* Manually set GPU ram total,*/
-#define Manual_gpuRam
+//#define Manual_gpuRam
 String set_GPUram = "24";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -171,25 +178,32 @@ String set_GPUram = "24";
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-//-------------------------------- Phat-Tacho Gauge -------------------------------------
+//-------------------------------- NeoPixel Modes -------------------------------------
 
-//#define enableNeopixelGauges     // NeoPixel ring bargraph example
-int NeoBrightness = 20;          //Global Brightness
+#define enableNeopixelGauges     // NeoPixel ring bargraph example
+
+
+/* BT BATTERY SAVER HACK JOB, VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
+#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+int     Neo_DivideBy = 5;   // Divide NeoPixel brightness v's TFT brightness (less is brighter)
+
+/* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
+int NeoBrightness = 0;           // Global start up brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
 
-/* Uncomment only one option, */
-
-/* Use the Rotary Encoder for HID Volume Control*/
-// Reserved!!! not supported on ESP32 Reserved
-//#define Encoder_HID
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-// Reserved!!! PWM is not supported on ESP32 Reserved
-#define Encoder_PWM2 // use rotary encoder for PWM screen brightness control  3.3v
+//if commented the screen brightness will default to the fixed level below
+#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
-// Reserved!!! not supported on ESP32 Reserved
-volatile int brightness_count = 150; // Start Up PWM Brightness
+/*TFT Start Up Brightness*/
+volatile int brightness_count = 130; // Start Up Brightness
 
+//---------------------------------------------------------------------------------------
+/* Reserved!!! not supported on ESP32 Reserved*/
+/* Uncomment only one option, */
+/* Use the Rotary Encoder for HID Volume Control
+  #define Encoder_HID*/
 //-------------------------- Display Activity Shutdown -----------------------------------
 
 /* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
@@ -206,7 +220,10 @@ int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from 
 /* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
 int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip
 
+
 //----------------------------- Debug Screen Erasers ---------------------------------------
 
 /* Debug Screen, Update Erasers, */
 //#define Debug
+
+#define enable_LibreNet // Experimental network stats

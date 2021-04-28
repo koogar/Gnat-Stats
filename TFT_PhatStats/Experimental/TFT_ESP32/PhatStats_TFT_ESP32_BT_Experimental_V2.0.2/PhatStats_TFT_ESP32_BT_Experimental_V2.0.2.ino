@@ -14,21 +14,14 @@
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
 
-  Board Manager QY-PY
+  https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/boards_manager.md
+
+  Board Manager ESP32
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  Install Arduino ATSAMD then ADD
-  https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 
-  Drivers
-  ------------
-  https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
 
-  Board Manager XIAO
-  -------------------
-  https://wiki.seeedstudio.com/Seeeduino-XIAO/
-  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  https://files.seeedstudio.com/arduino/package_seeeduino_board
 
   Libraries
   ---------
@@ -43,9 +36,9 @@
 
   Rotary encoder
   https://github.com/koogar/ErriezRotaryEncoderFullStep
-  https://github.com/madhephaestus/ESP32Encoder
 
-  https://github.com/T-vK/ESP32-BLE-Keyboard
+  ESP32 analogueWrite Function
+  https://github.com/ERROPiX/ESP32_AnalogWrite
 
   Hookup Guide
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
@@ -55,23 +48,25 @@
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
-
+#include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Fonts/Org_01.h>
-
+#include <analogWrite.h>
 #include <TML_ErriezRotaryFullStep.h>
 
 #include "Configuration_Settings.h" // load settings
 #include "Bitmaps.h"
 
 #include "BluetoothSerial.h" //https://www.electronicshub.org/esp32-bluetooth-tutorial/
-BluetoothSerial SerialBT;  // Bluetooth Classic, not BLE
+BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
-  ESP32 Lolin32 v1 (Tested)
+  Wemos ESP32 Lolin32 v1   (Tested)
+  Wemos ESP32 Lolin32 Lite (Untested)
+  Wemos ESP32 LoLin32 D32  (Untested)
   -------------------------
   CS     =  17     (15)
   RST    =  19     (-1)
@@ -86,13 +81,12 @@ BluetoothSerial SerialBT;  // Bluetooth Classic, not BLE
   ---------------------
 
   Rotary Encoder
-  Note: When uploading the sketch to the ESP32
-  disconnect the Rotary Encoder. Or it may fail to upload
   ---------------------
-  EncoderA = 2  (4)
-  EncoderB = 15 (16)
 
-  EncButton= 0  (17)
+  EncoderA = 14   (14,2,4)
+  EncoderB = 27   (27,15,16)
+
+  EncButton= 0    (0,17)
   ---------------------
   i2c
   ---------------------
@@ -103,14 +97,14 @@ BluetoothSerial SerialBT;  // Bluetooth Classic, not BLE
   Neopixel / LED's
   ---------------------
   Built in LED =  5
-  Neopixel     =  32
+  Neopixel     =  2 (32)
   ==========================================================================================================
 */
 
 
 //---------------------------------------------------------------------------------------
 #include <Adafruit_NeoPixel.h>
-#define NEOPIN      32
+#define NEOPIN      2
 #define NUM_PIXELS  16
 Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 
@@ -146,8 +140,8 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardwar
 //-----------------------------------------------------------------------------
 
 /* Rotary Encoder*/
-#define encoderOutA 2 // CLK
-#define encoderOutB 15// DT
+#define encoderOutA 27 // CLK
+#define encoderOutB 14 // DT
 
 RotaryFullStep rotary(encoderOutA, encoderOutB);
 
@@ -157,6 +151,7 @@ int enc_Button_counter = 0;
 
 /* Screen TFT backlight Pin */
 int TFT_backlight_PIN = 4;
+
 
 /* Encoder TFT Brightness*/ //Reserved!!! not supported on ESP32 Reserved
 //volatile int brightness_count = 150; // Start Up PWM Brightness, moved to CFG!!!
@@ -215,7 +210,7 @@ void setup() {
 
 #endif
 
-#ifdef Serial_BT
+#ifdef enable_BT
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
   Serial.begin(9600);  //  USB Serial Baud Rate
@@ -223,17 +218,15 @@ void setup() {
 
   inputString.reserve(200); // String Buffer
 
-  /* Setup HID*/
-  // Sends a clean report to the host. This is important on any Arduino type.
 
 
-#ifdef Encoder_HID // not supported on ESP32 Reserved
-  // Initialize pin change interrupt on both rotary encoder pins
-  attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
-#endif
+  /* #ifdef Encoder_HID // not supported on ESP32 Reserved
+    // Initialize pin change interrupt on both rotary encoder pins
+    attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
+    #endif*/
 
-#ifdef Encoder_PWM2 //PWM is not supported on ESP32 Reserved
+#ifdef Encoder_PWM2
   // Initialize pin change interrupt on both rotary encoder pins
   attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt_PWM2, CHANGE);
@@ -246,7 +239,10 @@ void setup() {
 
   /* Set up PINs*/
   pinMode(encoder_Button, INPUT_PULLUP);
-  pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
+  //pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
+
+  // Set resolution for a specific pin
+  analogWriteResolution(TFT_backlight_PIN, 12); //ESP32 only
   pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
 
   backlightOFF();
@@ -273,13 +269,13 @@ void setup() {
 void loop() {
 
 
-#ifdef Encoder_PWM2 // Reserved!!! PWM is not supported on ESP32 Reserved
+#ifdef Encoder_PWM2
   void rotaryInterrupt_PWM();
 #endif
 
-#ifdef Encoder_HID // Reserved!!! runs all the time regardless of Phat-Stats being Active.
-  void rotaryInterrupt();
-#endif
+  /* #ifdef Encoder_HID // Reserved!!! runs all the time regardless of Phat-Stats being Active.
+    void rotaryInterrupt();
+    #endif*/
 
   /*ESP Activity LED */
   digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
@@ -313,9 +309,9 @@ void allNeoPixelsGREEN() {
   for ( int i = 0; i < NUM_PIXELS; i++ ) {
     pixels.setPixelColor(i, 0, 255, 0 );
   }
-    pixels.show();
+  pixels.show();
 }
-  
+
 void allNeoPixelsBLUE() {
   for ( int i = 0; i < NUM_PIXELS; i++ ) {
     pixels.setPixelColor(i, 0, 0, 255 );
@@ -343,7 +339,7 @@ void serialBTEvent() {
       stringComplete = true;
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
-      
+
 
       /* Serial Activity LED */
       digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
@@ -369,7 +365,7 @@ void serialEvent() {
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
       /* Serial Activity LED*/
-      //digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
 
     }
   }
@@ -420,15 +416,11 @@ void activityChecker() {
 //----------------------------- TFT Backlight  -------------------------------
 
 void backlightON () {
-  //analogWrite(TFT_backlight_PIN, brightness_count); // TFT turn on backlight
-  digitalWrite(TFT_backlight_PIN, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-
+  analogWrite(TFT_backlight_PIN, brightness_count); // TFT turn on backlight
 }
 
 void backlightOFF () {
-  //analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
-  digitalWrite(TFT_backlight_PIN, LOW);    // turn the LED off HIGH(OFF) LOW (ON)
-
+  analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
 }
 
 //----------------------------- Splash Screens --------------------------------
@@ -436,7 +428,7 @@ void backlightOFF () {
 void splashScreen() {
 
   /* Initial Boot Screen, */
-  
+
   allNeoPixelsOff();
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
@@ -487,7 +479,7 @@ void splashScreen() {
 
   FeatureSet_Indicator2(); // Display Icons for enabled features
 
-  delay(6000);
+  delay(4000);
 
 #ifdef Serial_BT
   allNeoPixelsBLUE();
@@ -506,5 +498,5 @@ void splashScreen() {
 #endif
 
   delay(3000);
- 
+
 }

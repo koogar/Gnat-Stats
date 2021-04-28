@@ -126,16 +126,16 @@
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Manually name the  CPU,*/
-#define Manual_cpuName
-String set_CPUname = "Core i9-9900k";
+//#define Manual_cpuName
+String set_CPUname = "xxxxxx";
 
 /* Manually name the GPU,*/
-#define Manual_gpuName
-String set_GPUname = "GeForce RTX 3090";
+//#define Manual_gpuName
+String set_GPUname = "xxxxxx";
 
 /* Manually set GPU ram total,*/
-#define Manual_gpuRam
-String set_GPUram = "24";
+//#define Manual_gpuRam
+String set_GPUram = "xx";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
@@ -180,7 +180,7 @@ String set_GPUram = "24";
 
 //-------------------------------- Phat-Tacho Gauge -------------------------------------
 
-//#define enableNeopixelGauges     // NeoPixel ring bargraph example
+#define enableNeopixelGauges     // NeoPixel ring bargraph example
 int NeoBrightness = 20;          //Global Brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
