@@ -121,7 +121,7 @@
   so it does not to show up in HardwareSerialMonitor.*/
   
 /*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-//#define enable_BT       // enable Bluetooth serial connection
+#define enable_BT       // enable Bluetooth serial connection
 
 /*Disclaimer:
   If using a battery or LiPo pack you must take some responsibility, do your research!!!. 
@@ -133,8 +133,8 @@
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
 /* Uncomment your CPU,*/
-#define AMD_CPU
-//#define INTEL_CPU
+//#define AMD_CPU
+#define INTEL_CPU
 /* Uncomment your GPU,*/
 #define NVIDIA_GRAPHICS
 //#define AMD_GRAPHICS
@@ -147,15 +147,15 @@
 
 /* Manually name the  CPU,*/
 //#define Manual_cpuName
-String set_CPUname = "Ryzen 9 5950x";
+String set_CPUname = "xxxxxxxx";
 
 /* Manually name the GPU,*/
 //#define Manual_gpuName
-String set_GPUname = "GeForce RTX 3090";
+String set_GPUname = "xxxxxxxx";
 
 /* Manually set GPU ram total,*/
 //#define Manual_gpuRam
-String set_GPUram = "24";
+String set_GPUram = "xx";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
@@ -193,15 +193,15 @@ String set_GPUram = "24";
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 
-#define enableNeopixelGauges     // NeoPixel ring bargraph example
+//#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
 
 /* BT BATTERY SAVER HACK JOB, VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
-#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+//#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 int     Neo_DivideBy = 5;   // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
 /* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
-int NeoBrightness = 0;           // Global start up brightness
+int NeoBrightness   = 20;           // Global start up brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
 
