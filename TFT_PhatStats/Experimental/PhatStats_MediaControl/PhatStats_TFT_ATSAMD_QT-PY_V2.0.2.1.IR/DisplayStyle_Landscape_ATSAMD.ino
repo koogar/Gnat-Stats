@@ -13,7 +13,7 @@
 
 /*Optimised for ILI9341 320 x 240 in landscape*/
 
-void DisplayStyle_Landscape_NoBlink () {
+void DisplayStyle_Landscape_ATSAMD () {
 
   /* TFT DRAW STATS */
   if (stringComplete) {
