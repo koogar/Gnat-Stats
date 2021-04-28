@@ -8,7 +8,7 @@ void encoder_Modes() {
   if (enc_buttonVal == LOW)
 
   {
-    //Consumer.write(MEDIA_VOLUME_MUTE);
+    
     delay(debounceEncButton); // Debounce Button
     enc_Button_counter ++;
 
@@ -28,11 +28,11 @@ void encoder_Modes() {
     switch (enc_Button_counter) {
 
       case 0: // 1st SCREEN
-        DisplayStyle_Portrait_NoBlink();
+        DisplayStyle_Portrait_STM32();
         break;
 
       case 1: // 2nd SCREEN
-        DisplayStyle_Landscape_NoBlink ();
+        DisplayStyle_Landscape_STM32();
         break;
 
     }

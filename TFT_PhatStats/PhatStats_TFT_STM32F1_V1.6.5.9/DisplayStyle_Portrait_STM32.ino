@@ -12,7 +12,7 @@
 
 /* Optimised for ILI9341 320 x 240 in portrait,*/
 
-void DisplayStyle_Portrait_NoBlink () {
+void DisplayStyle_Portrait_STM32 () {
 
   /* TFT DRAW STATS, */
   if (stringComplete) {
