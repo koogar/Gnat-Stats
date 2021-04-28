@@ -11,6 +11,8 @@
               |_|            |___/                                        |_|
 */
 
+#define enable_LibreNet // Experimental network stats
+
 /*Optimised for ILI9341 320 x 240 in landscape*/
 
 void DisplayStyle_Landscape_LibreNet() {

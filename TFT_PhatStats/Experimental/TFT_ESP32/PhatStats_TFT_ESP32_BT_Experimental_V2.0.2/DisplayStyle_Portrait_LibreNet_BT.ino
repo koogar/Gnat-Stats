@@ -10,6 +10,7 @@
               |_|            |___/
 */
 
+#define enable_LibreNet // Experimental network stats
 /* Optimised for ILI9341 320 x 240 in portrait,*/
 
 void DisplayStyle_Portrait_LibreNet () {

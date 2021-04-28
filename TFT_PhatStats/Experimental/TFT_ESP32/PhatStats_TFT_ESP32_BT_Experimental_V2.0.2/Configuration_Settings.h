@@ -105,17 +105,22 @@
     \___/|_|   |_| |___\___/|_|\_|___/
 
   --------------------------------------------------------------------------------------*/
+/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
+#define enable_BT       // enable Bluetooth serial connection
+
 /*    BT Limitations:
+
+   If BT is enabled you can not use HardwareSerialMonitor with USB serial, even though it is visible.
+  You can still upload new code through the Arduino IDE as normal.
+
   Currently when using BT you only have to connect the device to Windows, no pairing is needed.
   When disconnected, you will need to manually reconnect in HardwareSerialMonitor by clicking
   on the correct COM port “Standard Serial over Bluetooth link”.
 
-                Note: Once connected two “Standard Serial over Bluetooth link” will be visible , one is Send the other
-  is Receive. Once you know the correct port for Send, you can disable the other in Device Manager
-  so it does not to show up in HardwareSerialMonitor. */
-
-/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-#define enable_BT       // enable Bluetooth serial connection
+                Note: Once connected, two “Standard Serial over Bluetooth link” will be visible
+  one is Send, the other is Receive. When you know the correct port for Send, you can disable the other in Device Manager
+  so it does not to show up in HardwareSerialMonitor.
+*/
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
@@ -225,5 +230,3 @@ int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Si
 
 /* Debug Screen, Update Erasers, */
 //#define Debug
-
-#define enable_LibreNet // Experimental network stats
