@@ -105,8 +105,7 @@
     \___/|_|   |_| |___\___/|_|\_|___/
 
   --------------------------------------------------------------------------------------*/
-/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-#define enable_BT       // enable Bluetooth serial connection
+
 
 /*    BT Limitations:
 
@@ -119,8 +118,17 @@
 
                 Note: Once connected, two “Standard Serial over Bluetooth link” will be visible
   one is Send, the other is Receive. When you know the correct port for Send, you can disable the other in Device Manager
-  so it does not to show up in HardwareSerialMonitor.
-*/
+  so it does not to show up in HardwareSerialMonitor.*/
+  
+/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
+//#define enable_BT       // enable Bluetooth serial connection
+
+/*Disclaimer:
+  If using a battery or LiPo pack you must take some responsibility, do your research!!!. 
+  No advice will be given, or implied regarding which you should use etc.
+  Use the battery/type in accordance with the microntroller board manufacturer's recommendations.
+  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!!  */ 
+
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 

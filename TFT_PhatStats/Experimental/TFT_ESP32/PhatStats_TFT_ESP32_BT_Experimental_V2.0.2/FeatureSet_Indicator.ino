@@ -86,10 +86,15 @@ void FeatureSet_Indicator2 () {
   //------ 5 BT
 #ifdef enable_BT // Reserved
   tft.drawBitmap(188 + X_Offset, 24 + Y_Offset, BT_BMP, 36, 36, ILI9341_BLUE);
-  tft.setTextColor(ILI9341_GREY); tft.setCursor(200 + X_Offset, 68 + Y_Offset); tft.print("BT");
+  tft.setTextColor(ILI9341_WHITE); tft.setCursor(200 + X_Offset, 68 + Y_Offset); tft.print("BT");
+
 #else
   tft.drawBitmap(188 + X_Offset, 24 + Y_Offset, BT_BMP, 36, 36, ILI9341_GREY);
-  tft.setTextColor(ILI9341_GREY); tft.setCursor(198 + X_Offset, 68 + Y_Offset); tft.print("Off");
+  tft.setTextSize(2);
+  tft.setTextColor(ILI9341_WHITE); tft.setCursor(192 + X_Offset, 47 + Y_Offset); tft.print("USB");
+  tft.setTextSize(1);
+  
+  tft.setTextColor(ILI9341_GREY); tft.setCursor(198 + X_Offset, 68 + Y_Offset); tft.print("OFF");
 #endif
 
 

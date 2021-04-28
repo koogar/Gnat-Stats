@@ -481,14 +481,14 @@ void splashScreen() {
 
   delay(4000);
 
-#ifdef Serial_BT
+#ifdef enable_BT
   allNeoPixelsBLUE();
 #else
   allNeoPixelsRED();
 #endif
   tft.fillScreen(ILI9341_BLACK);
 
-#ifdef Serial_BT
+#ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
 
