@@ -31,6 +31,11 @@ void rotaryInterrupt_PWM2() // TFT PWM Brightness Adjust
   if (brightness_countLast != brightness_count) {
     brightness_countLast = brightness_count;
     analogWrite(TFT_backlight_PIN , brightness_count );
+
+#ifdef Neo_BrightnessAuto // Adjust NeoPixel brightness with screen brightness
+    pixels.setBrightness(brightness_count / Neo_DivideBy); //
+#endif
+
   }
 }
 #endif

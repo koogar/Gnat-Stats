@@ -44,7 +44,19 @@ void FeatureSet_Indicator2 () {
   tft.setTextColor(ILI9341_GREY); tft.setCursor(72 + X_Offset, 68 + Y_Offset); tft.print("Off");
 #endif
   delay(featureDelay);
+  
+//------ 2B Neo_BrightnessAuto
+#ifdef Neo_BrightnessAuto
+// Mask Neo Brightness
+  tft.setTextColor(ILI9341_BLACK); tft.setCursor(74 + X_Offset, 78 + Y_Offset); tft.print(NeoBrightness);
+  
+  tft.drawBitmap(62 + X_Offset, 24 + Y_Offset, Neo_Gauges_BMP, 36, 36, ILI9341_WHITE);
+  tft.setTextColor(ILI9341_WHITE); tft.setCursor(72 + X_Offset, 68 + Y_Offset); tft.print("NEO");
+  tft.setTextColor(ILI9341_WHITE); tft.setCursor(69 + X_Offset, 78 + Y_Offset); tft.print("AUTO");
 
+#endif
+  delay(featureDelay);
+ 
 
   //------ 3 Volume
 #ifdef Encoder_HID
@@ -79,7 +91,7 @@ void FeatureSet_Indicator2 () {
 #else
   tft.drawBitmap(188 + X_Offset, 24 + Y_Offset, BT_BMP, 36, 36, ILI9341_GREY);
   tft.setTextSize(2);
-  tft.setTextColor(ILI9341_WHITE); tft.setCursor(192 + X_Offset, 47 + Y_Offset); tft.print("USB");
+  tft.setTextColor(ILI9341_WHITE); tft.setCursor(190 + X_Offset, 45 + Y_Offset); tft.print("USB");
   tft.setTextSize(1);
   
   tft.setTextColor(ILI9341_GREY); tft.setCursor(198 + X_Offset, 68 + Y_Offset); tft.print("OFF");

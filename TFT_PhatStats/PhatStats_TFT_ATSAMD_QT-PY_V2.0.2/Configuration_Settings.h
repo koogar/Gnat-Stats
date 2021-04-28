@@ -86,6 +86,7 @@
 
   v2.0.2:
        Add option to manual name CPU & GPU in the CFG
+       Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -178,10 +179,16 @@ String set_GPUram = "xx";
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-//-------------------------------- Phat-Tacho Gauge -------------------------------------
+//-------------------------------- NeoPixel Modes -------------------------------------
 
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
-int NeoBrightness = 20;          //Global Brightness
+
+/* VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
+//#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+int     Neo_DivideBy = 5;    // Divide NeoPixel brightness v's TFT brightness (less is brighter)
+
+/* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
+int NeoBrightness   = 20;           // Global start up brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
 
