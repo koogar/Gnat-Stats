@@ -60,33 +60,38 @@
 #include "Bitmaps.h"
 
 #include "BluetoothSerial.h" //https://www.electronicshub.org/esp32-bluetooth-tutorial/
+
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! 
+#endif
+
 BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
-  Wemos ESP32 Lolin32 v1   (Tested)
-  Wemos ESP32 Lolin32 Lite (Untested)
-  Wemos ESP32 LoLin32 D32  (Untested)
-  -------------------------
-  CS     =  17     (15)
-  RST    =  19     (-1)
-  DC     =  16     (2)
+  Wemos ESP32 Lolin32 v1   (Compiles/Tested)
+  Wemos ESP32 Lolin32 Lite (Compiles/Untested)
+  Wemos ESP32 LoLin32 D32  (Compiles/Untested)
+  --------------------------------------------
+  CS     =  17             (15)
+  RST    =  19             (-1)
+  DC     =  16             (2)
 
   SCLK   =  18
   MOSI   =  23
 
   MISO   =  19   (*Not Required for Reference only!!!)
 
-  B.LIGHT =  4   (0, 13) Note: analogWrite() PWM is not supported in the ESP32 Core
+  B.LIGHT =  4             (0, 13)
   ---------------------
 
   Rotary Encoder
   ---------------------
 
-  EncoderA = 14   (14,2,4)
-  EncoderB = 27   (27,15,16)
+  EncoderA = 14           (14,2,4)
+  EncoderB = 27           (27,15,16)
 
-  EncButton= 0    (0,17)
+  EncButton= 0            (0,17)
   ---------------------
   i2c
   ---------------------
@@ -97,7 +102,7 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
   Neopixel / LED's
   ---------------------
   Built in LED =  5
-  Neopixel     =  2 (32)
+  Neopixel     =  2       (32)
   ==========================================================================================================
 */
 

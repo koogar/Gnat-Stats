@@ -1,27 +1,29 @@
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
-  ESP32 Lolin32 v1 (Tested)
-  -------------------------
-  CS     =  17     
-  RST    =  19     
-  DC     =  16     
+  Wemos ESP32 Lolin32 v1   (Compiles/Tested)
+  Wemos ESP32 Lolin32 Lite (Compiles/Untested)
+  Wemos ESP32 LoLin32 D32  (Compiles/Untested)
+  --------------------------------------------
+  CS     =  17             (15)
+  RST    =  19             (-1)
+  DC     =  16             (2)
 
   SCLK   =  18
   MOSI   =  23
 
   MISO   =  19   (*Not Required for Reference only!!!)
 
-  B.LIGHT =  4   
+  B.LIGHT =  4             (0, 13)
   ---------------------
 
   Rotary Encoder
   ---------------------
-  EncoderA = 14   
-  EncoderB = 27   
 
-  EncButton= 0 
+  EncoderA = 14           (14,2,4)
+  EncoderB = 27           (27,15,16)
 
+  EncButton= 0            (0,17)
   ---------------------
   i2c
   ---------------------
@@ -32,6 +34,6 @@
   Neopixel / LED's
   ---------------------
   Built in LED =  5
-  Neopixel     =  2 
+  Neopixel     =  2       (32)
   ==========================================================================================================
 */

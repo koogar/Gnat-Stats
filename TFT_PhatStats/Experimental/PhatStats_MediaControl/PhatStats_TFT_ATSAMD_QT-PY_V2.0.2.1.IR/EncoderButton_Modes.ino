@@ -1,14 +1,13 @@
 
 
-/*New Encoder Mode Button*/
-void encoder_Modes() {
+/*New Encoder Mode Button Function*/
 
+void encoder_Modes() {
 
   int enc_buttonVal = digitalRead(encoder_Button);
   if (enc_buttonVal == LOW)
 
-  {
-    //Consumer.write(MEDIA_VOLUME_MUTE);
+  {  
     delay(debounceEncButton); // Debounce Button
     enc_Button_counter ++;
 
