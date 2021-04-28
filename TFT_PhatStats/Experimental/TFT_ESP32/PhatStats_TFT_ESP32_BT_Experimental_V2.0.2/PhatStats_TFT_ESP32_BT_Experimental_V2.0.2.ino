@@ -471,23 +471,30 @@ void splashScreen() {
 
   tft.setTextColor(ILI9341_WHITE);
   tft.setFont(); // Set Default Adafruit GRFX Font
+  
   tft.setTextSize(1);
+
   tft.setCursor(10, 305);
-  tft.print("Use HardwareSerialMonitor v1.3 Upward");
+  tft.setTextColor(ILI9341_WHITE);
+  tft.print("If using USB Serial? Disconnect BT!!!");
 
   backlightON();
 
   FeatureSet_Indicator2(); // Display Icons for enabled features
 
   delay(4000);
-
+  
+#ifdef enableNeopixelGauges
+ 
 #ifdef enable_BT
   allNeoPixelsBLUE();
 #else
   allNeoPixelsRED();
-#endif
-  tft.fillScreen(ILI9341_BLACK);
+#endif 
 
+#endif
+
+tft.fillScreen(ILI9341_BLACK);
 #ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
