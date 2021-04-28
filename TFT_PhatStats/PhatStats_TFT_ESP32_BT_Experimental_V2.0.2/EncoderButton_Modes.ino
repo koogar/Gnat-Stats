@@ -28,12 +28,12 @@ void encoder_Modes() {
 
       case 0: // 1st SCREEN
         //DisplayStyle_Portrait_LibreNet();
-        DisplayStyle_Portrait_NoBlink();
+        DisplayStyle_Portrait_ESP();
         break;
 
       case 1: // 2nd SCREEN
         //DisplayStyle_Landscape_LibreNet();
-        DisplayStyle_Landscape_NoBlink();
+        DisplayStyle_Landscape_ESP();
         break;
 
     }
