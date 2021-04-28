@@ -483,11 +483,16 @@ void splashScreen() {
 
   delay(6000);
 
-#ifdef Serial_BT
+#ifdef enableNeopixelGauges
+ 
+#ifdef enable_BT
   allNeoPixelsBLUE();
 #else
   allNeoPixelsRED();
+#endif 
+
 #endif
+
   tft.fillScreen(ILI9341_BLACK);
 
 #ifdef Serial_BT
