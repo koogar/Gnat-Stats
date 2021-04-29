@@ -101,7 +101,7 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 
   Neopixel / LED's
   ---------------------
-  Built in LED =  5
+  Built in LED =  5 (*Not Required for Reference only!!!)
   Neopixel     =  2       (32)
   ==========================================================================================================
 */
@@ -223,14 +223,6 @@ void setup() {
 
   inputString.reserve(200); // String Buffer
 
-
-
-  /* #ifdef Encoder_HID // not supported on ESP32 Reserved
-    // Initialize pin change interrupt on both rotary encoder pins
-    attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
-    #endif*/
-
 #ifdef Encoder_PWM2
   // Initialize pin change interrupt on both rotary encoder pins
   attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt_PWM2, CHANGE);
@@ -244,7 +236,6 @@ void setup() {
 
   /* Set up PINs*/
   pinMode(encoder_Button, INPUT_PULLUP);
-  //pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
 
   // Set resolution for a specific pin
   analogWriteResolution(TFT_backlight_PIN, 12); //ESP32 only
@@ -278,9 +269,6 @@ void loop() {
   void rotaryInterrupt_PWM();
 #endif
 
-  /* #ifdef Encoder_HID // Reserved!!! runs all the time regardless of Phat-Stats being Active.
-    void rotaryInterrupt();
-    #endif*/
 
   /*ESP Activity LED */
   digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)

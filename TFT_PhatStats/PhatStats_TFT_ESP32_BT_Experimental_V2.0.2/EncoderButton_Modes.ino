@@ -27,12 +27,10 @@ void encoder_Modes() {
     switch (enc_Button_counter) {
 
       case 0: // 1st SCREEN
-        //DisplayStyle_Portrait_LibreNet();
         DisplayStyle_Portrait_ESP();
         break;
 
       case 1: // 2nd SCREEN
-        //DisplayStyle_Landscape_LibreNet();
         DisplayStyle_Landscape_ESP();
         break;
 

@@ -42,39 +42,10 @@ void rotaryInterrupt_PWM2() // TFT PWM Brightness Adjust
 
 #ifdef Neo_BrightnessAuto // Adjust NeoPixel brightness with screen brightness
 
-    pixels.setBrightness(brightness_count / Neo_DivideBy); //
+    pixels.setBrightness(brightness_count / Neo_DivideBy); 
 
 #endif
 
   }
 }
 #endif
-
-
-
-
-/*
-  //---------------------------------------------------
-  #ifdef Encoder_HID // Reserved!!! not supported on ESP32 Reserved
-
-  void rotaryInterrupt() // Volume control
-  {
-  int rotaryState;
-
-  // Read rotary state (Counter clockwise) -3, -2, -1, 0, 1, 2, 3 (Clockwise)
-  rotaryState = rotary.read();
-
-  if (rotaryState < 0)  {
-    //Do Something Down
-
-  } else {
-
-    if (rotaryState > 0)  {
-      //Do Something UP
-
-    }
-  }
-  }
-
-  #endif
-*/

@@ -205,18 +205,13 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
 
-/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
-//if commented the screen brightness will default to the fixed level below
-#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
+/* If commented the screen brightness will default to the fixed level below,*/
+//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
 volatile int brightness_count = 130; // Start Up Brightness
 
-//---------------------------------------------------------------------------------------
-/* Reserved!!! not supported on ESP32 Reserved*/
-/* Uncomment only one option, */
-/* Use the Rotary Encoder for HID Volume Control
-  #define Encoder_HID*/
 //-------------------------- Display Activity Shutdown -----------------------------------
 
 /* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
