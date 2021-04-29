@@ -120,8 +120,9 @@
   one is Send, the other is Receive. When you know the correct port for Send, you can disable the other in Device Manager
   so it does not to show up in HardwareSerialMonitor.*/
   
+  
 /*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-#define enable_BT       // enable Bluetooth serial connection
+//#define enable_BT       // enable Bluetooth serial connection
 
 /*Disclaimer:
   If using a battery or LiPo pack you must take some responsibility, do your research!!!. 
