@@ -84,12 +84,9 @@
        Change Boot Logo.
        Reduce the Size of the MHz font in the frequency gains display to allow for an extra digit.
 
-  v2.0.1.BT:
-       ESP32 Bluetooth Communication (BT Classic not BLE)
-
-  v2.0.2.BT:
-       Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
-
+  v2.0.2:
+       Add option to manual name CPU & GPU in the CFG
+       Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -102,57 +99,40 @@
      ___  ___ _____ ___ ___  _  _ ___
     / _ \| _ \_   _|_ _/ _ \| \| / __|
    | (_) |  _/ | |  | | (_) | .` \__ \
-    \___/|_|   |_| |___\___/|_|\_|___/*/
+    \___/|_|   |_| |___\___/|_|\_|___/
 
-//------------------------------- BT Limitations --------------------------------------
+  --------------------------------------------------------------------------------------
+*/
 
-/*If BT is enabled you can not use HardwareSerialMonitor with USB serial, even though it is visible.
-  You can still upload new code through the Arduino IDE as normal.
+//--------------------------- Micro Controller Selection---------------------------------
 
-  Currently when using BT you only have to connect the device to Windows, no pairing is needed.
-  When disconnected, you will need to manualy reconnect in HardwareSerialMonitor by clicking
-  on the correct COM port “Standard Serial over Bluetooth link”.
-
-  Note: Once connected, two “Standard Serial over Bluetooth link” will be visible
-  one is Send, the other is Receive. 
-  When you know the correct port for Send you can disable the other in Device Manager 
-  so it does not to show up in HardwareSerialMonitor.*/
-
-//--------------------------- Bluetooth or USB serial -----------------------------------
-
-/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-#define enable_BT       // enable Bluetooth serial connection
-
-//-------------------------------- DISCLAIMER -------------------------------------------
-
-/*If using a battery or LiPo pack you must take some responsibility, do your research!!!.
-  No advice will be given, or implied regarding which you should use etc.
-  
-  Use the battery/type in accordance with the microntroller board manufacturer's recommendations.
-  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! */
+/* Uncomment your Micro Processor,*/
+//#define Adafruit_QTPY
+#define Seeeduino_XIAO
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
-
 /* Uncomment your CPU,*/
 //#define AMD_CPU
 #define INTEL_CPU
+
 /* Uncomment your GPU,*/
 #define NVIDIA_GRAPHICS
 //#define AMD_GRAPHICS
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
 #define gpuNameStartLength 11
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 /* Manually name the  CPU,*/
 //#define Manual_cpuName
-String set_CPUname = "xxxxxxxx";
+String set_CPUname = "xxxxxx";
 
 /* Manually name the GPU,*/
 //#define Manual_gpuName
-String set_GPUname = "xxxxxxxx";
+String set_GPUname = "xxxxxx";
 
 /* Manually set GPU ram total,*/
 //#define Manual_gpuRam
@@ -161,10 +141,13 @@ String set_GPUram = "xx";
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
 #define smallPercent  // Use small percent symbol
+
 //---------------------------------------------------------------------------------------
 
 /* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
 //#define CPU_OverClocked
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* CPU & GPU Thermal Junction Max Temperature in "c" before throttling,*/
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
@@ -174,6 +157,8 @@ String set_GPUram = "xx";
 #define CPU_BOOST 3700  //  Enter Stock CPU Frequency eg. Intel Core i9600k = 3700MHz
 #define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
 //#define enable_gpuPowerStats // Nvidia Specific???
 //#define enable_gpuFanStats%
@@ -182,6 +167,8 @@ String set_GPUram = "xx";
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
 #define enable_ShowFrequencyGain
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Uncomment only one of the below,*/
 //#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
@@ -196,22 +183,23 @@ String set_GPUram = "xx";
 
 //#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
-
-/* BT BATTERY SAVER HACK JOB, VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
+/* VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
 //#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
-int     Neo_DivideBy = 5;   // Divide NeoPixel brightness v's TFT brightness (less is brighter)
+int     Neo_DivideBy = 5;    // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
 /* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
 int NeoBrightness   = 20;           // Global start up brightness
 
 //----------------------------- Rotary Encoder Usage ------------------------------------
 
-/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
-/* If commented the screen brightness will default to the fixed level below,*/
-//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+/* Uncomment only one option, */
 
-/*TFT Start Up Brightness*/
-volatile int brightness_count = 130; // Start Up Brightness
+/* Use the Rotary Encoder for HID Volume Control*/
+//#define Encoder_HID
+
+/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
+#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+volatile int brightness_count = 150; // Start Up PWM Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
@@ -224,11 +212,10 @@ volatile int brightness_count = 130; // Start Up Brightness
 //-------------------------------- Misco Setting -----------------------------------------
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
-/* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
-int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip
-
+/* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
+int Serial_eventDelay = 0; //
 
 //----------------------------- Debug Screen Erasers ---------------------------------------
 

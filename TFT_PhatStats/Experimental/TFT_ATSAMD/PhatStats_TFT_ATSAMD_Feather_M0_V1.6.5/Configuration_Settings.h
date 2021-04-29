@@ -48,19 +48,18 @@
         Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
 
   v1.6.3 :
-       Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
+        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
 
   v1.6.4:
-       QT-PY Only: Optimise Pins (changes from previous)
-       Remove PWM_Encoder_PNP option
-       Move ActivityChecker and Serialevent back to main loop,
-       Add option to disable ActivityChecker to retain last info before PC crash ETC
-
+        QT-PY Only: Optimise Pins (changes from previous)
+        Remove PWM_Encoder_PNP option
+        Move ActivityChecker and Serialevent back to main loop, 
+        Add option to disable ActivityChecker to retain last info before PC crash ETC
   v1.6.5:
        Move encoder modes in its own function tab
        Rename switchpin to encoder_Button
        Clean up old stuff
-
+       
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -74,11 +73,8 @@
    | (_) |  _/ | |  | | (_) | .` \__ \
     \___/|_|   |_| |___\___/|_|\_|___/
 
-  --------------------------------------------------------------------------------------*/
-
-/* Uncomment your Micro Processor,*/
-#define Adafruit_QTPY
-//#define Seeeduino_XIAO
+  --------------------------------------------------------------------------------------
+*/
 
 /* Uncomment your CPU,*/
 //#define AMD_CPU

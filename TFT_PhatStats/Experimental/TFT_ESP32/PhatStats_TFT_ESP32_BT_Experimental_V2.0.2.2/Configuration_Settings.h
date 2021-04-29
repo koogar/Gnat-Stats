@@ -88,7 +88,10 @@
        ESP32 Bluetooth Communication (BT Classic not BLE)
 
   v2.0.2.BT:
-       Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
+      Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
+  
+  v2.0.2.2.BT:
+      Use either BT or USB Serial "enable_DualSerialEvent"
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -119,9 +122,13 @@
   so it does not to show up in HardwareSerialMonitor.*/
 
 //--------------------------- Bluetooth or USB serial -----------------------------------
+/*ESP32 Communication type, Uncomment only one option!!!*/
 
-/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-#define enable_BT       // enable Bluetooth serial connection
+/*Uncomment to enable BT, else default to USB serial,*/
+//#define enable_BT              // enable only Bluetooth serial connection
+
+/*Uncomment to enable BT and USB serial,*/
+#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 //-------------------------------- DISCLAIMER -------------------------------------------
 
