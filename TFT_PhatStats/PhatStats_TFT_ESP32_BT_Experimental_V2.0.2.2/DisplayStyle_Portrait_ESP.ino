@@ -13,6 +13,10 @@
 /* Optimised for ILI9341 320 x 240 in portrait,*/
 
 void DisplayStyle_Portrait_ESP () {
+  
+#ifdef enable_DualSerialEvent
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#endif
 
 #ifdef enable_BT
   serialBTEvent();    // Check for Bluetooth Serial Activity

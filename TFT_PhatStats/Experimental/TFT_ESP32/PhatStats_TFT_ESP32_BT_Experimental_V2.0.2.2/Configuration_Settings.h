@@ -136,8 +136,13 @@
   No advice will be given, or implied regarding which you should use etc.
   
   Use the battery/type in accordance with the microntroller board manufacturer's recommendations.
-  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! */
+  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! 
 
+  !!!THE WEMOS LOLIN32 APPEARS TO HAVE NO "LOW CUT OFF VOLTAGE" ON THE LIPO SOCKET!!! 
+        OTHER BOARDS MAY BE THE SAME, USE A LIPO BATTERY WITH BUILT IN PROTECTION. 
+  
+                ALTERNATIVELY USE A BATTERY BANK THROUGH THE USB CONNECTOR*/
+  
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
 /* Uncomment your CPU,*/

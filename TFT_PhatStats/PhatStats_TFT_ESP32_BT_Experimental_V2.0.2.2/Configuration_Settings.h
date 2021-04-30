@@ -88,7 +88,10 @@
        ESP32 Bluetooth Communication (BT Classic not BLE)
 
   v2.0.2.BT:
-       Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
+      Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
+  
+  v2.0.2.2.BT:
+      Use either BT or USB Serial "enable_DualSerialEvent"
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -119,9 +122,13 @@
   so it does not to show up in HardwareSerialMonitor.*/
 
 //--------------------------- Bluetooth or USB serial -----------------------------------
+/*ESP32 Communication type, Uncomment only one option!!!*/
 
-/*ESP32 Communication type, Uncomment to enable BT, else default to USB serial,*/
-#define enable_BT       // enable Bluetooth serial connection
+/*Uncomment to enable BT, else default to USB serial,*/
+//#define enable_BT              // enable only Bluetooth serial connection
+
+/*Uncomment to enable BT and USB serial,*/
+#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 //-------------------------------- DISCLAIMER -------------------------------------------
 
@@ -129,8 +136,13 @@
   No advice will be given, or implied regarding which you should use etc.
   
   Use the battery/type in accordance with the microntroller board manufacturer's recommendations.
-  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! */
+  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! 
 
+  !!!THE WEMOS LOLIN32 APPEARS TO HAVE NO "LOW CUT OFF VOLTAGE" ON THE LIPO SOCKET!!! 
+        OTHER BOARDS MAY BE THE SAME, USE A LIPO BATTERY WITH BUILT IN PROTECTION. 
+  
+                ALTERNATIVELY USE A BATTERY BANK THROUGH THE USB CONNECTOR*/
+  
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
 /* Uncomment your CPU,*/
@@ -229,7 +241,7 @@ int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from 
 /* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
 int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip
 
-int baud = 115200;
+int baud = 115200; //do not adjust
 //----------------------------- Debug Screen Erasers ---------------------------------------
 
 /* Debug Screen, Update Erasers, */

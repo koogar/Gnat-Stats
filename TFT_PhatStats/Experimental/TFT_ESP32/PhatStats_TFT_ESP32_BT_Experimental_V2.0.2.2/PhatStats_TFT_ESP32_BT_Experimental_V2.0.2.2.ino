@@ -61,6 +61,7 @@
 
 #include "BluetoothSerial.h" //https://www.electronicshub.org/esp32-bluetooth-tutorial/
 
+
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled!
 #endif
@@ -211,14 +212,18 @@ boolean stringComplete = false;
 
 void setup() {
 
+
+
 #ifdef enable_DualSerialEvent
   SerialBT.begin(device_BT); //Bluetooth device name
 #endif
 
 
 #ifdef enable_BT
+  //btStart();
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
+  //btStop();
   Serial.begin(baud);  //  USB Serial Baud Rate
 #endif
 

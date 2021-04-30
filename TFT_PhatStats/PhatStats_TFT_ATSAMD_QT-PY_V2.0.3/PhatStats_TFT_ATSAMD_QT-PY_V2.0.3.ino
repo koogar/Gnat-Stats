@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.2"  // Code version number
+#define CODE_VERS  "2.0.3"  // Code version number
 
 
 /*

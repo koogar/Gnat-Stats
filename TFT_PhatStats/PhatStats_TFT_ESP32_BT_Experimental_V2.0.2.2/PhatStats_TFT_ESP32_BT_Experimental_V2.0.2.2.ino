@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.2.BT"  // Code version number
+#define CODE_VERS  "2.0.2.2.BT"  // Code version number
 #define device_BT "TallmanLabs_BT"
 
 
@@ -61,8 +61,9 @@
 
 #include "BluetoothSerial.h" //https://www.electronicshub.org/esp32-bluetooth-tutorial/
 
+
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled! 
+#error Bluetooth is not enabled!
 #endif
 
 BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
@@ -211,13 +212,18 @@ boolean stringComplete = false;
 
 void setup() {
 
-#ifdef Serial_USB
 
+
+#ifdef enable_DualSerialEvent
+  SerialBT.begin(device_BT); //Bluetooth device name
 #endif
 
+
 #ifdef enable_BT
+  //btStart();
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
+  //btStop();
   Serial.begin(baud);  //  USB Serial Baud Rate
 #endif
 
@@ -435,11 +441,11 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
-  
+
   tft.setCursor(20, 20);
   tft.setTextColor(ILI9341_WHITE);
   tft.print(baud);//tft.println(" bits/s");
-  
+
   tft.setTextSize(3);
   tft.setCursor(86, 140);
   tft.setTextColor(ILI9341_WHITE);
@@ -468,7 +474,7 @@ void splashScreen() {
 
   tft.setTextColor(ILI9341_WHITE);
   tft.setFont(); // Set Default Adafruit GRFX Font
-  
+
   tft.setTextSize(1);
 
   tft.setCursor(10, 305);
@@ -480,18 +486,21 @@ void splashScreen() {
   FeatureSet_Indicator2(); // Display Icons for enabled features
 
   delay(4000);
-  
+
 #ifdef enableNeopixelGauges
- 
+
 #ifdef enable_BT
   allNeoPixelsBLUE();
 #else
   allNeoPixelsRED();
-#endif 
+#endif
 
 #endif
 
-tft.fillScreen(ILI9341_BLACK);
+  tft.fillScreen(ILI9341_BLACK);
+
+
+
 #ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
@@ -500,6 +509,13 @@ tft.fillScreen(ILI9341_BLACK);
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_USB, 76, 190, ILI9341_RED);
 #endif
+
+#ifdef enable_DualSerialEvent
+  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
+  tft.drawBitmap(82, 62, WaitingDataBMP_USB, 76, 190, ILI9341_BLUE);
+#endif
+
+
 
   delay(3000);
 

@@ -105,6 +105,19 @@ void FeatureSet_Indicator2 () {
 #endif
 
 
-  delay(featureDelay);
-  tft.setFont(); // Set back to default Adafruit GRFX font
+//------ 5 BT and USB serial
+#ifdef enable_DualSerialEvent 
+tft.drawBitmap(188 + X_Offset, 24 + Y_Offset, BT_BMP, 36, 36, ILI9341_BLUE);
+
+tft.setTextSize(2);
+tft.setTextColor(ILI9341_CYAN); tft.setCursor(190 + X_Offset, 45 + Y_Offset); tft.print("USB");
+tft.setTextSize(1);
+
+tft.setTextColor(ILI9341_WHITE); tft.setCursor(196 + X_Offset, 68 + Y_Offset); tft.print("DUAL");
+#else
+//
+#endif
+
+delay(featureDelay);
+tft.setFont(); // Set back to default Adafruit GRFX font
 }

@@ -15,6 +15,9 @@
 
 void DisplayStyle_Landscape_ESP () {
 
+#ifdef enable_DualSerialEvent
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#endif
 
 #ifdef enable_BT
   serialBTEvent();    // Check for Bluetooth Serial Activity
