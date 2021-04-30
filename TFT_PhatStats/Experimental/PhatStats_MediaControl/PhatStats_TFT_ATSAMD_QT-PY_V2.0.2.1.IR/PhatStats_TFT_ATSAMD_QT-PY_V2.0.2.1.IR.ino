@@ -12,7 +12,7 @@
   GPL v2
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
- 
+
   Board Manager QY-PY
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
@@ -255,13 +255,13 @@ int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
 
 void setup() {
 
-  Serial.begin(9600);  //  USB Serial Baud Rate
+  Serial.begin(baud);  //  USB Serial Baud Rate
   inputString.reserve(200); // String Buffer
 
   /* Setup HID*/
   // Sends a clean report to the host. This is important on any Arduino type.
   Consumer.begin();
-  
+
   /* InfraRed */
   irrecv.enableIRIn(); // Enable Infra Red
 
@@ -467,7 +467,7 @@ void backlightOFF () {
 void splashScreen() {
 
   /* Initial Boot Screen, */
-  
+
   allNeoPixelsOff();
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
@@ -481,6 +481,12 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
+  
+
+  tft.setCursor(20, 20);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.print(baud);//tft.println(" bits/s");
+  
 
   tft.setTextSize(3);
   tft.setCursor(86, 140);
@@ -504,7 +510,7 @@ void splashScreen() {
   tft.setFont(); // Set Default Adafruit GRFX Font
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(1);
-  tft.setCursor(150, 290);
+  tft.setCursor(135, 290);
   tft.print("TFT: v");
   tft.print (CODE_VERS);
 
@@ -521,12 +527,12 @@ void splashScreen() {
   delay(6000);
 
 #ifdef enableNeopixelGauges
- 
+
 #ifdef enable_BT
   allNeoPixelsBLUE();
 #else
   allNeoPixelsRED();
-#endif 
+#endif
 
 #endif
 
@@ -542,5 +548,5 @@ void splashScreen() {
 #endif
 
   delay(3000);
- 
+
 }

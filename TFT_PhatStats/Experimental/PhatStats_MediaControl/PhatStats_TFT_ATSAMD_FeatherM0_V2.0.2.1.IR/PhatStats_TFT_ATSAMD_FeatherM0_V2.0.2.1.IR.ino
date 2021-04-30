@@ -240,7 +240,7 @@ int state = 0; // Keep track of mute, 0 = LED off while 1 = LED on
 
 void setup() {
 
-  Serial.begin(9600);  //  USB Serial Baud Rate
+  Serial.begin(baud);  //  USB Serial Baud Rate
   inputString.reserve(200); // String Buffer
 
   /* Setup HID*/
@@ -442,6 +442,10 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
 
+  tft.setCursor(20, 20);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.print(baud);//tft.println(" bits/s");
+  
   tft.setTextSize(3);
   tft.setCursor(86, 140);
   tft.setTextColor(ILI9341_WHITE);

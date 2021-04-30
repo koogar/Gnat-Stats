@@ -221,6 +221,7 @@ int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, ESP32 15 most others 5 will do*/
 int Serial_eventDelay = 0; //
 
+int baud = 112500;
 //----------------------------- Debug Screen Erasers ---------------------------------------
 
 /* Debug Screen, Update Erasers, */

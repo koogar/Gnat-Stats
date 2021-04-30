@@ -219,7 +219,7 @@ void setup() {
 #ifdef enable_BT
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
-  Serial.begin(9600);  //  USB Serial Baud Rate
+  Serial.begin(baud);  //  USB Serial Baud Rate
 #endif
 
   inputString.reserve(200); // String Buffer
@@ -437,6 +437,10 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
 
+  tft.setCursor(20, 20);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.print(baud);//tft.println(" bits/s");
+
   tft.setTextSize(3);
   tft.setCursor(86, 140);
   tft.setTextColor(ILI9341_WHITE);
@@ -459,7 +463,7 @@ void splashScreen() {
   tft.setFont(); // Set Default Adafruit GRFX Font
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(1);
-  tft.setCursor(150, 290);
+  tft.setCursor(130, 290);
   tft.print("TFT: v");
   tft.print (CODE_VERS);
 

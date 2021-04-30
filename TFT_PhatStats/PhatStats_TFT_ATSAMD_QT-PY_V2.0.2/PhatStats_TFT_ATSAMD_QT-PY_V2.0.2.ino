@@ -467,7 +467,7 @@ void splashScreen() {
   tft.setFont(); // Set Default Adafruit GRFX Font
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(1);
-  tft.setCursor(150, 290);
+  tft.setCursor(130, 290);
   tft.print("TFT: v");
   tft.print (CODE_VERS);
 
