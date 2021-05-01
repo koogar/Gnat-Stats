@@ -151,7 +151,7 @@
   If you are going to use a battery or LiPo pack you must take some responsibility, do your research!!!.
   No advice will be given, or implied regarding which you should use etc.
 
-  Use the battery/type in accordance with the microntroller board manufacturer's recommendations.*/
+  Use the battery/type in accordance with the manufacturer's recommendations.*/
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
