@@ -130,7 +130,7 @@
 /*Uncomment to enable BT and USB serial,*/
 #define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
-//-------------------------------- DISCLAIMER -------------------------------------------
+//---------- DISCLAIMER AND WARNINGS FOR ESP32's WITH BUILT IN LiPo CHARGING --------------
 
 /*If using a battery or LiPo pack you must take some responsibility, do your research!!!.
   No advice will be given, or implied regarding which you should use etc.
