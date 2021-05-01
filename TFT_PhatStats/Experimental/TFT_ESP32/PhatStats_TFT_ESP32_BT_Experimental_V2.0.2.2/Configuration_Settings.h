@@ -89,7 +89,7 @@
 
   v2.0.2.BT:
       Adjust NeoPixel brightness together with screen brightness using the rotary encoder (battery saver)
-  
+
   v2.0.2.2.BT:
       Use either BT or USB Serial "enable_DualSerialEvent"
 
@@ -117,8 +117,8 @@
   on the correct COM port “Standard Serial over Bluetooth link”.
 
   Note: Once connected, two “Standard Serial over Bluetooth link” will be visible
-  one is Send, the other is Receive. 
-  When you know the correct port for Send you can disable the other in Device Manager 
+  one is Send, the other is Receive.
+  When you know the correct port for Send you can disable the other in Device Manager
   so it does not to show up in HardwareSerialMonitor.*/
 
 //--------------------------- Bluetooth or USB serial -----------------------------------
@@ -134,15 +134,18 @@
 
 /*If using a battery or LiPo pack you must take some responsibility, do your research!!!.
   No advice will be given, or implied regarding which you should use etc.
-  
   Use the battery/type in accordance with the microntroller board manufacturer's recommendations.
-  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! 
 
-  !!!THE WEMOS LOLIN32 APPEARS TO HAVE NO "LOW CUT OFF VOLTAGE" ON THE LIPO SOCKET!!! 
-        OTHER BOARDS MAY BE THE SAME, USE A LIPO BATTERY WITH BUILT IN PROTECTION. 
-  
-                ALTERNATIVELY USE A BATTERY BANK THROUGH THE USB CONNECTOR*/
-  
+  !!!THE WEMOS LOLIN32 (NOT LIMITED TO) APPEARS TO HAVE NO "UNDERVOLTAGE PROTECTON" (AKA LOW DISCHARGE CUT OFF)!!!
+
+  OTHER BOARDS ARE THE SAME!!! USE A LIPO BATTERY WITH BUILT IN PROTECTION, EVEN THEN, BUILT IN PROTECTION IS CONSIDERED A
+  LAST RESORT SAFETY NET. YOU MAY GET THE BENEFITS OF OVERVOLTAGE AND SHORT CIRCUIT PROTECTION BUT, USUALLY THE UNDERVOLTAGE PROTECTION
+  (LOW DISCHARGE) CUT OFF VOLTAGE IS AROUND 2.4v WHICH IS WAY TOO LOW FOR THE MAINTAINED HEALTH OF THE BATTERY.
+
+  RECOMMENDED LOW DISCHARGE VOLTAGES FOR LiPo's ARE AROUND 2.9 - 3 VOLTS. ALTERNATIVELY USE A BATTERY BANK THROUGH THE USB CONNECTOR
+
+   !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! */
+
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 
 /* Uncomment your CPU,*/
