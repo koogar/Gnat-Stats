@@ -71,7 +71,7 @@ v1.59.6:
        ADD new visual features to bring it in line with v2
        
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
-      You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
+      You may get wierd results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
   --------------------------------------------------------------------------------------
     ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
