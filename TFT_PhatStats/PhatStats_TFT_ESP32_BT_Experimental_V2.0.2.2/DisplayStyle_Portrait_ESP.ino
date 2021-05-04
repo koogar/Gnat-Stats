@@ -14,6 +14,7 @@
 
 void DisplayStyle_Portrait_ESP () {
   
+  
 #ifdef enable_DualSerialEvent
   serialBTEvent();    // Check for Bluetooth Serial Activity
 #endif

@@ -12,7 +12,7 @@
   GPL v2
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
- 
+
   Board Manager QY-PY
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
@@ -118,16 +118,17 @@
 #define NEOPIN      6
 #define NUM_PIXELS 16
 
-/*onboard XIAO BUILD in LED for RX*/
+/*onboard XIAO BUILD in LED for TX*/
 #ifdef Seeeduino_XIAO
-#define RX_LEDPin 13
+#define TX_LEDPin 13
 #endif
 
-/*onboard QT-PY NeoPixel for RX*/
+
+/*onboard QT-PY NeoPixel for TX*/
 #ifdef Adafruit_QTPY
-#define RX_NeoPin 11  //Built in NeoPixel, on the QT-PY
+#define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
 #else
-#define RX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
+#define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
 #endif
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
@@ -141,7 +142,7 @@
 #define BLACK      0x000000 // OFF
 
 Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel RX_pixel(1, RX_NeoPin, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
 //----------------------------------------------------------------------------
 
 /* ILI9321 TFT setup */
@@ -249,9 +250,11 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
-
+ 
+#ifdef enableTX_LED 
 #ifdef Adafruit_QTPY
-  RX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
+  TX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
+#endif
 #endif
 
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
@@ -262,7 +265,9 @@ void setup() {
   pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
 
 #ifdef Seeeduino_XIAO
-  pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#ifdef enableTX_LED
+  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#endif
 #endif
 
   backlightOFF();
@@ -303,15 +308,19 @@ void loop() {
   void rotaryInterrupt(); // HID Volume Control Function, runs all the time regardless of Phat-Stats being Active.
 #endif
 
+#ifdef enableTX_LED
   /*Serial Activity LED */
 #ifdef Seeeduino_XIAO
-  digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+  digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+#endif
 #endif
 
+#ifdef enableTX_LED
   /* Serial Activity NeoPixel */
 #ifdef Adafruit_QTPY
-  RX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
-  RX_pixel.show();
+  TX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
+  TX_pixel.show();
+#endif
 #endif
 
   //-----------------------------
@@ -360,17 +369,21 @@ void serialEvent() {
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
+#ifdef enableTX_LED
+
       /* Serial Activity LED */
 #ifdef Seeeduino_XIAO
-      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+#endif
 #endif
 
+#ifdef enableTX_LED
       /* Serial Activity NeoPixel */
 #ifdef Adafruit_QTPY
-      RX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
-      RX_pixel.show();
+      TX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+      TX_pixel.show();
 #endif
-
+#endif
     }
   }
 }
@@ -430,7 +443,7 @@ void backlightOFF () {
 void splashScreen() {
 
   /* Initial Boot Screen, */
-  
+
   allNeoPixelsOff();
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
@@ -484,12 +497,12 @@ void splashScreen() {
   delay(6000);
 
 #ifdef enableNeopixelGauges
- 
+
 #ifdef enable_BT
   allNeoPixelsBLUE();
 #else
   allNeoPixelsRED();
-#endif 
+#endif
 
 #endif
 
@@ -505,5 +518,5 @@ void splashScreen() {
 #endif
 
   delay(3000);
- 
+
 }

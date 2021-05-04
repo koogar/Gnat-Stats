@@ -88,6 +88,9 @@
        Add option to manual name CPU & GPU in the CFG
        Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 
+  v2.0.3
+       ADD enableTX_LED  option to enable/disable built in LED when transmitting data
+
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get wierd results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -107,8 +110,8 @@
 //--------------------------- Micro Controller Selection---------------------------------
 
 /* Uncomment your Micro Processor,*/
-//#define Adafruit_QTPY
-#define Seeeduino_XIAO
+#define Adafruit_QTPY
+//define Seeeduino_XIAO
 
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 /* Uncomment your CPU,*/
@@ -211,8 +214,11 @@ volatile int brightness_count = 150; // Start Up PWM Brightness
 
 //-------------------------------- Misco Setting -----------------------------------------
 
-/* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+/* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and does not change*/
+int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND
+
+/* Enable the built in LED blinking when transmitting data,*/
+#define enableTX_LED 
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //

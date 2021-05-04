@@ -125,7 +125,7 @@ Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 #define BLACK      0x000000 // OFF
 
 /*onboard BUILD in LED for RX*/
-#define RX_LEDPin 5
+#define TX_LEDPin 5
 
 //----------------------------------------------------------------------------
 
@@ -212,8 +212,6 @@ boolean stringComplete = false;
 
 void setup() {
 
-
-
 #ifdef enable_DualSerialEvent
   SerialBT.begin(device_BT); //Bluetooth device name
 #endif
@@ -223,7 +221,8 @@ void setup() {
   //btStart();
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
-  //btStop();
+  //btStop();      // Turn off BT Radio
+  //SerialBT.end(); // Turn off BT Radio
   Serial.begin(baud);  //  USB Serial Baud Rate
 #endif
 
@@ -245,7 +244,10 @@ void setup() {
 
   // Set resolution for a specific pin
   analogWriteResolution(TFT_backlight_PIN, 12); //ESP32 only
-  pinMode(RX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+
+#ifdef enableTX_LED
+  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#endif
 
   backlightOFF();
 
@@ -275,10 +277,10 @@ void loop() {
   void rotaryInterrupt_PWM();
 #endif
 
-
+#ifdef enableTX_LED
   /*ESP Activity LED */
-  digitalWrite(RX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-
+  digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
+#endif
   //-----------------------------
 
   /*Encoder Mode Button, moved to its own tab*/
@@ -339,9 +341,10 @@ void serialBTEvent() {
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
-
+#ifdef enableTX_LED
       /* Serial Activity LED */
-      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+#endif
 
     }
   }
@@ -363,8 +366,10 @@ void serialEvent() {
 
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
+#ifdef enableTX_LED
       /* Serial Activity LED*/
-      digitalWrite(RX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+#endif
 
     }
   }
@@ -408,6 +413,7 @@ void activityChecker() {
     tft.fillScreen(ILI9341_BLACK);
     backlightOFF ();
     displayDraw = 0;
+
   }
 
 }
@@ -416,10 +422,12 @@ void activityChecker() {
 
 void backlightON () {
   analogWrite(TFT_backlight_PIN, brightness_count); // TFT turn on backlight
+
 }
 
 void backlightOFF () {
   analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
+
 }
 
 //----------------------------- Splash Screens --------------------------------
@@ -499,8 +507,6 @@ void splashScreen() {
 
   tft.fillScreen(ILI9341_BLACK);
 
-
-
 #ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
@@ -514,8 +520,6 @@ void splashScreen() {
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_USB, 76, 190, ILI9341_BLUE);
 #endif
-
-
 
   delay(3000);
 

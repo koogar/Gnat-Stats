@@ -92,6 +92,7 @@
 
   v2.0.2.2.BT:
       Use either BT or USB Serial "enable_DualSerialEvent"
+      ADD enableTX_LED  option to enable/disable built in LED when transmitting data 
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -124,11 +125,14 @@
 //--------------------------- Bluetooth or USB serial -----------------------------------
 /*ESP32 Communication type, Uncomment only one option!!!*/
 
-/*Uncomment to enable BT, else default to USB serial,*/
-//#define enable_BT              // enable only Bluetooth serial connection
+/*Uncomment to enable BT, else default to USB serial only,*/
+#define enable_BT              // enable only Bluetooth serial connection
 
 /*Uncomment to enable BT and USB serial,*/
-#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
+//#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
+
+/* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
+//#define enableTX_LED // 
 
 //-------------------------------- DISCLAIMER -------------------------------------------
 /*
