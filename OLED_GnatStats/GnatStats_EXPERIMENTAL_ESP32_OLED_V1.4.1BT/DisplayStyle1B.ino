@@ -36,7 +36,7 @@ void DisplayStyle1B () { // HSMv1.3
   display.setTextSize(0); // string font size
   String cpuName = "";
   display.println(cpuName);
-  
+
   display.setTextSize(0); // string font size
   String gpuName = "";
   display.println(gpuName);

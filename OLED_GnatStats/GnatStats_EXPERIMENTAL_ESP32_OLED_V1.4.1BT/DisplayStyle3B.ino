@@ -5,19 +5,19 @@
   |___/|_/__/ .__/_\__,_|\_, |___/\__|\_, |_\___/
            |_|          |__/         |__/
 
-CPU BIG FREQUENCY / Small Temp
-GPU Small Temp / Core / Shader / VRAM
-
+   CPU: Name /Temp /Big Frequency /
+   GPU: Name /Temp /Big Frequency /VRAM Mhz
+   RAM: System Memory Used
+   Requires HardwareSerialMonitor v 1.3
 */
 
-void DisplayStyle2 () {
-
+void DisplayStyle3B() { //HSMv1.3
 
   //-------------------------------------------Clearing Box ----------------------------------------------------
 
   //Clearing Boxes, eg: display.fillRect(<X>, ^Y^, W, H, Color);*/
   display.fillRect (0, 0, 128, 64, BLACK); // Clear entire screen for testing
-  
+
   //---------------------------------------- Static Background ----------------------------------------------------
 
   display.setTextSize(2); //set background txt font size
@@ -27,22 +27,7 @@ void DisplayStyle2 () {
   display.println("GPU");
   display.setTextSize(1); //set background txt font size
 
-  //-------------------------------------------Clearing Boxes ----------------------------------------------------
-
-  /*CPU/GPU/RAM  Clearing Boxes, eg: display.fillRect(<X>, ^Y^, W, H, Color);*/
-  //display.fillRect(38, 11, 90, 18, BLACK);  // fill CPU live stats section only
-  //display.fillRect(82, 37, 46, 25, BLACK);  // fill GPU Freq live stats section only
-  //display.fillRect( 0, 54, 35, 10, BLACK);   // fill GPU Temp live stats section only
-
-  /* Position Test*/
-  //display.drawRect(38, 11, 90, 16, WHITE); // fill CPU live stats section only
-  //display.drawRect(82, 37, 46, 25, WHITE); // fill GPU Freq live stats section only
-  //display.drawRect(0,  54, 35, 10, WHITE);  // fill GPU Temp live stats section only
-
-
   //---------------------------------------CPU & GPU Hardware ID--------------------------------------------------
-
-
 
   /*CPU Manual Position Test*/
   //display.setTextSize(0);
@@ -106,9 +91,6 @@ void DisplayStyle2 () {
     display.println(gpuName);
   }
 
-
-
-
   //------------------------------------------ CPU Freq -------------------------------------------------
 
   /*CPU Freq Display String*/
@@ -116,7 +98,7 @@ void DisplayStyle2 () {
   int cpuCoreClockEnd = inputString.indexOf("|", cpuCoreClockStart);
   String cpuClockString = inputString.substring(cpuCoreClockStart, cpuCoreClockEnd);
 
-  /*CPU Core Freq*/
+  /*CPU  Freq Display*/
   display.setTextSize(2);
   display.setCursor(42, 12);
   display.print(cpuClockString);
@@ -125,14 +107,14 @@ void DisplayStyle2 () {
 
   //------------------------------------------ CPU Temp -------------------------------------------------
 
-  /*CPU Display String*/
+  /*CPU Temp Display String*/
   int cpuStringStart = inputString.indexOf("C");
   int cpuDegree = inputString.indexOf("c");
   int cpuStringLimit = inputString.indexOf("|");
   String cpuString1 = inputString.substring(cpuStringStart + 1, cpuDegree);
   String cpuString2 = inputString.substring(cpuDegree + 1, cpuStringLimit - 1);
 
-  /*CPU TEMPERATURE*/
+  /*CPU Temp Display*/
   display.setTextSize(1);
   display.setCursor(105, 22);
   display.print(cpuString1);
@@ -144,53 +126,75 @@ void DisplayStyle2 () {
   display.print("C");       // Centigrade Symbol
 #endif
 
-
   //------------------------------------------ GPU Freq/Temp -------------------------------------------------
 
   /* GPU temp V's GPU freq to check for throttling and max 'GPU Boost' */
 
-  /*GPU Core Freq*/
+  /*GPU Core Freq Display String*/
   int gpuCoreClockStart = inputString.indexOf("GCC") + 3;
   int gpuCoreClockEnd = inputString.indexOf("|", gpuCoreClockStart);
   String gpuCoreClockString = inputString.substring(gpuCoreClockStart, gpuCoreClockEnd);
 
-  int gpuMemClockStart = inputString.indexOf("GMC") + 3;
-  int gpuMemClockEnd = inputString.indexOf("|", gpuMemClockStart);
-  String gpuMemClockString = inputString.substring(gpuMemClockStart, gpuMemClockEnd);
-
-  int gpuShaderClockStart = inputString.indexOf("GSC") + 3;
-  int gpuShaderClockEnd = inputString.indexOf("|", gpuShaderClockStart);
-  String gpuShaderClockString = inputString.substring(gpuShaderClockStart, gpuShaderClockEnd);
-
-
-  display.setTextSize(1);
-  display.setCursor(42, 38);
-  display.print("Core  :");
-  display.print(gpuCoreClockString);
-  display.setTextSize(1);
-  display.print("MHz");       // Centigrade Symbol
-  display.setCursor(42, 46);
-  display.print("VRAM  :");
-  display.print(gpuMemClockString);
-  display.print("MHz");
-  display.setCursor(42, 54);
-  display.print("Shader:");
-  display.print(gpuShaderClockString);
-  display.print("MHz");
-
-  // GPU Temp
-
-
-  /*GPU Display String*/
+  /*GPU Core Temp Display String*/
   int gpuStringStart = inputString.indexOf("G", cpuStringLimit);
   int gpuDegree = inputString.indexOf("c", gpuStringStart);
   int gpuStringLimit = inputString.indexOf("|", gpuStringStart);
   String gpuString1 = inputString.substring(gpuStringStart + 1, gpuDegree);
   String gpuString2 = inputString.substring(gpuDegree + 1, gpuStringLimit - 1);
 
-  /*GPU TEMPERATURE*/
+  /*GPU Memory Used*/
+  int gpuMemoryUsedStart = inputString.indexOf("GMU") + 3;
+  int gpuMemoryUsedEnd = inputString.indexOf("|", gpuMemoryUsedStart);
+  String gpuMemoryUsedString = inputString.substring(gpuMemoryUsedStart, gpuMemoryUsedEnd);
+
+  double gpuMemUsed = atof(gpuMemoryUsedString.c_str());
+  double  gpuMemUsedSum = gpuMemUsed / 1024;
+
+
+  /*GPU Power*/
+  int gpuPowerStart = inputString.indexOf("GPWR") + 4;
+  int gpuPowerEnd = inputString.indexOf("|", gpuPowerStart);
+  String gpuPowerString = inputString.substring(gpuPowerStart, gpuPowerEnd);
+
+  /*GPU Fan %*/
+  int gpuFanStart = inputString.indexOf("GFANL") + 5;  // GPU Fan Load %
+  int gpuFanEnd = inputString.indexOf("|", gpuFanStart);
+  String gpuFanString = inputString.substring(gpuFanStart, gpuFanEnd);
+
+  /*GPU Fan RPM*/
+  int gpuRPMStart = inputString.indexOf("GRPM") + 4;
+  int gpuRPMEnd = inputString.indexOf("|", gpuRPMStart);
+  String gpuRPMString = inputString.substring(gpuRPMStart, gpuRPMEnd);
+
+  /*GPU Core Freq Display*/
+  display.setTextSize(2);
+  display.setCursor(42, 38);
+  //display.print("Core  :");
+  display.print(gpuCoreClockString);
   display.setTextSize(1);
-  display.setCursor(1, 56);
+  display.print("MHz");
+
+
+  /*GPU Fan Power Display*/
+
+  display.setCursor(1, 57);
+  display.print("Fan:");
+  //display.print(gpuRPMString);// RPM
+  display.print(gpuFanString);  // %
+  display.print("%");
+  //display.print(" P:");
+  //display.print(gpuPowerString);
+  //display.print("w");
+
+  /*GPU Memory Used Display*/
+  display.print(" Used:");
+  //display.print(gpuMemUsedSum);      //  show values in GB
+  display.print(gpuMemoryUsedString); //  show values in MB
+  display.print("MB");
+
+  /*GPU Core Temp Display*/
+  display.setTextSize(1);
+  display.setCursor(105, 48);
   display.print(gpuString1);
   display.setTextSize(1);
 
@@ -200,7 +204,6 @@ void DisplayStyle2 () {
   display.print((char)247); //Degrees Symbol
   display.print("C");       // Centigrade Symbol
 #endif
-
 
   //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
 
@@ -233,9 +236,10 @@ void DisplayStyle2 () {
   //GPU_tempGauge( gpuString1.toInt() ); // Neopixel Ring Gauge  GPU  Temperature
 
 #endif
+
   display.setTextSize(1);
   display.setCursor(115, 1);
-  display.println("D2");
+  display.println("D3");
 
   display.display();
 
