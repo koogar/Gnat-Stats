@@ -26,6 +26,7 @@
     Version 1.2.1 : Top Config option to disable/enable positive/negative screen cycle
 
     Move HSMonitor(v1.1) to .Net 4.6.2
+
     Version 1.3   : Option to trigger an event at a given CPU or GPU threshold eg: LED indicator at 100% CPU Load.
                     Top Config option to disable all pre-selected power/gnd pins on Arduino pins D4 and D5 when not powering OLED from ProMicro
                     Top Config option to disable/enable "activitychecker" (Enable blank screen on serial timeout eg: PC powered down,
@@ -39,8 +40,13 @@
     Version 1.33  : Add i2c Address change option
                     Add RotateScreen option
                     Add Neopixel Global Brightness
+  Move HSMonitor(v1.3)
 
     Version 1.4  :  Add Some HardwareSerialMonitor v1.3 Features
+
+  Move HSMonitor(v1.4) Change Baud rate to 115200
+
+  Version 1.4.1  :  Change Baud rate to 115200
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
@@ -73,7 +79,7 @@
 #include "bitmap.h"
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#define CODE_VERS  "1.4"  // Code version number 
+#define CODE_VERS  "1.4.1"  // Code version number 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*--------------------------------------------------------------------------------------
     ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
@@ -85,22 +91,38 @@
    | (_) |  _/ | |  | | (_) | .` \__ \
     \___/|_|   |_| |___\___/|_|\_|___/
 
+----------------------------------
+    Pins Reference
   ----------------------------------
-  Pins Reference
+  ProMicro  : SDA: D2, SCL: D3
+  Leonardo  : SDA: D2, SCL: D3
+  NeoPixel  : D10
+  OLED_RESET: 4   Reference only!!
   ----------------------------------
-  ProMicro:    SDA: D2, SCL: D3
-  Leonardo:    SDA: D2, SCL: D3
-  NeoPixel:    D10
+  QT-PY        : SDA: D4, SCL: D5
+  NeoPixel     : A3
+  Built in NeoPixel: 11 Reference only!!
+  OLED_RESET   : -1     Reference only!!
+  ---------------------
+  XIAO         : SDA: D4, SCL: D5
+  NeoPixel     : A1
+  Built in LED : 13  Reference only!!
+  OLED_RESET   : -1  Reference only!!
   ----------------------------------
-  uVolume :    SDA: D2, SCL: D3
-  NeoPixel:    D5
+  ESP32 LOLIN32: SDA: 21, SCL: 22
+  NeoPixel     : 2 or 19
+  Built in LED : 5   Reference only!!
+  OLED_RESET   : -1  Reference only!!
   ----------------------------------
-  UNO/NANO : Atmel ATMega 328 Chips
-  are not supported!!!!!
-  Use Leonardo/ProMicro (Atmel 32u4)
+  STM32 BluePill: SDA: PB7, SCL: PB6
+  NeoPixel      : PA7 (MOSI)
+  OLED_RESET    : -1   Reference only!!
   ----------------------------------
-
-  ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!*/
+  uVolume   :  SDA: D2, SCL: D3
+  NeoPixel  :  D5
+  OLED_RESET:  4  Reference only!!
+  ----------------------------------
+  */
 
 //----------------------------------- OLED Setup ----------------------------------------
 
@@ -202,8 +224,10 @@ int invertedStatus = 1;
 long lastDebounceTime = 0;
 long debounceDelay = 3000;
 //----------------------
+
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0;
+int baud = 115200; //serial do not adjust
 
 /* Timer for active connection to host*/
 boolean activeConn = false;
@@ -246,7 +270,7 @@ void setup() {
   display.setTextWrap(false); // Stop  "Loads/Temps" wrapping and corrupting static characters
 
   /* Serial setup, start serial port at 9600 bps and wait for port to open:*/
-  Serial.begin(9600); // 32u4 USB Serial Baud Rate
+  Serial.begin(baud);  //  USB Serial Baud Rate
   inputString.reserve(200);
 
   /* Set up the NeoPixel*/
