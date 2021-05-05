@@ -187,7 +187,10 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 //--------------------- OLED Setup --------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
+
 #define OLED_SSD1306
+
+//#define OLED_SH1106
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -254,14 +257,26 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KH
 
 //--------------------------------------------------------------
 
+#define OLED_SDA 21   //SH1106
+#define OLED_SCL 22   //SH1106
+
+#define OLED_RESET -1 //"OLED_RESET" IS IS NOT A PHYSICAL PIN DO NOT CONNECT!!!
+
+#define SSD1306_128_64
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+
 /*SSD1306 OLED setup*/
 #ifdef OLED_SSD1306
 #include <Adafruit_SSD1306.h> // i2C not SPI
-#define SSD1306_128_64
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET -1   //   QT-PY / XIAO
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#endif
+
+
+/*SH1106 OLED setup*/
+#ifdef OLED_SH1106
+#include <Adafruit_SH1106_ESP32.h> // i2C not SPI
+Adafruit_SH1106_ESP32 display(OLED_SDA, OLED_SCL);
 #endif
 
 //----------------------
@@ -307,6 +322,9 @@ long lastDisplayChange;
 
 void setup() {
 
+  // Start I2C Communication SDA = x and SCL = x on Wemos Lolin32 ESP32 with built-in SSD1306 OLED
+  //Wire.begin(OLED_SDA, OLED_SCL); //SDD1306
+
 #ifdef enable_BT
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
@@ -327,6 +345,12 @@ void setup() {
   /* OLED SETUP */
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
+  //display.begin(SSD1306_SWITCHCAPVCC, i2c_Address, false, false);
+  //display.begin(SSD1306_SWITCHCAPVCC, i2c_Address, true, true);
+#endif
+
+#ifdef OLED_SH1106
+  display.begin(SH1106_SWITCHCAPVCC, i2c_Address);  // initialize with the I2C addr 0x3D (for the 128x64)
 #endif
 
   display.clearDisplay();
@@ -570,6 +594,10 @@ void splashScreen() {
 #else
   allNeoPixelsRED();
 #endif
+#endif
+
+#ifdef enable_DualSerialEvent
+  allNeoPixelsGREEN();
 #endif
 
   delay(3000);
