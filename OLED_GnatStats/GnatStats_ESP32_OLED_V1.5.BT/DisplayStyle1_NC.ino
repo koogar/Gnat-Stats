@@ -11,7 +11,7 @@
    Requires HardwareSerialMonitor v 1.3
 */
 
-void DisplayStyle1B () { // HSMv1.3
+void DisplayStyle1_NC () { // HSMv1.3
 
   //-------------------------------------------Clearing Box ----------------------------------------------------
 
@@ -36,7 +36,7 @@ void DisplayStyle1B () { // HSMv1.3
   display.setTextSize(0); // string font size
   String cpuName = "";
   display.println(cpuName);
-  
+
   display.setTextSize(0); // string font size
   String gpuName = "";
   display.println(gpuName);
@@ -60,7 +60,14 @@ void DisplayStyle1B () { // HSMv1.3
     }
     else
       cpuName = inputString.substring(cpuNameStart);
+
+    /* CPU Manual Name*/
+#ifdef Manual_cpuName
+    display.println(set_CPUname);
+#else
+    /* CPU Auto Detect Name*/
     display.println(cpuName);
+#endif
 
   }
   if (inputString.indexOf("GPU") > -1)
@@ -78,7 +85,14 @@ void DisplayStyle1B () { // HSMv1.3
     }
 
     int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+    /* GPU Manual Name*/
+#ifdef Manual_gpuName
+    String gpuName = set_GPUname; // Name spacing test
+#else
+    /* GPU Auto Detect Name*/
     String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
     display.println(gpuName);
   }
 
@@ -149,10 +163,16 @@ void DisplayStyle1B () { // HSMv1.3
   float  totalGPUmemSumDP = totalGPUmemSum ;     // float to handle the decimal point when printed (totalGPUmemSumDP, 0)
 
   display.setCursor(103, 28);
-  //display.print(gpuMemoryString); // Show Value in MB
-  display.print(totalGPUmemSumDP, 0); // Show Value in GB
-  display.println("GB");
+  ////display.print(gpuMemoryString); // Show Value in MB
+  //display.print(totalGPUmemSumDP, 0); // Show Value in GB
+  
+#ifdef Manual_gpuRam
+    display.print(set_GPUram);
+#else
+    display.print(totalGPUmemSumDP, 0); // Show Value in GB
+#endif
 
+display.println("GB");
   //----------------------------------------SYSTEM  RAM TOTAL---------------------------------------------------
   /*SYSTEM RAM String*/
   int ramStringStart = inputString.indexOf("R", gpuStringLimit);

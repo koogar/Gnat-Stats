@@ -10,7 +10,7 @@
    Requires HardwareSerialMonitor v 1.3
 */
 
-void DisplayStyle4GPU () {
+void DisplayStyle4GPU_NC () {
 
   //-------------------------------------------Clearing Box ----------------------------------------------------
 
@@ -41,8 +41,16 @@ void DisplayStyle4GPU () {
     }
 
     int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+    /* GPU Manual Name*/
+#ifdef Manual_gpuName
+    String gpuName = set_GPUname; // Name spacing test
+#else
+    /* GPU Auto Detect Name*/
     String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
-    display.println(gpuName);
+#endif
+   display.println(gpuName);
+
   }
 
   //---------------------------------------------Total GPU Memory-----------------------------------------------------------

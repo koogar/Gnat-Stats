@@ -11,7 +11,7 @@
    Requires HardwareSerialMonitor v 1.3
 */
 
-void DisplayStyle3B() { //HSMv1.3
+void DisplayStyle3_NC() { //HSMv1.3
 
   //-------------------------------------------Clearing Box ----------------------------------------------------
 
@@ -68,7 +68,14 @@ void DisplayStyle3B() { //HSMv1.3
     }
     else
       cpuName = inputString.substring(cpuNameStart);
+
+    /* CPU Manual Name*/
+#ifdef Manual_cpuName
+    display.println(set_CPUname);
+#else
+    /* CPU Auto Detect Name*/
     display.println(cpuName);
+#endif
 
   }
   if (inputString.indexOf("GPU") > -1)
@@ -85,9 +92,15 @@ void DisplayStyle3B() { //HSMv1.3
       gpuNameStart = gpuNameStart + 8;
     }
 
-
     int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+    /* GPU Manual Name*/
+#ifdef Manual_gpuName
+    String gpuName = set_GPUname; // Name spacing test
+#else
+    /* GPU Auto Detect Name*/
     String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
     display.println(gpuName);
   }
 
@@ -185,7 +198,7 @@ void DisplayStyle3B() { //HSMv1.3
   //display.print(" P:");
   //display.print(gpuPowerString);
   //display.print("w");
-  
+
   /*GPU Memory Used Display*/
   display.print(" Used:");
   //display.print(gpuMemUsedSum);      //  show values in GB
@@ -194,7 +207,7 @@ void DisplayStyle3B() { //HSMv1.3
 
   /*GPU Core Temp Display*/
   display.setTextSize(1);
-  display.setCursor(105, 48);
+  display.setCursor(105, 47);
   display.print(gpuString1);
   display.setTextSize(1);
 

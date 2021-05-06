@@ -1,20 +1,15 @@
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#define device_BT "TallmanLabs_BT"
-#define CODE_VERS  "1.4BT"  // Code version number 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 /*
    _____ __  __ _         _            ___           _   ___ _        _
   |_   _|  \/  | |   __ _| |__ ______ / __|_ _  __ _| |_/ __| |_ __ _| |_ ___
     | | | |\/| | |__/ _` | '_ (_-<___| (_ | ' \/ _` |  _\__ \  _/ _` |  _(_-<
     |_| |_|  |_|____\__,_|_.__/__/    \___|_||_\__,_|\__|___/\__\__,_|\__/__/
 
-   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
    Rupert Hirst & Colin Conway © 2016-2018
 
    http://tallmanlabs.com
    http://runawaybrainz.blogspot.com/
+   https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
 
    Licence
    -------
@@ -37,7 +32,7 @@
                     Top Config option to disable/enable "activitychecker" (Enable blank screen on serial timeout eg: PC powered down,
                     Disable to retain last sampled info eg: PC crash or overclocking diagnostics)
 
-    Version 1.31   : MOVE CONFLICTING!!! NEOPIXEL PIN TO 10 (32u4)
+    Version 1.31   : MOVE CONFLICTING!!! NEOPIXEL PIN TO 10
 
     Version 1.32   : Add screen height/width definitions for updated Adafruit SSD1306 library
                    Clean up some code for clearing boxes not needed for OLED
@@ -45,53 +40,59 @@
     Version 1.33  : Add i2c Address change option
                     Add RotateScreen option
                     Add Neopixel Global Brightness
-
   Move HSMonitor(v1.3)
 
-    Version 1.4   : Add Some HardwareSerialMonitor v1.3 Features
+    Version 1.4  :  Add Some HardwareSerialMonitor v1.3 Features
 
   Move HSMonitor(v1.4) Change Baud rate to 115200
 
-    Version 1.4BT : Add Bluetooth serial support (ESP32 Only)
-                  : Change Baud rate to 115200
+  Version 1.4.1  :  Change Baud rate to 115200
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
     Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
-
-  ESP32 Core URL
-  ----------------
-  https://github.com/espressif/arduino-esp32
-
-  Board Manager
-  ----------------
-  This repo is available as a package usable with Arduino Boards Manager.
-  Use this link in the "Additional Boards Managers URLs" field:
-  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 
    _    ___ ___ ___    _   ___ ___ ___ ___
   | |  |_ _| _ ) _ \  /_\ | _ \_ _| __/ __|
   | |__ | || _ \   / / _ \|   /| || _|\__ \
   |____|___|___/_|_\/_/ \_\_|_\___|___|___/
 
-  ESP32 Libraries
-  -------------------------
-
+  Adafruit Neopixel
   https://github.com/adafruit/Adafruit_NeoPixel
 
   Adafruit SSD1306 library
   https://github.com/adafruit/Adafruit_SSD1306
 
-  SH1106 library :
-  https://github.com/koogar/Adafruit_SH1106_ESP32
+  Adafruit library ported to the SH1106
+  https://github.com/badzz/Adafruit_SH1106      Currently used library in this sketch!!!
 
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
 
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
-  --------------------------------------------------------------------------------------
 
-  Pins Reference
+*/
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_NeoPixel.h>
+#include <Adafruit_GFX.h>
+#include "bitmap.h"
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#define CODE_VERS  "1.4.9"  // Code version number 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*--------------------------------------------------------------------------------------
+    ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
+   / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
+  | (_| (_) | .` | _| | | (_ | |_| |   / / _ \| |  | | (_) | .` |
+   \___\___/|_|\_|_| |___\___|\___/|_|_\/_/ \_\_| |___\___/|_|\_|
+     ___  ___ _____ ___ ___  _  _ ___
+    / _ \| _ \_   _|_ _/ _ \| \| / __|
+   | (_) |  _/ | |  | | (_) | .` \__ \
+    \___/|_|   |_| |___\___/|_|\_|___/
+
+----------------------------------
+    Pins Reference
   ----------------------------------
   ProMicro  : SDA: D2, SCL: D3
   Leonardo  : SDA: D2, SCL: D3
@@ -121,84 +122,20 @@
   NeoPixel  :  D5
   OLED_RESET:  4  Reference only!!
   ----------------------------------
-  ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!
-*/
-
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_NeoPixel.h>
-#include <Adafruit_GFX.h>
-#include "bitmap.h"
-
-#include "BluetoothSerial.h"
-
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled!
-#endif
-
-BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
-
-//------------------------------- BT Limitations --------------------------------------
-
-/*If BT is enabled you can not use HardwareSerialMonitor with USB serial, even though it is visible.
-  You can still upload new code through the Arduino IDE as normal.
-
-  Currently when using BT you only have to connect the device to Windows, no pairing is needed.
-  When disconnected, you will need to manualy reconnect in HardwareSerialMonitor by clicking
-  on the correct COM port “Standard Serial over Bluetooth link”.
-
-  Note: Once connected, two “Standard Serial over Bluetooth link” will be visible
-  one is Send, the other is Receive.
-  When you know the correct port for Send you can disable the other in Device Manager
-  so it does not to show up in HardwareSerialMonitor.*/
-
-//--------------------------- Bluetooth or USB serial -----------------------------------
-/*ESP32 Communication type, Uncomment only one option!!!*/
-
-/*Uncomment to enable BT, else default to USB serial only,*/
-//#define enable_BT
-
-/*Uncomment to enable BT and USB serial,*/
-#define enable_DualSerialEvent
-
-//------------------------------------
-/* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
-#define enableTX_LED
-
-//-------------------------------- DISCLAIMER -------------------------------------------
-/*
-  !!!THE WEMOS LOLIN32, NOT LIMITED TO, APPEARS TO HAVE NO "UNDERVOLTAGE PROTECTION"
-  OR "OVER DISCHARGE PROTECTION" ON THE CHARGING CIRCUIT!!!
-
-  OTHER BOARDS ARE THE SAME!!! USE A LiPo BATTERY WITH BUILT IN PROTECTION, EVEN THEN,
-  BUILT IN PROTECTION IS CONSIDERED A LAST RESORT SAFETY NET OR "BELTS AND BRACERS" APPROACH.
-
-  YOU MAY GET SOME BENEFITS, OVERVOLTAGE,OVERCURRENT AND SHORT CIRCUIT PROTECTION BUT, USUALLY
-  THE OVER DISCHARGE PROTECTION CUT OFF VOLTAGE IS AROUND 2.4v WHICH IS WAY TOO LOW FOR THE
-  CONTINUED MAINTAINED HEALTH OF THE BATTERY.
-
-  RECOMMENDED OVER DISCHARGE PROTECTION VOLTAGES FOR LiPo's ARE AROUND 2.9 - 3 VOLTS.
-
-  ALTERNATIVELY USE A BATTERY BANK THROUGH THE USB CONNECTOR
-
-  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!!
-
-  If you are going to use a battery or LiPo pack you must take some responsibility, do your research!!!.
-  No advice will be given, or implied regarding which you should use etc.*/
-
+  */
 
 //----------------------------------- OLED Setup ----------------------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
-//#define OLED_SSD1306
-#define OLED_SH1106
+#define OLED_SSD1306
+//#define OLED_SH1106
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
 //#define i2c_Address 0x3d //initialize with the I2C addr 0x3D Typically Adafruit OLED's
 
 /*Rotate the display at the start:  0 or 2  (0, 180 degrees)*/
-#define rotateScreen 0
+#define rotateScreen 2
 
 /* Uncomment below, to enable positive and negative screen cycler */
 //#define enableInvertscreen
@@ -206,6 +143,21 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 /* Uncomment below, to take out small degree symbol for better spacing
    when hitting 100% cpu/gpu load the percent symbol gets clipped */
 //#define noDegree
+
+//--------------- Manual CPU/GPU Display Name Entry -------------------------
+/* Requires DisplayStyles ending in "_NC" (NameChange),*/
+
+/* Manually name the  CPU,*/
+//#define Manual_cpuName
+String set_CPUname = "Core i6-666k";
+
+/* Manually name the GPU,*/
+//#define Manual_gpuName
+String set_GPUname = "GeForce GTX 666";
+
+/* Manually set GPU ram total,*/
+//#define Manual_gpuRam
+String set_GPUram = "66";
 
 //--------------------------------- Threshold Triggers ---------------------------------------
 /* Uncomment below, to enable custom threshold event triggers*/
@@ -215,14 +167,13 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
 //#define enableNeopixelGauges //
-/* Global NeoPixel Brightness,*/
-#define neoBrightness 20
 
 /* uVolume only,*/
 //#define uVol_enableThesholdtriggers
 
 //------------------------------------- Other Stuff --------------------------------------------
-
+/* Global NeoPixel Brightness,*/
+#define neoBrightness 60
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
 #define enableActivityChecker
@@ -234,16 +185,13 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 #define lastActiveDelay 10000
 
 //------------------------------------ End of User configuration ---------------------------------
-/* TX LED indicator,*/
-#ifdef enableTX_LED
-#define TX_LEDPin 5
-#endif
 
 /* Neo Pixel Setup */
-#define NEOPIN         2
+#define NEOPIN         10
+//#define NEOPIN         5 // uVolume
+
 #define NUMPIXELS      16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
-
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
 #define BLUE       0x0000FF
@@ -257,29 +205,24 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KH
 
 //--------------------------------------------------------------------------------------
 
+/*SH1106 OLED setup*/
+#ifdef OLED_SH1106
+#include <Adafruit_SH1106.h> // i2C not SPI
+#define SH1106_128_64
+#define OLED_RESET 4  //  "OLED_RESET" IS IS NOT A PHYSICAL PIN DO NOT CONNECT!!!
+Adafruit_SH1106 display(OLED_RESET);
+#endif
+
+//-----------------------
 /*SSD1306 OLED setup*/
 #ifdef OLED_SSD1306
-
 #include <Adafruit_SSD1306.h> // i2C not SPI
 #define SSD1306_128_64
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET -1   //   QT-PY / XIAO
+#define OLED_RESET 4     // "OLED_RESET" IS IS NOT A PHYSICAL PIN DO NOT CONNECT!!!
+//#define OLED_RESET -1   //   QT-PY / XIAO
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
-#endif
-
-/*SH1106 OLED setup*/
-
-#ifdef OLED_SH1106
-
-#define OLED_SDA 21
-#define OLED_SCL 22
-#include <Adafruit_SH1106_ESP32.h> // i2C not SPI
-#define SH1106_128_64
-#define OLED_RESET -1 //  "OLED_RESET" IS IS NOT A PHYSICAL PIN DO NOT CONNECT!!!
-Adafruit_SH1106_ESP32 display(OLED_SDA, OLED_SCL);
-
 #endif
 
 //----------------------
@@ -315,8 +258,6 @@ int displayChangeMode = 1;
 long lastDisplayChange;
 //----------------------
 
-
-
 /* ___ ___ _____ _   _ ___
   / __| __|_   _| | | | _ \
   \__ \ _|  | | | |_| |  _/
@@ -325,31 +266,13 @@ long lastDisplayChange;
 
 void setup() {
 
-#ifdef enable_BT
-  SerialBT.begin(device_BT); //Bluetooth device name
-#else //USB
-  Serial.begin(baud);  //  USB Serial Baud Rate
+  /* OLED SETUP */
+#ifdef OLED_SH1106
+  display.begin(SH1106_SWITCHCAPVCC, i2c_Address);    // initialize with the I2C addr 0x3D (for the 128x64)
 #endif
 
-#ifdef enable_DualSerialEvent
-  SerialBT.begin(device_BT); //Bluetooth device name
-#endif
-
-  inputString.reserve(200);
-
-  /* Set up PINs*/
-#ifdef enableTX_LED
-  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
-
-  /* SSD1306 OLED */
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
-#endif
-
-  /*SH1106 OLED */
-#ifdef OLED_SH1106
-  display.begin(SH1106_SWITCHCAPVCC, i2c_Address);  // initialize with the I2C addr 0x3D (for the 128x64)
 #endif
 
   display.clearDisplay();
@@ -360,6 +283,10 @@ void setup() {
 
   /* stops text wrapping*/
   display.setTextWrap(false); // Stop  "Loads/Temps" wrapping and corrupting static characters
+
+  /* Serial setup, start serial port at 9600 bps and wait for port to open:*/
+  Serial.begin(baud);  //  USB Serial Baud Rate
+  inputString.reserve(200);
 
   /* Set up the NeoPixel*/
   pixels.begin(); // This initializes the NeoPixel library.
@@ -381,27 +308,12 @@ void setup() {
 
 void loop() {
 
-#ifdef enable_DualSerialEvent
-  serialBTEvent();
-#endif
-
   /*Serial stuff*/
-#ifdef enable_BT
-  serialBTEvent();
-#else
   serialEvent();
-#endif
 
 #ifdef enableActivityChecker
   activityChecker();
 #endif
-
-
-#ifdef enableTX_LED
-  /*Serial Activity LED */
-  digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-#endif
-
 
   /*change display screen*/
   if ((millis() - lastDisplayChange) > displayChangeDelay)
@@ -435,13 +347,13 @@ void loop() {
     lastActiveConn = millis();
 
     if (displayChangeMode == 1) {
-      DisplayStyle1B();
+      DisplayStyle1_NC();
     }
     else if (displayChangeMode == 2) {
-      DisplayStyle2 ();
+      DisplayStyle2_NC ();
     }
     else if (displayChangeMode == 3) {
-      DisplayStyle3B ();
+      DisplayStyle3_NC ();
     }
 
     inputString = "";
@@ -467,7 +379,37 @@ void loop() {
   | _|| |_| | .` | (__  | |  | | (_) | .` \__ \
   |_|  \___/|_|\_|\___| |_| |___\___/|_|\_|___/*/
 
+//----------------  NeoPixel Reset ------------------
 
+void allNeoPixelsOff() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 0 );
+  }
+  //pixels.show();
+}
+
+//----------------  NeoPixels RGB  -------------------
+
+void allNeoPixelsRED() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 255, 0, 0 );
+  }
+  pixels.show();
+}
+
+void allNeoPixelsGREEN() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 255, 0 );
+  }
+  pixels.show();
+}
+
+void allNeoPixelsBLUE() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 255 );
+  }
+  pixels.show();
+}
 //-------------------------------------------  Serial Events -------------------------------------------------------------
 
 void serialEvent() {
@@ -485,36 +427,6 @@ void serialEvent() {
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
-
-#ifdef enableTX_LED
-      /*Serial Activity LED */
-      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-#endif
-
-    }
-  }
-}
-
-void serialBTEvent() {
-
-  while (SerialBT.available()) {          //  32u4 USB Serial Available?
-    char inChar = (char)SerialBT.read();  // Read 32u4 USB Serial
-    //Serial.print(inChar); // Debug Incoming Serial
-
-    inputString += inChar;
-    if (inChar == '|') {
-      stringComplete = true;
-
-      delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
-
-      //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
-      display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
-      display.display();
-
-#ifdef enableTX_LED
-      /*Serial Activity LED */
-      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-#endif
 
     }
   }
@@ -558,7 +470,7 @@ void inverter() {
     invertedStatus = 0;
   } else {
     invertedStatus = 1;
-  }
+  };
   display.invertDisplay(invertedStatus);
   display.display();
 }
@@ -566,7 +478,6 @@ void inverter() {
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 void splashScreen() {
 
-  allNeoPixelsOff();
   display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
   display.setTextSize(3);
   display.setCursor(58, 5);
@@ -582,64 +493,24 @@ void splashScreen() {
   display.print (CODE_VERS);
 
   display.display();
-
-#ifdef enableNeopixelGauges
-#ifdef enable_BT
-  allNeoPixelsBLUE();
-#else
-  allNeoPixelsRED();
-#endif
-#endif
-
   delay(3000);
   display.clearDisplay();
   display.display();
-  allNeoPixelsOff();
 
-  // USB Serial Screen
-  //display.startscrollleft(0x00, 0x0F);
-
-#ifdef enable_BT
-  display.drawBitmap(0, 0, BT_WaitingDataBMP, 128, 64, WHITE);
-#else
-  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
-#endif
-
-#ifdef enable_DualSerialEvent
-  //display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE
-#endif
-
+  display.setTextSize(3); //set background txt font size
+  display.setCursor(1, 1);
+  display.println(">");
   display.display();
-}
-
-//-------------------------------------------  NeoPixel Reset -------------------------------------------------------------
-
-void allNeoPixelsOff() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 0, 0, 0 );
-  }
-  //pixels.show();
-}
-
-//-----------------------------  NeoPixels RGB  -----------------------------------
-
-void allNeoPixelsRED() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 255, 0, 0 );
-  }
-  pixels.show();
-}
-
-void allNeoPixelsGREEN() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 0, 255, 0 );
-  }
-  pixels.show();
-}
-
-void allNeoPixelsBLUE() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 0, 0, 255 );
-  }
-  pixels.show();
+  display.setTextSize(2);
+  display.setCursor(20, 30);
+  display.display();
+  display.println("0101010..");
+  display.display();
+  display.setTextSize(1);
+  display.setCursor(1, 54);
+  display.println("waiting for data.....");
+  display.display();
+  //delay(5000);
+  display.clearDisplay();
+  //display.display(); //note... not needed "main loop" will initiate this, when serial coms establish
 }
