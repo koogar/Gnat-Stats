@@ -13,21 +13,7 @@
 
 /*Optimised for ILI9341 320 x 240 in landscape*/
 
-void DisplayStyle_Landscape_ESP () {
-
-#ifdef enable_DualSerialEvent
-  serialBTEvent();    // Check for Bluetooth Serial Activity
-#endif
-
-#ifdef enable_BT
-  serialBTEvent();    // Check for Bluetooth Serial Activity
-#else //USB
-  serialEvent();     // Check for USB Serial Activity
-#endif
-
-#ifdef  enableActivityChecker
-  activityChecker();      // Turn off screen when no activity
-#endif
+void DisplayStyle_Landscape_ATSAMD () {
 
   /* TFT DRAW STATS */
   if (stringComplete) {
@@ -37,11 +23,6 @@ void DisplayStyle_Landscape_ESP () {
       //splashScreen2();
 
       tft.fillScreen(ILI9341_BLACK);
-
-      tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-      tft.setFont(); // set to default Adafruit library font
-
-
       bootMode = false;
     }
 
@@ -52,9 +33,9 @@ void DisplayStyle_Landscape_ESP () {
 
     backlightON (); //Turn ON display when there is  activity
 
-    //moved to boot true
-    //tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-    //tft.setFont(); // set to default Adafruit library font
+
+    tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+    tft.setFont(); // set to default Adafruit library font
     tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
 
 #ifdef Debug
@@ -144,10 +125,6 @@ void DisplayStyle_Landscape_ESP () {
 
       String cpuName = "";
 
-      tft.setTextSize(1);
-      tft.setCursor(16, 8);// (Left/Right, UP/Down)
-      //tft.setCursor(-35, 1);
-
       int cpuNameStart = inputString.indexOf("CPU:");
       if (inputString.indexOf("Intel", cpuNameStart) > -1) {
         cpuNameStart = cpuNameStart + cpuNameStartLength;
@@ -162,6 +139,9 @@ void DisplayStyle_Landscape_ESP () {
       else
         cpuName = inputString.substring(cpuNameStart);
 
+      tft.setTextSize(1);
+      tft.setCursor(16, 8);// (Left/Right, UP/Down)
+
       /* CPU Manual Name*/
 #ifdef Manual_cpuName
       tft.println(set_CPUname);
@@ -173,9 +153,7 @@ void DisplayStyle_Landscape_ESP () {
     }
     if (inputString.indexOf("GPU") > -1)
     {
-      tft.setTextSize(1);
-      tft.setCursor(16, 130);  // Position GPU Name
-      //tft.setCursor(-41, 28);   // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
+
       int gpuNameStart = inputString.indexOf("GPU:");
       if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
         gpuNameStart = gpuNameStart + gpuNameStartLength;
@@ -195,22 +173,17 @@ void DisplayStyle_Landscape_ESP () {
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
 #endif
 
+      tft.setTextSize(1);
+      tft.setCursor(16, 130);  // Position GPU Name
       tft.println(gpuName);
     }
 
     //------------------------------------------------------RX indicator---------------------------------------------------
 
-#ifdef enable_BT
     tft.setCursor(284, 9);
-    tft.println("BT");
-    tft.fillCircle(306, 12, 7, ILI9341_BLUE);// Flash top right corner when updating  //see "serialEvent();" loop
+    tft.print("RX");
+    tft.fillCircle(306, 12, 7, ILI9341_RED);// Landscape Flash RX top right corner when updating
     tft.drawCircle(306, 12, 8, ILI9341_WHITE);
-#else
-    tft.setCursor(284, 9);
-    tft.println("RX");
-    tft.fillCircle(306, 12, 7, ILI9341_RED);// Flash top right corner when updating  //see "serialEvent();" loop
-    tft.drawCircle(306, 12, 8, ILI9341_WHITE);
-#endif
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
@@ -624,7 +597,8 @@ void DisplayStyle_Landscape_ESP () {
     tft.print(ramString)    ; tft.setTextSize(0); tft.print("GB");
 
     //------------------------------------------ RX indicator Clear------------------------------------------------
-    delay(TX_LED_Delay);
+
+    delay(TX_LED_Delay); // TX blink delay
     tft.fillCircle(306, 12, 7, ILI9341_BLACK);// Flash top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.2.2.BT"  // Code version number
+#define CODE_VERS  "2.0.4.BT"  // Code version number
 #define device_BT "TallmanLabs_BT"
 
 

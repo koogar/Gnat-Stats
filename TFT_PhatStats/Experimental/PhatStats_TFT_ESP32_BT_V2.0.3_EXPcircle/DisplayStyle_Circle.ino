@@ -151,10 +151,6 @@ void DisplayStyle_Circle_ESP () {
 
       String cpuName = "";
 
-      tft.setTextSize(1);
-      tft.setCursor(122 - X_Offset, 19 + X_Offset); // (Left/Right, UP/Down)
-      //tft.setCursor(-35, 1);
-
       int cpuNameStart = inputString.indexOf("CPU:");
       if (inputString.indexOf("Intel", cpuNameStart) > -1) {
         cpuNameStart = cpuNameStart + cpuNameStartLength;
@@ -169,6 +165,9 @@ void DisplayStyle_Circle_ESP () {
       else
         cpuName = inputString.substring(cpuNameStart);
 
+      tft.setTextSize(1);
+      tft.setCursor(122 - X_Offset, 19 + X_Offset); // (Left/Right, UP/Down)
+
       /* CPU Manual Name*/
 #ifdef Manual_cpuName
       tft.println(set_CPUname);
@@ -180,9 +179,7 @@ void DisplayStyle_Circle_ESP () {
     }
     if (inputString.indexOf("GPU") > -1)
     {
-      tft.setTextSize(1);
-      tft.setCursor(100 - X_Offset, 130 + Y_Offset); // Position GPU Name
-      //tft.setCursor(-41, 28);   // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
+
       int gpuNameStart = inputString.indexOf("GPU:");
       if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
         gpuNameStart = gpuNameStart + gpuNameStartLength;
@@ -193,7 +190,6 @@ void DisplayStyle_Circle_ESP () {
 
       int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
 
-
       /* GPU Manual Name*/
 #ifdef Manual_gpuName
       String gpuName = set_GPUname; // Name spacing test
@@ -202,6 +198,8 @@ void DisplayStyle_Circle_ESP () {
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
 #endif
 
+      tft.setTextSize(1);
+      tft.setCursor(100 - X_Offset, 130 + Y_Offset); // Position GPU Name
       tft.println(gpuName);
     }
 

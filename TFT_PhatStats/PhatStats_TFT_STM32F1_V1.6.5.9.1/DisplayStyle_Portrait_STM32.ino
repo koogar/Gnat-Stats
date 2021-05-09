@@ -12,7 +12,7 @@
 
 /* Optimised for ILI9341 320 x 240 in portrait,*/
 
-void DisplayStyle_Portrait_ATSAMD () {
+void DisplayStyle_Portrait_STM32 () {
 
   /* TFT DRAW STATS, */
   if (stringComplete) {
@@ -113,19 +113,12 @@ void DisplayStyle_Portrait_ATSAMD () {
 
     /*CPU & GPU Hardware ID*/
 
-    /*CPU Manual Position Test*/
-
-
-
     if (inputString.indexOf("CPU") > -1)
     {
 
 
       /* CPU Auto Detect Name*/
       String cpuName = "";
-
-      tft.setTextSize(1);
-      tft.setCursor(16, 8); // (Left/Right, UP/Down)
 
       int cpuNameStart = inputString.indexOf("CPU:");
       if (inputString.indexOf("Intel", cpuNameStart) > -1) {
@@ -141,6 +134,10 @@ void DisplayStyle_Portrait_ATSAMD () {
       else
         cpuName = inputString.substring(cpuNameStart);
 
+
+      tft.setTextSize(1);
+      tft.setCursor(16, 8); // (Left/Right, UP/Down)
+      
       /* CPU Manual Name*/
 #ifdef Manual_cpuName
       tft.println(set_CPUname);
@@ -153,9 +150,7 @@ void DisplayStyle_Portrait_ATSAMD () {
     }
     if (inputString.indexOf("GPU") > -1)
     {
-      tft.setTextSize(1);
-      tft.setCursor(16, 128);  // Position GPU Name
-      //tft.setCursor(-41, 28);   // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
+
       int gpuNameStart = inputString.indexOf("GPU:");
       if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
         gpuNameStart = gpuNameStart + gpuNameStartLength;
@@ -173,6 +168,9 @@ void DisplayStyle_Portrait_ATSAMD () {
       /* GPU Auto Detect Name*/
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
 #endif
+
+      tft.setTextSize(1);
+      tft.setCursor(16, 128);  // Position GPU Name
       tft.println(gpuName);
 
     }

@@ -1,4 +1,5 @@
-#define CODE_VERS  "2.0.3"  // Code version number
+#define CODE_VERS  "2.0.2.2.BT"  // Code version number
+#define device_BT "TallmanLabs_BT"
 
 
 /*
@@ -13,21 +14,14 @@
 
   This Sketch Requires HardwareSerialMonitor v1.3 or higher
 
-  Board Manager QY-PY
+  https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/boards_manager.md
+
+  Board Manager ESP32
   -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  Install Arduino ATSAMD then ADD
-  https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 
-  Drivers
-  ------------
-  https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
 
-  Board Manager XIAO
-  -------------------
-  https://wiki.seeedstudio.com/Seeeduino-XIAO/
-  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  https://files.seeedstudio.com/arduino/package_seeeduino_board
 
   Libraries
   ---------
@@ -40,11 +34,11 @@
   Adafruit ILI9341
   https://github.com/adafruit/Adafruit_ILI9341
 
-  HID-Project
-  https://github.com/NicoHood/HID/wiki/Consumer-API
-
   Rotary encoder
   https://github.com/koogar/ErriezRotaryEncoderFullStep
+
+  ESP32 analogueWrite Function
+  https://github.com/ERROPiX/ESP32_AnalogWrite
 
   Hookup Guide
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
@@ -54,82 +48,71 @@
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
-
+#include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Fonts/Org_01.h>
-
+#include <analogWrite.h>
 #include <TML_ErriezRotaryFullStep.h>
-#include "HID-Project.h"  //https://github.com/NicoHood/HID/wiki/Consumer-API
-
 
 #include "Configuration_Settings.h" // load settings
 #include "Bitmaps.h"
 
+#include "BluetoothSerial.h" //https://www.electronicshub.org/esp32-bluetooth-tutorial/
 
+
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled!
+#endif
+
+BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 /*
   eBay Special Red PCB pinouots VCC(3.3v), GND, CS, RST, D/C, MOSI, SCK, BL, (MISO, T_CLK, T_CS, T_DIN, T_DO, T_IRQ)
 
-  Adafruit QT-PY / XIAO
-  ---------------------
-  ATSAMD21G18 @ 48MHz with 3.3V logic/power
-  256KB of FLASH + 32KB of RAM
-  ---------------------
-  (TFT)
-  CS     =  5
-  RST    =  9
-  DC     =  7
-  SCLK   =  8
-  MOSI   =  10
+  Wemos ESP32 Lolin32 v1   (Compiles/Tested)
+  Wemos ESP32 Lolin32 Lite (Compiles/Untested)
+  Wemos ESP32 LoLin32 D32  (Compiles/Untested)
+  --------------------------------------------
+  CS     =  17             (15)
+  RST    =  19             (-1)
+  DC     =  16             (2)
 
+  SCLK   =  18
+  MOSI   =  23
 
-  B.LIGHT =  4
+  MISO   =  19   (*Not Required for Reference only!!!)
+
+  B.LIGHT =  4             (0, 13)
   ---------------------
+
   Rotary Encoder
   ---------------------
-  EncoderA = 3
-  EncoderB = 2
-  EncButton= 1
 
-  ---------------------
+  EncoderA = 14           (14,2,4)
+  EncoderB = 27           (27,15,16)
 
-  InfraRed = 0
-
+  EncButton= 0            (0,17)
   ---------------------
   i2c
   ---------------------
-  SCL = 5  (*Not Required for Reference only!!!)
-  SDA = 4  (*Not Required for Reference only!!!)
+  SCL = 22  (*Not Required for Reference only!!!)
+  SDA = 21  (*Not Required for Reference only!!!)
   ---------------------
 
   Neopixel / LED's
   ---------------------
-  XIAO Built in LED       =  13  None on the QT-PY     (*Not Required for Reference only!!!)
-  QT-PY Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
-
-  NeoPixel         =  6
+  Built in LED =  5 (*Not Required for Reference only!!!)
+  Neopixel     =  2       (32)
   ==========================================================================================================
 */
 
 
 //---------------------------------------------------------------------------------------
 #include <Adafruit_NeoPixel.h>
-#define NEOPIN      6
-#define NUM_PIXELS 16
-
-/*onboard XIAO BUILD in LED for TX*/
-#ifdef Seeeduino_XIAO
-#define TX_LEDPin 13
-#endif
-
-
-/*onboard QT-PY NeoPixel for TX*/
-#ifdef Adafruit_QTPY
-#define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
-#else
-#define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
-#endif
+#define NEOPIN      2
+#define NUM_PIXELS  16
+Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
 #define BLUE       0x0000FF
@@ -141,40 +124,42 @@
 #define WHITE      0xFFFFFF
 #define BLACK      0x000000 // OFF
 
-Adafruit_NeoPixel pixels(NUM_PIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
+/*onboard BUILD in LED for RX*/
+#define TX_LEDPin 5
+
 //----------------------------------------------------------------------------
 
 /* ILI9321 TFT setup */
 #include <Adafruit_ILI9341.h>  // v1.5.6 Adafruit Standard
 
 /* ATSAMD21 SPi Hardware only for speed*/
-#define TFT_CS     5
-#define TFT_DC     7
-#define TFT_RST    9
+#define TFT_CS     17
+#define TFT_DC     16
+#define TFT_RST    19
 
 /* These pins do not have to be defined as they are hardware pins */
-//Connect TFT_SCLK to pin   8
-//Connect TFT_MOSI to pin   10
+//Connect TFT_SCLK to pin   18
+//Connect TFT_MOSI to pin   23
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST); // Use hardware SPI
 
 //-----------------------------------------------------------------------------
 
 /* Rotary Encoder*/
-#define encoderOutA 2 // CLK
-#define encoderOutB 3 // DT
+#define encoderOutA 27 // CLK
+#define encoderOutB 14 // DT
 
 RotaryFullStep rotary(encoderOutA, encoderOutB);
 
 /* Encoder Button pin*/
-int encoder_Button     = 1;
+int encoder_Button     = 0;
 int enc_Button_counter = 0;
 
 /* Screen TFT backlight Pin */
 int TFT_backlight_PIN = 4;
 
-/* Encoder TFT Brightness*/
+
+/* Encoder TFT Brightness*/ //Reserved!!! not supported on ESP32 Reserved
 //volatile int brightness_count = 150; // Start Up PWM Brightness, moved to CFG!!!
 int brightness_countLast      = 0;   // Store Last PWM Value
 
@@ -227,20 +212,21 @@ boolean stringComplete = false;
 
 void setup() {
 
-  Serial.begin(9600);  //  USB Serial Baud Rate
-  inputString.reserve(200); // String Buffer
-
-  /* Setup HID*/
-  // Sends a clean report to the host. This is important on any Arduino type.
-  Consumer.begin();
-
-
-
-#ifdef Encoder_HID
-  // Initialize pin change interrupt on both rotary encoder pins
-  attachInterrupt(digitalPinToInterrupt(encoderOutA), rotaryInterrupt, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(encoderOutB), rotaryInterrupt, CHANGE);
+#ifdef enable_DualSerialEvent
+  SerialBT.begin(device_BT); //Bluetooth device name
 #endif
+
+
+#ifdef enable_BT
+  //btStart();
+  SerialBT.begin(device_BT); //Bluetooth device name
+#else //USB
+  //btStop();      // Turn off BT Radio
+  //SerialBT.end(); // Turn off BT Radio
+  Serial.begin(baud);  //  USB Serial Baud Rate
+#endif
+
+  inputString.reserve(200); // String Buffer
 
 #ifdef Encoder_PWM2
   // Initialize pin change interrupt on both rotary encoder pins
@@ -250,24 +236,17 @@ void setup() {
 
   /* Set up the NeoPixel*/
   pixels.begin();    // This initializes the NeoPixel library.
- 
-#ifdef enableTX_LED 
-#ifdef Adafruit_QTPY
-  TX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
-#endif
-#endif
-
   pixels.setBrightness(NeoBrightness); // Atmel Global Brightness (does not work for STM32!!!!)
   pixels.show(); // Turn off all Pixels
 
   /* Set up PINs*/
   pinMode(encoder_Button, INPUT_PULLUP);
-  pinMode(TFT_backlight_PIN, OUTPUT); // declare backlight pin to be an output:
 
-#ifdef Seeeduino_XIAO
+  // Set resolution for a specific pin
+  analogWriteResolution(TFT_backlight_PIN, 12); //ESP32 only
+
 #ifdef enableTX_LED
   pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
 #endif
 
   backlightOFF();
@@ -286,7 +265,6 @@ void setup() {
   tft.setTextColor(ILI9341_WHITE);
 
   splashScreen();
-  //splashScreenSumo();
 
 }
 
@@ -294,35 +272,15 @@ void setup() {
 
 void loop() {
 
-  serialEvent();          // Check for Serial Activity
-
-#ifdef  enableActivityChecker
-  activityChecker();      // Turn off screen when no activity
-#endif
 
 #ifdef Encoder_PWM2
   void rotaryInterrupt_PWM();
 #endif
 
-#ifdef Encoder_HID
-  void rotaryInterrupt(); // HID Volume Control Function, runs all the time regardless of Phat-Stats being Active.
-#endif
-
 #ifdef enableTX_LED
-  /*Serial Activity LED */
-#ifdef Seeeduino_XIAO
+  /*ESP Activity LED */
   digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
 #endif
-#endif
-
-#ifdef enableTX_LED
-  /* Serial Activity NeoPixel */
-#ifdef Adafruit_QTPY
-  TX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
-  TX_pixel.show();
-#endif
-#endif
-
   //-----------------------------
 
   /*Encoder Mode Button, moved to its own tab*/
@@ -333,7 +291,7 @@ void loop() {
 /* END of Main Loop */
 
 
-//-----------------------------  NeoPixels  -----------------------------------
+//-----------------------------  NeoPixels RGB  -----------------------------------
 void allNeoPixelsOff() {
   for ( int i = 0; i < NUM_PIXELS; i++ ) {
     pixels.setPixelColor(i, 0, 0, 0 );
@@ -347,17 +305,56 @@ void allNeoPixelsRED() {
   }
   pixels.show();
 }
+
+void allNeoPixelsGREEN() {
+  for ( int i = 0; i < NUM_PIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 255, 0 );
+  }
+  pixels.show();
+}
+
+void allNeoPixelsBLUE() {
+  for ( int i = 0; i < NUM_PIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 255 );
+  }
+  pixels.show();
+}
 //-----------------------------  Serial Events -------------------------------
 /*
   SerialEvent occurs whenever a new data comes in the hardware serial RX. This
   routine is run between each time loop() runs, so using delay inside loop can
   delay response. Multiple bytes of data may be available.
 */
-void serialEvent() {
 
+/* BlueTooth */
+void serialBTEvent() {
+  while (SerialBT.available()) {
+
+    char inChar = (char)SerialBT.read();
+    //Serial.print(inChar); // Debug Incoming Serial
+
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character has '|' in it, set a flag so the main loop can do something about it:
+    if (inChar == '|') {
+      stringComplete = true;
+
+      delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
+
+#ifdef enableTX_LED
+      /* Serial Activity LED */
+      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
+#endif
+
+    }
+  }
+}
+
+
+/* USB Serial*/
+void serialEvent() {
   while (Serial.available()) {
-    //while (Serial.available() > 0) {
-    // get the new byte:
+
     char inChar = (char)Serial.read();
     //Serial.print(inChar); // Debug Incoming Serial
 
@@ -370,21 +367,78 @@ void serialEvent() {
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
 #ifdef enableTX_LED
-
-      /* Serial Activity LED */
-#ifdef Seeeduino_XIAO
+      /* Serial Activity LED*/
       digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
 #endif
+
+    }
+  }
+}
+void getCPUname () {
+  /* CPU & GPU Hardware ID */
+
+  if (inputString.indexOf("CPU") > -1)
+  {
+
+    String cpuName = "";
+
+    int cpuNameStart = inputString.indexOf("CPU:");
+    if (inputString.indexOf("Intel", cpuNameStart) > -1) {
+      cpuNameStart = cpuNameStart + cpuNameStartLength;
+    }
+    else {
+      cpuNameStart = cpuNameStart + 8;
+    }
+    if (inputString.indexOf("GPU") > -1)
+    {
+      cpuName = inputString.substring(cpuNameStart, inputString.indexOf("GPU:"));
+    }
+    else
+      cpuName = inputString.substring(cpuNameStart);
+
+    //tft.setTextSize(1);
+    //tft.setCursor(16, 8);// (Left/Right, UP/Down)
+    
+    /* CPU Manual Name*/
+#ifdef Manual_cpuName
+    tft.println(set_CPUname);
+#else
+    /* CPU Auto Detect Name*/
+    tft.println(cpuName);
 #endif
 
-#ifdef enableTX_LED
-      /* Serial Activity NeoPixel */
-#ifdef Adafruit_QTPY
-      TX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
-      TX_pixel.show();
-#endif
-#endif
+
+
+  }
+}
+
+void getGPUname () {
+  if (inputString.indexOf("GPU") > -1)
+  {
+
+    int gpuNameStart = inputString.indexOf("GPU:");
+    if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
+      gpuNameStart = gpuNameStart + gpuNameStartLength;
     }
+    else {
+      gpuNameStart = gpuNameStart + 8;
+    }
+
+    int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+
+    /* GPU Manual Name*/
+#ifdef Manual_gpuName
+    String gpuName = set_GPUname; // Name spacing test
+#else
+    /* GPU Auto Detect Name*/
+    String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
+
+    //tft.setTextSize(1);
+    //tft.setCursor(16, 130);  // Position GPU Name
+    //tft.setCursor(-41, 28);   // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
+    //tft.println(gpuName);
   }
 }
 
@@ -425,6 +479,7 @@ void activityChecker() {
     tft.fillScreen(ILI9341_BLACK);
     backlightOFF ();
     displayDraw = 0;
+
   }
 
 }
@@ -433,13 +488,16 @@ void activityChecker() {
 
 void backlightON () {
   analogWrite(TFT_backlight_PIN, brightness_count); // TFT turn on backlight
+
 }
 
 void backlightOFF () {
   analogWrite(TFT_backlight_PIN, 0);        // TFT turn off backlight,
+
 }
 
 //----------------------------- Splash Screens --------------------------------
+
 void splashScreen() {
 
   /* Initial Boot Screen, */
@@ -457,6 +515,10 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
+
+  tft.setCursor(20, 20);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.print(baud);//tft.println(" bits/s");
 
   tft.setTextSize(3);
   tft.setCursor(86, 140);
@@ -486,15 +548,18 @@ void splashScreen() {
 
   tft.setTextColor(ILI9341_WHITE);
   tft.setFont(); // Set Default Adafruit GRFX Font
+
   tft.setTextSize(1);
+
   tft.setCursor(10, 305);
-  tft.print("Use HardwareSerialMonitor v1.3 Upward");
+  tft.setTextColor(ILI9341_WHITE);
+  tft.print("If using USB Serial? Disconnect BT!!!");
 
   backlightON();
 
   FeatureSet_Indicator2(); // Display Icons for enabled features
 
-  delay(6000);
+  delay(4000);
 
 #ifdef enableNeopixelGauges
 
@@ -508,13 +573,18 @@ void splashScreen() {
 
   tft.fillScreen(ILI9341_BLACK);
 
-#ifdef Serial_BT
+#ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
 
 #else // USB
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_USB, 76, 190, ILI9341_RED);
+#endif
+
+#ifdef enable_DualSerialEvent
+  tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
+  tft.drawBitmap(82, 62, WaitingDataBMP_USB, 76, 190, ILI9341_BLUE);
 #endif
 
   delay(3000);
