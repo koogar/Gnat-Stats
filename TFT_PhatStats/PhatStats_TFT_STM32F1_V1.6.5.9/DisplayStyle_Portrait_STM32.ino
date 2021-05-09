@@ -585,7 +585,7 @@ void DisplayStyle_Portrait_STM32 () {
 
 
     //------------------------------------------ RX indicator Clear-----------------------------------------------
-
+    delay(TX_LED_Delay); // TX blink delay
     tft.fillCircle(226, 14, 6, ILI9341_BLACK); // Portrait Flash RX top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------

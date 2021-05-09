@@ -92,7 +92,7 @@
 
   v2.0.2.2.BT:
       Use either BT or USB Serial "enable_DualSerialEvent"
-      ADD enableTX_LED  option to enable/disable built in LED when transmitting data 
+      ADD enableTX_LED  option to enable/disable built in LED when transmitting data
 
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
@@ -132,7 +132,8 @@
 //#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
-//#define enableTX_LED // 
+//#define enableTX_LED //
+int TX_LED_Delay = 200; // Blink Delay
 
 //-------------------------------- DISCLAIMER -------------------------------------------
 /*
@@ -150,7 +151,7 @@
 
   ALTERNATIVELY USE A BATTERY BANK THROUGH THE USB CONNECTOR
 
-  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!! 
+  !!!LITHIUM POLYMER PACKS / BATTERIES CAN BE VERY DANGEROUS, WITH A RISK OF FIRE!!!
 
   If you are going to use a battery or LiPo pack you must take some responsibility, do your research!!!.
   No advice will be given, or implied regarding which you should use etc.
@@ -207,16 +208,16 @@ String set_GPUram = "xx";
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
-#define enable_ShowFrequencyGain
+//#define enable_ShowFrequencyGain
 
 /* Uncomment only one of the below,*/
 //#define ShowFrequencyGainMHz    // Show Overlock/Turbo & Boost Clock Frequency Gains in MHZ  eg: "+24MHz"
-#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
+//#define ShowFrequencyGain%       // Show Overlock/Turbo & Boost Clock Frequency Gains in Percent  eg: "+24%"
 
 //----------------------------- Throttle/Boost Indicator --------------------------------
 
-#define enable_ThrottleIndicator // Show TJMax Indicator 
-#define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
+//#define enable_ThrottleIndicator // Show TJMax Indicator
+//#define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 
@@ -234,15 +235,15 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
 /* If commented the screen brightness will default to the fixed level below,*/
-//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
-volatile int brightness_count = 130; // Start Up Brightness
+volatile int brightness_count = 200; // Start Up Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
 /* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
-#define enableActivityChecker
+//#define enableActivityChecker
 
 /* How long the display takes to timeout due to inactive serial data from the windows application */
 #define lastActiveDelay 8000

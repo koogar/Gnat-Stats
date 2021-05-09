@@ -12,7 +12,22 @@
 
 /* Optimised for ILI9341 320 x 240 in portrait,*/
 
-void DisplayStyle_Portrait_ATSAMD () {
+void DisplayStyle_Portrait_ESP () {
+  
+  
+#ifdef enable_DualSerialEvent
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#endif
+
+#ifdef enable_BT
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#else //USB
+  serialEvent();     // Check for USB Serial Activity
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker();      // Turn off screen when no activity
+#endif
 
   /* TFT DRAW STATS, */
   if (stringComplete) {
@@ -178,10 +193,17 @@ void DisplayStyle_Portrait_ATSAMD () {
     }
 
     //------------------------------------------------------RX indicator---------------------------------------------------
+#ifdef enable_BT
+    tft.setCursor(203, 11);
+    tft.println("BT");
+    tft.fillCircle(226, 14, 6, ILI9341_BLUE);// Flash top right corner when updating  //see "serialEvent();" loop
+    tft.drawCircle(226, 14, 7, ILI9341_WHITE);
+#else
     tft.setCursor(203, 11);
     tft.println("RX");
     tft.fillCircle(226, 14, 6, ILI9341_RED);// Flash top right corner when updating  //see "serialEvent();" loop
     tft.drawCircle(226, 14, 7, ILI9341_WHITE);
+#endif
 
     //--------------------------------------------DATA CLEARING BOXES------------------------------------------------------
 
@@ -585,7 +607,8 @@ void DisplayStyle_Portrait_ATSAMD () {
 
 
     //------------------------------------------ RX indicator Clear-----------------------------------------------
-    delay(TX_LED_Delay); // TX blink delay
+
+delay(TX_LED_Delay);
     tft.fillCircle(226, 14, 6, ILI9341_BLACK); // Portrait Flash RX top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------

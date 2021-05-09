@@ -598,7 +598,8 @@ void DisplayStyle_Landscape_ATSAMD () {
     tft.print(ramString)    ; tft.setTextSize(0); tft.print("GB");
 
     //------------------------------------------ RX indicator Clear------------------------------------------------
-
+    
+    delay(TX_LED_Delay); // TX blink delay
     tft.fillCircle(306, 12, 7, ILI9341_BLACK);// Flash top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------

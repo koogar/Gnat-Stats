@@ -1,0 +1,62 @@
+PhatStats tft.print (Reference Names)
+
+Note: You can not simply call these tft.prints in a new "DisplayStyle" 
+without including the int & string code
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+//-------------Hardware Names
+tft.println(cpuName);
+tft.println(gpuName);
+
+//-------------CPU Load/Temp/Freq
+tft.print(cpuString1);           // CPU TEMP
+tft.print(cpuString2);           // CPU Load
+tft.print(cpuClockString);       // CPU Freq Display
+
+//-------------CPU Freq Gains
+tft.print(cpuOverclockSum, 0);            // ShowFrequencyGain MHz
+tft.print(cpuOverclockGainPercentSum, 0); // Show Value in %
+
+
+//-------------GPU Load/Temp 
+tft.print(gpuString1);           // GPU TEMPERATURE C
+tft.print(gpuString2);           // GPU LOAD %
+
+
+//------------ GPU Freq/Temp 
+tft.print(gpuMemClockString);    //VRAM Clock MHz
+tft.print(gpuShaderClockString); //Shader Clock MHz
+tft.print(gpuCoreClockString);   //Core Clock MHz
+
+
+//-------------GPU Freq Gains
+tft.print(gpuOverclockSum, 0);            // Show Value in MHz
+tft.print(gpuOverclockGainPercentSum, 0); // Show Value in %
+
+
+//-------------GPU Memory Total
+tft.print(totalGPUmemSumDP, 0); // GPU RAM Total in GB
+
+//-------------GPU Memory Used
+tft.print(gpuMemoryUsedString); //  GPU RAM Used in MB
+
+
+//-------------GPU Power Consumption
+tft.print(gpuPowerString);      //GPU Power Watts
+
+
+//-------------GPU FAN Speed
+
+tft.print(gpuFanString);        //GPU Fan %
+tft.print(gpuRPMString);        //GPU Fan RPM
+
+
+//-------------SYSTEM RAM USAGE
+tft.print(intRamSum, 0)         // Total System Ram
+tft.print(ramString);           // Used System Ram
+
+
+
+

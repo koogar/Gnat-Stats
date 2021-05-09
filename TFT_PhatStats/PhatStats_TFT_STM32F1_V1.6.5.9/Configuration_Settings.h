@@ -185,5 +185,7 @@ int Serial_eventDelay = 0; //
 
 int baud = 112500;
 
+int TX_LED_Delay = 100; // TX blink delay delay
+
 /* Debug Screen, Update Erasers, */
 //#define Debug
