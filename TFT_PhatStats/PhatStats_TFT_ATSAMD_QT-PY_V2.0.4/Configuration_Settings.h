@@ -163,9 +163,9 @@ String set_GPUram = "xx";
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
+#define enable_gpuPowerStats // Nvidia Specific???
+#define enable_gpuFanStats%
+#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -184,10 +184,10 @@ String set_GPUram = "xx";
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 
-//#define enableNeopixelGauges     // NeoPixel ring bargraph example
+#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
 /* VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
-//#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 int     Neo_DivideBy = 5;    // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
 /* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
@@ -219,7 +219,7 @@ int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from 
 
 /* Enable the built in LED blinking when transmitting data,*/
 #define enableTX_LED 
-int TX_LED_Delay = 200; // TX blink delay
+int TX_LED_Delay = 100; // TX blink delay
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //

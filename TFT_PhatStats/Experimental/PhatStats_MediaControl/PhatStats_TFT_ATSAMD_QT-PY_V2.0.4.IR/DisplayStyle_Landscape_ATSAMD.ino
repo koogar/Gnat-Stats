@@ -125,10 +125,6 @@ void DisplayStyle_Landscape_ATSAMD () {
 
       String cpuName = "";
 
-      tft.setTextSize(1);
-      tft.setCursor(16, 8);// (Left/Right, UP/Down)
-      //tft.setCursor(-35, 1);
-
       int cpuNameStart = inputString.indexOf("CPU:");
       if (inputString.indexOf("Intel", cpuNameStart) > -1) {
         cpuNameStart = cpuNameStart + cpuNameStartLength;
@@ -143,6 +139,9 @@ void DisplayStyle_Landscape_ATSAMD () {
       else
         cpuName = inputString.substring(cpuNameStart);
 
+      tft.setTextSize(1);
+      tft.setCursor(16, 8);// (Left/Right, UP/Down)
+
       /* CPU Manual Name*/
 #ifdef Manual_cpuName
       tft.println(set_CPUname);
@@ -154,9 +153,7 @@ void DisplayStyle_Landscape_ATSAMD () {
     }
     if (inputString.indexOf("GPU") > -1)
     {
-      tft.setTextSize(1);
-      tft.setCursor(16, 130);  // Position GPU Name
-      //tft.setCursor(-41, 28);   // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
+
       int gpuNameStart = inputString.indexOf("GPU:");
       if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
         gpuNameStart = gpuNameStart + gpuNameStartLength;
@@ -176,6 +173,8 @@ void DisplayStyle_Landscape_ATSAMD () {
       String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
 #endif
 
+      tft.setTextSize(1);
+      tft.setCursor(16, 130);  // Position GPU Name
       tft.println(gpuName);
     }
 
@@ -599,6 +598,7 @@ void DisplayStyle_Landscape_ATSAMD () {
 
     //------------------------------------------ RX indicator Clear------------------------------------------------
 
+    delay(TX_LED_Delay); // TX blink delay
     tft.fillCircle(306, 12, 7, ILI9341_BLACK);// Flash top right corner when updating
 
     //-------------------------------------------------------------------------------------------------------------
