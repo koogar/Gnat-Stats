@@ -132,7 +132,7 @@
 //#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
-//#define enableTX_LED //
+#define enableTX_LED //
 int TX_LED_Delay = 200; // TX blink delay
 
 //-------------------------------- DISCLAIMER -------------------------------------------
@@ -202,9 +202,9 @@ String set_GPUram = "xx";
 #define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
+#define enable_gpuPowerStats // Nvidia Specific???
+#define enable_gpuFanStats%
+#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -221,11 +221,11 @@ String set_GPUram = "xx";
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 
-//#define enableNeopixelGauges     // NeoPixel ring bargraph example
+#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
 
 /* BT BATTERY SAVER HACK JOB, VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
-//#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 int     Neo_DivideBy = 5;   // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
 /* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
@@ -235,7 +235,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
 /* If commented the screen brightness will default to the fixed level below,*/
-//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
 volatile int brightness_count = 130; // Start Up Brightness
@@ -251,7 +251,7 @@ volatile int brightness_count = 130; // Start Up Brightness
 //-------------------------------- Misco Setting -----------------------------------------
 
 /* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
+int debounceEncButton = 200; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND and set at "0"
 
 /* Delay screen event, to stop screen data corruption ESP8622 / ESP32 use 25, most others 5 or 0 will do*/
 int Serial_eventDelay = 15;  // 15 is the minimum setting for an ESP32 with a Silicon Labs CP210x serial chip

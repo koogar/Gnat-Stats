@@ -1,7 +1,7 @@
 
 
-/*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240), 
-Same ST7789 library as the square version*/
+/*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
+  Same ST7789 library as the square version*/
 
 /*ST7789 240x240 Portrait & Landscape offsets,*/
 //int X_Offset = 40; // - Portrait
@@ -15,7 +15,7 @@ int Y_Offset = 40; // + Portrait
 //int X_Offset = 0; // - Landscape
 //int Y_Offset = 0; // + Landscape
 
-void DisplayStyle_CircleGauge () {
+void DisplayStyle_CircleGauge_STM32 () {
 
 #ifdef enable_DualSerialEvent
   serialBTEvent();    // Check for Bluetooth Serial Activity
@@ -457,7 +457,6 @@ void DisplayStyle_CircleGauge () {
 
     inputString = "";
     stringComplete = false;
-    //tft.fillScreen(ILI9341_BLACK);
 
   }
 }

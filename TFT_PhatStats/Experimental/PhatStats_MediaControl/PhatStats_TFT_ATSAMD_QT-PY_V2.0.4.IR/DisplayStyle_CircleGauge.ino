@@ -1,15 +1,15 @@
 
 
-/*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240), 
-Same ST7789 library as the square version*/
+/*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
+  Same ST7789 library as the square version*/
 
-/*ST7789V 240x240 Portrait & Landscape offsets,*/
-int X_Offset = 40; // - Portrait
-int Y_Offset = 0;  // + Portrait
+/*ST7789 240x240 Portrait & Landscape offsets,*/
+//int X_Offset = 40; // - Portrait
+//int Y_Offset = 0;  // + Portrait
 
 /*ILI9341 240x320 Portrait offsets(centre),*/
-//int X_Offset = 40; // - Portrait
-//int Y_Offset = 40; // + Portrait
+int X_Offset = 40; // - Portrait
+int Y_Offset = 40; // + Portrait
 
 /*ILI9341 240x320 Landscape offsets(centre),*/
 //int X_Offset = 0; // - Landscape
@@ -455,9 +455,32 @@ void DisplayStyle_CircleGauge () {
 
     displayDraw = 1;
 
+
+    //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
+
+
+#ifdef enable_CustomThesholdtriggers
+
+    CustomTriggerCPU_temp( cpuString1.toInt() ); //  CPU  Temperature
+    CustomTriggerCPU_load( cpuString2.toInt() ); //  CPU  Load
+
+    CustomTriggerGPU_temp( gpuString1.toInt() ); //  GPU  Temperature
+    CustomTriggerGPU_load( gpuString2.toInt() ); //  GPU  Load
+#endif
+
+#ifdef enableNeopixelGauges
+
+    CPU_loadGauge( cpuString2.toInt() ); // Neopixel Ring Gauge  CPU  Load
+    //CPU_tempGauge( cpuString1.toInt() ); // Neopixel Ring Gauge  CPU  Temperature
+
+    GPU_loadGauge( gpuString2.toInt() ); // Neopixel Ring Gauge  GPU  Load
+    //GPU_tempGauge( gpuString1.toInt() ); // Neopixel Ring Gauge  GPU  Temperature
+
+#endif
+    //---------------------------------
+
     inputString = "";
     stringComplete = false;
-    //tft.fillScreen(ILI9341_BLACK);
 
   }
 }
