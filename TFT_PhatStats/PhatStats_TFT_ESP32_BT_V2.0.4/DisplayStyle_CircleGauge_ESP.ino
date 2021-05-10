@@ -15,7 +15,7 @@ int Y_Offset = 40; // + Portrait
 //int X_Offset = 0; // - Landscape
 //int Y_Offset = 0; // + Landscape
 
-void DisplayStyle_CircleGauge () {
+void DisplayStyle_CircleGauge_ESP () {
 
 #ifdef enable_DualSerialEvent
   serialBTEvent();    // Check for Bluetooth Serial Activity

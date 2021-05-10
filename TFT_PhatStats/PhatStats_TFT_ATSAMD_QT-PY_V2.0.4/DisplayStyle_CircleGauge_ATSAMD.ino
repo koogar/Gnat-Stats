@@ -15,23 +15,7 @@ int Y_Offset = 40; // + Portrait
 //int X_Offset = 0; // - Landscape
 //int Y_Offset = 0; // + Landscape
 
-void DisplayStyle_CircleGauge () {
-
-#ifdef enable_DualSerialEvent
-  serialBTEvent();    // Check for Bluetooth Serial Activity
-#endif
-
-#ifdef enable_BT
-  serialBTEvent();    // Check for Bluetooth Serial Activity
-#else //USB
-  serialEvent();     // Check for USB Serial Activity
-#endif
-
-#ifdef  enableActivityChecker
-  activityChecker();      // Turn off screen when no activity
-#endif
-
-
+void DisplayStyle_CircleGauge_ATSAMD () {
 
   /* TFT DRAW STATS */
   if (stringComplete) {

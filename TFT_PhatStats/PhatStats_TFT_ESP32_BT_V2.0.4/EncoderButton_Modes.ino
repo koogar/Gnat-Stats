@@ -28,7 +28,7 @@ void encoder_Modes() {
 
       case 0: // 1st SCREEN
         //DisplayStyle_Portrait_ESP();
-        DisplayStyle_CircleGauge();
+        DisplayStyle_CircleGauge_ESP();
         break;
 
       case 1: // 2nd SCREEN
