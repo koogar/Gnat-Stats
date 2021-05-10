@@ -10,6 +10,8 @@ without including the int & string code
 tft.println(cpuName);
 tft.println(gpuName);
 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 //-------------CPU Load/Temp/Freq
 tft.print(cpuString1);           // CPU TEMP
 tft.print(cpuString2);           // CPU Load
@@ -19,6 +21,8 @@ tft.print(cpuClockString);       // CPU Freq Display
 tft.print(cpuOverclockSum, 0);            // ShowFrequencyGain MHz
 tft.print(cpuOverclockGainPercentSum, 0); // Show Value in %
 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //-------------GPU Load/Temp 
 tft.print(gpuString1);           // GPU TEMPERATURE C
@@ -52,6 +56,7 @@ tft.print(gpuPowerString);      //GPU Power Watts
 tft.print(gpuFanString);        //GPU Fan %
 tft.print(gpuRPMString);        //GPU Fan RPM
 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //-------------SYSTEM RAM USAGE
 tft.print(intRamSum, 0)         // Total System Ram
