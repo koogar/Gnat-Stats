@@ -11,7 +11,7 @@ void DisplayStyle_CircleGauge_ESP_Per () {
 
 
   /*ILI9341 240x320 Portrait offsets(centre),*/
-  //#define X_Offset =40 // - Portrait
+  //#define X_Offset  40 // - Portrait
   //#define Y_Offset  40 // + Portrait
 
 
