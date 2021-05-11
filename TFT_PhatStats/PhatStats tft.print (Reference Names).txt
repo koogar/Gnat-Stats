@@ -52,7 +52,6 @@ tft.print(gpuPowerString);      //GPU Power Watts
 
 
 //-------------GPU FAN Speed
-
 tft.print(gpuFanString);        //GPU Fan %
 tft.print(gpuRPMString);        //GPU Fan RPM
 

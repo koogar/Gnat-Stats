@@ -1,29 +1,62 @@
 
-void DisplayStyle_CircleGauge_STM32 () {
-{
 
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
+void DisplayStyle_CircleGauge_ESP_Per () {
+
 
   /*ST7789 240x240 Portrait & Landscape offsets,*/
   //#define X_Offset  40 // - Portrait
   //#define Y_Offset  0  // + Portrait
+  //tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+
 
   /*ILI9341 240x320 Portrait offsets(centre),*/
-#define X_Offset =40 // - Portrait
-#define Y_Offset  40 // + Portrait
+  //#define X_Offset =40 // - Portrait
+  //#define Y_Offset  40 // + Portrait
+
 
   /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
   //#define X_Offset 40 // - Portrait
   //#define Y_Offset 63 // + Portrait
 
   /*ILI9341 240x320 Landscape offsets(centre),*/
-  //#define X_Offset  0 // - Landscape
-  //#define Y_Offset  0 // + Landscape
+#define X_Offset  0 // - Landscape
+#define Y_Offset  0 // + Landscape
 
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
+    Same ST7789 library as the square version*/
+
+  /*ST7789 240x240 Portrait & Landscape offsets,*/
+  //int X_Offset = 40; // - Portrait
+  //int Y_Offset = 0;  // + Portrait
+
+  /*ILI9341 240x320 Portrait offsets(centre),*/
+  //int X_Offset = 40; // - Portrait
+  //int Y_Offset = 40; // + Portrait
+
+  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
+  //int X_Offset = 40; // - Portrait
+  //int Y_Offset = 63; // + Portrait
+
+  /*ILI9341 240x320 Landscape offsets(centre),*/
+  //int X_Offset = 0; // - Landscape
+  //int Y_Offset = 0; // + Landscape
+
+#ifdef enable_DualSerialEvent
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#endif
+
+#ifdef enable_BT
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#else //USB
+  serialEvent();     // Check for USB Serial Activity
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker();      // Turn off screen when no activity
+#endif
+
 
 
   /* TFT DRAW STATS */
@@ -31,15 +64,20 @@ void DisplayStyle_CircleGauge_STM32 () {
 
     if (bootMode) {
 
-      tft.fillScreen(ILI9341_BLACK);
-
-      //tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-      tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+      //tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+      tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
       tft.setFont(); // set to default Adafruit library font
 
+      //clear entire screen
+      tft.fillScreen(ILI9341_BLACK);
+
+      //clear circle
       //tft.fillCircle(160 - X_Offset, 120 + Y_Offset, 112, ILI9341_RED); // landscape circle 119 for radius -1 for line thickness
-      tft.fillCircle  (160 - X_Offset, 120 + Y_Offset, 112, ILI9341_BLACK); // landscape circle 119 for radius -1 for line thickness
+      tft.fillCircle  (160 - X_Offset, 120 + Y_Offset, 112, ILI9341_GREEN); // landscape circle 119 for radius -1 for line thickness
+
+      tft.setTextColor(ILI9341_BLACK, ILI9341_GREEN);
+      //tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
 
       //tft.invertDisplay(true);
 
@@ -52,37 +90,8 @@ void DisplayStyle_CircleGauge_STM32 () {
     //--------------------------------------- Display Background ----------------------------------------------------
 
     backlightON (); //Turn ON display when there is  activity
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    /*
-      //Performante
-      // Mid lines
-       //tft.drawFastVLine(160 - X_Offset, 10 + Y_Offset, 220, ILI9341_WHITE);
-       tft.fillRect     (50 - X_Offset, 116 + Y_Offset, 220, 8, ILI9341_GREEN);
-       tft.fillRect     (50 - X_Offset, 119 + Y_Offset, 220, 3, ILI9341_WHITE);
-       tft.drawFastHLine(50 - X_Offset, 120 + Y_Offset, 220, ILI9341_RED);
 
-       // Left Edge Circles
-       tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 48, ILI9341_GREEN); // landscape circle 119 for radius -1 for line tickness
-       tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 38, ILI9341_WHITE); // landscape circle 119 for radius -1 for line tickness
-       tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 28, ILI9341_RED); // landscape circle 119 for radius -1 for line tickness
-       //tft.fillCircle(40 -X_Offset   , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
-
-       // Right Edge Circles
-       tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 48, ILI9341_GREEN); // landscape circle 119 for radius -1 for line tickness
-       tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 38, ILI9341_WHITE); // landscape circle 119 for radius -1 for line tickness
-       tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 28, ILI9341_RED); // landscape circle 119 for radius -1 for line tickness
-       //tft.fillCircle(280 -X_Offset  , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
-
-    */
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-    //tft.drawFastVLine(160 - X_Offset, 10 + Y_Offset, 220, ILI9341_WHITE);
-    tft.drawRect     (50 - X_Offset, 118 + Y_Offset, 220, 4, ILI9341_RED);
-    tft.drawFastHLine(50 - X_Offset, 120 + Y_Offset, 220, ILI9341_WHITE);
-
-    //tft.setTextColor(ILI9341_BLACK, ILI9341_WHITE);
-    tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
 
 #ifdef Debug
     tft.setTextColor(ILI9341_BLACK, ILI9341_RED); // used to stop flickering when updating digits that do not increase in length. CPU/GPU load still need a clear box on the end digits
@@ -149,8 +158,28 @@ void DisplayStyle_CircleGauge_STM32 () {
       tft.println(gpuName);
     }
 
-    //------------------------------------------------------RX indicator---------------------------------------------------
 
+    // Mid lines
+    //tft.drawFastVLine(160 - X_Offset, 10 + Y_Offset, 220, ILI9341_WHITE);
+    tft.fillRect     (50 - X_Offset, 116 + Y_Offset, 220, 8, ILI9341_GREEN);
+    tft.fillRect     (50 - X_Offset, 119 + Y_Offset, 220, 3, ILI9341_WHITE);
+    tft.drawFastHLine(50 - X_Offset, 120 + Y_Offset, 220, ILI9341_RED);
+
+    // Left Edge Circles
+    tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 48, ILI9341_GREEN); // landscape circle 119 for radius -1 for line tickness
+    tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 38, ILI9341_WHITE); // landscape circle 119 for radius -1 for line tickness
+    tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 28, ILI9341_RED); // landscape circle 119 for radius -1 for line tickness
+    //tft.fillCircle(40 -X_Offset   , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
+
+    // Right Edge Circles
+    tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 48, ILI9341_GREEN); // landscape circle 119 for radius -1 for line tickness
+    tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 38, ILI9341_WHITE); // landscape circle 119 for radius -1 for line tickness
+    tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 28, ILI9341_RED); // landscape circle 119 for radius -1 for line tickness
+    //tft.fillCircle(280 -X_Offset  , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
+
+
+
+    //------------------------------------------------------RX indicator---------------------------------------------------
 #ifdef enable_BT
 
     tft.drawCircle(160 - X_Offset, 120 + Y_Offset, 111, ILI9341_BLUE); // landscape circle 119 for radius -1 for line tickness
@@ -259,7 +288,7 @@ void DisplayStyle_CircleGauge_STM32 () {
 
     /* CPU OVERCLOCK Display Freq Gain in MHz */
     tft.setCursor(206 - X_Offset, 47 + Y_Offset);// (Left/Right, UP/Down)
-    tft.fillRect (208 - X_Offset, 47 + Y_Offset , 37, 10, ILI9341_BLACK);
+    tft.fillRect (208 - X_Offset, 47 + Y_Offset , 37, 10, ILI9341_GREEN);
 
 #ifdef ShowFrequencyGainMHz
     tft.setTextSize(1);
@@ -345,7 +374,7 @@ void DisplayStyle_CircleGauge_STM32 () {
     /* GPU OVERCLOCK Display Freq Gain, */
     //tft.setCursor(225, 56);// (Left/Right, UP/Down)
     tft.setCursor(206 - X_Offset, 180 + Y_Offset);
-    tft.fillRect (206 - X_Offset, 179 + Y_Offset , 40, 10, ILI9341_BLACK);
+    tft.fillRect (206 - X_Offset, 179 + Y_Offset , 40, 10, ILI9341_GREEN);
 
 #ifdef ShowFrequencyGainMHz
     tft.setTextSize(1);
@@ -423,7 +452,7 @@ void DisplayStyle_CircleGauge_STM32 () {
     while (gpuPowerString.length() < 6) gpuPowerString = " " + gpuPowerString;
 
     tft.setTextSize(1);
-    tft.setCursor(70 - X_Offset, 180 + Y_Offset);   // (Left/Right, UP/Down)
+    tft.setCursor(72 - X_Offset, 180 + Y_Offset);   // (Left/Right, UP/Down)
     tft.print(gpuPowerString); //GPU Power Watts
     tft.setTextSize(1);
     tft.print("w");
@@ -459,6 +488,27 @@ void DisplayStyle_CircleGauge_STM32 () {
     tft.setTextSize(2);
     tft.print(ramString)    ; tft.setTextSize(0); tft.println("GB");
 
+
+
+
+    /* CPU Turbo Clock, */
+    tft.drawRoundRect  (77, 100, 88, 22, 4, ILI9341_WHITE); //
+    tft.fillRoundRect  (78, 101, 86, 20, 4, ILI9341_RED);   //
+    tft.setTextSize(2);
+    tft.setCursor(91, 104);
+    //tft.setTextColor(ILI9341_BLACK);
+    tft.println("TURBO");
+
+
+    /* GPU Boost Clock, */
+    tft.drawRoundRect  (77, 236, 88, 22, 4, ILI9341_WHITE); //
+    tft.fillRoundRect  (78, 237, 86, 20, 4, ILI9341_RED);   //
+    tft.setTextSize(2);
+    tft.setCursor(92, 240);
+    //tft.setTextColor(ILI9341_BLACK);
+    tft.println("BOOST"); //
+
+
     //------------------------------------------ RX indicator Clear------------------------------------------------
 
     delay(TX_LED_Delay);
@@ -472,18 +522,6 @@ void DisplayStyle_CircleGauge_STM32 () {
     //-------------------------------------------------------------------------------------------------------------
 
     displayDraw = 1;
-
-    //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
-
-#ifdef enable_BoostIndicator
-    CustomTriggerCPU_BOOST_Circle( cpuClockString.toInt     ()); // CPU Frequency
-    CustomTriggerGPU_BOOST_Circle( gpuCoreClockString.toInt ()); // GPU Frequency
-#endif
-
-#ifdef enable_ThrottleIndicator
-    CustomTriggerCPU_ThrottleIndicator_Circle( cpuString1.toInt() ); //  CPU TJMax/Throttle Incicator BMP
-    CustomTriggerGPU_ThrottleIndicator_Circle( gpuString1.toInt() ); //  GPU TJMax/Throttle Incicator BMP
-#endif
 
 
     //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
@@ -512,102 +550,5 @@ void DisplayStyle_CircleGauge_STM32 () {
     inputString = "";
     stringComplete = false;
 
-  }
-}
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-// -------------------  CPU Turbo Boost Indicator Event Portrait --------------------
-
-void CustomTriggerCPU_BOOST_Circle(int cpuClockString ) {
-  float CPUboostfactor = cpuClockString;
-
-
-  delay(350); // Small delay so Turbo frequency gains stay on screen longer
-  //tft.drawRoundRect  (106, 90, 88, 22, 4, ILI9341_WHITE); //
-
-  if (CPUboostfactor >  CPU_BOOST) {  // i5-9600k boost is 3700Mhz to 4700Mhz
-    //Do Something!!!
-
-#ifdef CPU_OverClocked //Do Nothing!!
-
-    //Do Nothing!!!
-
-#else
-    /* CPU Turbo Clock, */
-    //                 (   X,    Y,   Length, Height, Radius,   Colour    )
-    tft.fillRoundRect  (  114 - X_Offset,    35 + Y_Offset,    93,      28,     3,   ILI9341_WHITE); //
-    tft.fillRoundRect  (  116 - X_Offset,    37 + Y_Offset,    89,      24,     2,   ILI9341_GREEN); //
-    tft.setTextSize(2);
-    tft.setCursor(134 - X_Offset, 42 + Y_Offset);
-    tft.setTextColor(ILI9341_BLACK);
-    tft.println("TURBO");
-
-#endif
-
-  }
-}
-
-// -------------------  GPU Boost Clock Indicator Event Portrait --------------------
-
-void CustomTriggerGPU_BOOST_Circle(int gpuCoreClockString ) {
-  float GPUboostfactor = gpuCoreClockString ;
-
-  //Do Something!!!
-
-  if (GPUboostfactor >  GPU_BOOST) {  //GTX 1080 boost = 1607Mhz to 1733mhz
-
-    /* GPU Boost Clock, */
-    //                 (   X,    Y,   Length, Height, Radius,   Colour    )
-    tft.fillRoundRect  (  115 - X_Offset,    170 + Y_Offset,    93,      28,     3,   ILI9341_WHITE); //
-    tft.fillRoundRect  (  117 - X_Offset,    172 + Y_Offset,    89,      24,     2,   ILI9341_GREEN); //
-    tft.setTextSize(2);
-    tft.setCursor(135 - X_Offset, 177 + Y_Offset);
-    tft.setTextColor(ILI9341_BLACK);
-    tft.println("BOOST"); //
-
-  }
-}
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// -------------------  CPU Throttle Indicator Event Portrait --------------------
-
-void CustomTriggerCPU_ThrottleIndicator_Circle(int cpuDegree ) {  // i5-9600k TJMax is 100c
-  float CPUtempfactor = cpuDegree ;
-
-
-  if (CPUtempfactor >= CPU_TJMAX ) {  // TJ Max for the Intel 9900K 100c
-
-    /* CPU Junction Max Throttle Temp, */
-    //                 (   X,    Y,   Length, Height, Radius,   Colour    )
-    tft.fillRoundRect  (  114 - X_Offset,    35 + Y_Offset,    93,      28,     3,   ILI9341_WHITE); //
-    tft.fillRoundRect  (  116 - X_Offset,    37 + Y_Offset,    89,      24,     2,   ILI9341_RED); //
-    tft.setTextSize(2);
-    tft.setCursor(134 - X_Offset, 42 + Y_Offset);
-    tft.setTextColor(ILI9341_WHITE);
-
-    tft.println("TJMax");
-  }
-}
-
-
-// -------------------  GPU Throttle Indicator Event Portrait --------------------
-
-void CustomTriggerGPU_ThrottleIndicator_Circle(int gpuDegree ) {
-  float GPUtempfactor = gpuDegree ;
-
-
-  if (GPUtempfactor >= GPU_TJMAX ) {  //GTX 1080 TJMax = 83c
-
-    /* GPU Junction Max Throttle Temp, */
-
-    //                 (   X,    Y,   Length, Height, Radius,   Colour    )
-    tft.fillRoundRect  (  115 - X_Offset,    170 + Y_Offset,    93,      28,     3,   ILI9341_WHITE); //
-    tft.fillRoundRect  (  117 - X_Offset,    172 + Y_Offset,    89,      24,     2,   ILI9341_RED); //
-    tft.setTextSize(2);
-    tft.setCursor(135 - X_Offset, 177 + Y_Offset);
-    tft.setTextColor(ILI9341_WHITE);
-
-    tft.println("TJMax");
   }
 }
