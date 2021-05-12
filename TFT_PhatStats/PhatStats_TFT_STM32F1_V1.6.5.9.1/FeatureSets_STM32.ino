@@ -1,4 +1,4 @@
-_STM32
+
 
 void FeatureSet_Indicator2 () {
 

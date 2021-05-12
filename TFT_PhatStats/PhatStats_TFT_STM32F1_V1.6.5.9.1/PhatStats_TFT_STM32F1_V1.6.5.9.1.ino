@@ -1,4 +1,4 @@
-#define CODE_VERS  "V1.6.5.9"  // Code version number
+#define CODE_VERS  "V1.6.5.9.1"  // Code version number
 
 /*
   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -28,10 +28,10 @@
   BluePill_generic_boot20_pc13.bin  (On the "Bluepill" bootloader "_pc13" refers to the LED pin. )
 
   Important Upload Note:
-  ----------------------- 
-  
+  -----------------------
+
   If your "upload method" is STLink you will loose the ability to upload using the "STMduino Bootloader".
-  To use the STMduino Bootloader again, you will need to reflash the bootloader using a UART adaptor. 
+  To use the STMduino Bootloader again, you will need to reflash the bootloader using a UART adaptor.
 
 
   USB Issues:
@@ -219,7 +219,7 @@ void setup() {
   tft.fillScreen(ILI9341_BLACK);
 
   tft.setTextColor(ILI9341_WHITE);
-  
+
   //backlightON(); //Moved to splashscreen so it gives the screen time to draw Splashscreen, before being seen
   splashScreen();
 
@@ -249,6 +249,7 @@ void loop() {
 #endif
 
 }
+
 
 /* END of Main Loop */
 
@@ -338,7 +339,7 @@ void backlightOFF () {
 void splashScreen() {
 
   /* Initial Boot Screen, */
-  
+
 
   tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
@@ -352,11 +353,11 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
-  
+
   tft.setCursor(20, 20);
   tft.setTextColor(ILI9341_WHITE);
   tft.print(baud);//tft.println(" bits/s");
-  
+
   tft.setTextSize(3);
   tft.setCursor(86, 140);
   tft.setTextColor(ILI9341_WHITE);
@@ -393,7 +394,7 @@ void splashScreen() {
 
   FeatureSet_Indicator2(); // Display Icons for enabled features
 
-  
+
   delay(4000);
 
   tft.fillScreen(ILI9341_BLACK);
