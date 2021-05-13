@@ -12,12 +12,12 @@ void DisplayStyle_CircleGauge_ATSAMD () {
   //#define Y_Offset  0  // + Portrait
 
   /*ILI9341 240x320 Portrait offsets(centre),*/
-#define X_Offset  40 // - Portrait
-#define Y_Offset  40 // + Portrait
+//#define X_Offset  40 // - Portrait
+//#define Y_Offset  40 // + Portrait
 
   /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  //#define X_Offset 40 // - Portrait
-  //#define Y_Offset 63 // + Portrait
+  #define X_Offset 40 // - Portrait
+  #define Y_Offset 63 // + Portrait
 
   /*ILI9341 240x320 Landscape offsets(centre),*/
   //#define X_Offset  0 // - Landscape

@@ -27,7 +27,7 @@
   -------------------
   https://wiki.seeedstudio.com/Seeeduino-XIAO/
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  https://files.seeedstudio.com/arduino/package_seeeduino_board
+  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
 
   Libraries
   ---------
