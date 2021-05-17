@@ -23,7 +23,7 @@ void CPU_tempGauge(int cpuDegree ) {
   tft.setCursor(298, 90);
   tft.setTextSize(1);
   tft.setTextColor(ILI9341_WHITE);
-  tft.print("100");
+  tft.print("MAX");
 }
 
 
@@ -52,5 +52,5 @@ void GPU_tempGauge(int gpuDegree ) {
   tft.setCursor(298, 227);
   tft.setTextSize(1);
   tft.setTextColor(ILI9341_WHITE);
-  tft.print("100");
+  tft.print("MAX");
 }

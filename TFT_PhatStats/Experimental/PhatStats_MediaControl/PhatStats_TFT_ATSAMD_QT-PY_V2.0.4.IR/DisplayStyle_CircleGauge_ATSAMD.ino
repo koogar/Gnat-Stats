@@ -12,12 +12,12 @@ void DisplayStyle_CircleGauge_ATSAMD () {
   //#define Y_Offset  0  // + Portrait
 
   /*ILI9341 240x320 Portrait offsets(centre),*/
-#define X_Offset  40 // - Portrait
-#define Y_Offset  40 // + Portrait
+  //#define X_Offset  40 // - Portrait
+  //#define Y_Offset  40 // + Portrait
 
   /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  //#define X_Offset 40 // - Portrait
-  //#define Y_Offset 63 // + Portrait
+#define X_Offset 40 // - Portrait
+#define Y_Offset 63 // + Portrait
 
   /*ILI9341 240x320 Landscape offsets(centre),*/
   //#define X_Offset  0 // - Landscape
@@ -33,9 +33,6 @@ void DisplayStyle_CircleGauge_ATSAMD () {
 
       tft.fillScreen(ILI9341_BLACK);
 
-      //tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-      tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-
       tft.setFont(); // set to default Adafruit library font
 
       //tft.fillCircle(160 - X_Offset, 120 + Y_Offset, 112, ILI9341_RED); // landscape circle 119 for radius -1 for line thickness
@@ -50,6 +47,9 @@ void DisplayStyle_CircleGauge_ATSAMD () {
 
 
     //--------------------------------------- Display Background ----------------------------------------------------
+
+    //tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+    tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
     backlightON (); //Turn ON display when there is  activity
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
