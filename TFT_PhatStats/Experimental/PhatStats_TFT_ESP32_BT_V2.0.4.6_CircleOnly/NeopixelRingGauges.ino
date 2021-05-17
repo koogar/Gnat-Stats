@@ -25,7 +25,7 @@
   GPU Pixel  0 - 7
   ------------------------------------------------------------------------------------------
 
-*/
+
 
 void refreshNeopixels() {
   for ( int i = 0; i < NUM_PIXELS; i++ ) {
@@ -185,3 +185,5 @@ void GPU_tempGauge(int gpuDegree ) {
   pixels.show();
 
 }
+
+*/

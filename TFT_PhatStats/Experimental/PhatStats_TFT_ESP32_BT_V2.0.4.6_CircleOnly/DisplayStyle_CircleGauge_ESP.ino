@@ -1,28 +1,8 @@
 
 
+
 void DisplayStyle_CircleGauge_ESP ()
 {
-  tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 0;  // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 40; // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  int X_Offset = 40; // - Portrait
-  int Y_Offset = 63; // + Portrait
-
-  //tft.setRotation(3);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-  //int X_Offset = 0; // - Landscape
-  //int Y_Offset = 0; // + Landscape
 
 #ifdef enable_DualSerialEvent
   serialBTEvent();    // Check for Bluetooth Serial Activity
@@ -37,7 +17,32 @@ void DisplayStyle_CircleGauge_ESP ()
 #ifdef  enableActivityChecker
   activityChecker();      // Turn off screen when no activity
 #endif
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
+    Same ST7789 library as the square version*/
+
+  /*ST7789 240x240 Portrait & Landscape offsets,*/
+  //#define X_Offset  40 // - Portrait
+  //#define Y_Offset  0  // + Portrait
+
+  /*ILI9341 240x320 Portrait offsets(centre),*/
+  //#define X_Offset  40 // - Portrait
+  //#define Y_Offset  40 // + Portrait
+
+  /*ILI9341 240x320 Landscape offsets(centre),*/
+  //#define X_Offset  0 // - Landscape
+  //#define Y_Offset  0 // + Landscape
+
+  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
+  //#define X_Offset 40 // - Portrait
+  //#define Y_Offset 63 // + Portrait
+
+  /*ILI9341 240x320 Landscape offsets(Middle of PCB 86mm),*/
+#define X_Offset 24// - Portrait
+#define Y_Offset 0 // + Portrait
+
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
   /* TFT DRAW STATS */
@@ -46,6 +51,7 @@ void DisplayStyle_CircleGauge_ESP ()
     if (bootMode) {
 
       tft.fillScreen(ILI9341_BLACK);
+
       tft.setFont(); // set to default Adafruit library font
 
       //tft.fillCircle(160 - X_Offset, 120 + Y_Offset, 112, ILI9341_RED); // landscape circle 119 for radius -1 for line thickness
@@ -60,9 +66,42 @@ void DisplayStyle_CircleGauge_ESP ()
 
 
     //--------------------------------------- Display Background ----------------------------------------------------
+    tft.setRotation(ASPECT);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
     backlightON (); //Turn ON display when there is  activity
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+    /*
+      //Performante
+      // Mid lines
+       //tft.drawFastVLine(160 - X_Offset, 10 + Y_Offset, 220, ILI9341_WHITE);
+       tft.fillRect     (50 - X_Offset, 116 + Y_Offset, 220, 8, ILI9341_GREEN);
+       tft.fillRect     (50 - X_Offset, 119 + Y_Offset, 220, 3, ILI9341_WHITE);
+       tft.drawFastHLine(50 - X_Offset, 120 + Y_Offset, 220, ILI9341_RED);
+
+       // Left Edge Circles
+       tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 48, ILI9341_GREEN); // landscape circle 119 for radius -1 for line tickness
+       tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 38, ILI9341_WHITE); // landscape circle 119 for radius -1 for line tickness
+       tft.fillCircle(40 - X_Offset   , 120 + Y_Offset, 28, ILI9341_RED); // landscape circle 119 for radius -1 for line tickness
+       //tft.fillCircle(40 -X_Offset   , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
+
+       // Right Edge Circles
+       tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 48, ILI9341_GREEN); // landscape circle 119 for radius -1 for line tickness
+       tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 38, ILI9341_WHITE); // landscape circle 119 for radius -1 for line tickness
+       tft.fillCircle(280 - X_Offset  , 120 + Y_Offset, 28, ILI9341_RED); // landscape circle 119 for radius -1 for line tickness
+       //tft.fillCircle(280 -X_Offset  , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
+
+    */
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>> Side Appertures  >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    tft.fillCircle   (8,   5, 5, ILI9341_WHITE); // top left corner  LS 0,0
+    //tft.fillCircle   (308, 5, 5, ILI9341_GREEN); // top right corner LS
+    //tft.fillRoundRect(297, 0, 22,  102, 11, ILI9341_GREEN); // top right corner LS
+
+    tft.fillCircle   (8,   234, 5, ILI9341_RED); // bottom left corner LS
+    //tft.fillCircle   (308, 234, 5, ILI9341_BLUE); // top bottom corner LS
+    //tft.fillRoundRect(297, 137, 22, 102, 11, ILI9341_BLUE); // bottom right corner LS
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     //tft.drawFastVLine(160 - X_Offset, 10 + Y_Offset, 220, ILI9341_WHITE);
     tft.drawRect     (50 - X_Offset, 118 + Y_Offset, 220, 4, ILI9341_RED);
@@ -132,7 +171,7 @@ void DisplayStyle_CircleGauge_ESP ()
 #endif
 
       tft.setTextSize(1);
-      tft.setCursor(100 - X_Offset, 130 + Y_Offset); // Position GPU Name
+      tft.setCursor(100 - 25 - X_Offset, 130 + Y_Offset); // Position GPU Name
       tft.println(gpuName);
     }
 
@@ -371,7 +410,7 @@ void DisplayStyle_CircleGauge_ESP ()
     float  totalGPUmemSumDP = totalGPUmemSum ;     // float to handle the decimal point when printed (totalGPUmemSumDP, 0)
 
     tft.setTextSize(1);
-    tft.setCursor(200 - X_Offset, 130 + Y_Offset); // Position GPU Total Memory
+    tft.setCursor(200 + 25 - X_Offset, 130 + Y_Offset); // Position GPU Total Memory
 
 #ifdef Manual_gpuRam
     tft.print(set_GPUram);
@@ -473,8 +512,6 @@ void DisplayStyle_CircleGauge_ESP ()
 #endif
 
 
-
-
     //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
 
 
@@ -487,15 +524,13 @@ void DisplayStyle_CircleGauge_ESP ()
     CustomTriggerGPU_load( gpuString2.toInt() ); //  GPU  Load
 #endif
 
-
-
 #ifdef enableNeopixelGauges
 
     CPU_loadGauge( cpuString2.toInt() ); // Neopixel Ring Gauge  CPU  Load
-    //CPU_tempGauge( cpuString1.toInt() ); // Neopixel Ring Gauge  CPU  Temperature
+    CPU_tempGauge( cpuString1.toInt() ); // Neopixel Ring Gauge  CPU  Temperature
 
     GPU_loadGauge( gpuString2.toInt() ); // Neopixel Ring Gauge  GPU  Load
-    //GPU_tempGauge( gpuString1.toInt() ); // Neopixel Ring Gauge  GPU  Temperature
+    GPU_tempGauge( gpuString1.toInt() ); // Neopixel Ring Gauge  GPU  Temperature
 
 #endif
     //---------------------------------
@@ -507,29 +542,12 @@ void DisplayStyle_CircleGauge_ESP ()
 }
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 // -------------------  CPU Turbo Boost Indicator Event Portrait --------------------
 
 void CustomTriggerCPU_BOOST_Circle(int cpuClockString ) {
   float CPUboostfactor = cpuClockString;
 
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 0;  // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 40; // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  int X_Offset = 40; // - Portrait
-  int Y_Offset = 63; // + Portrait
-
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-  //int X_Offset = 0; // - Landscape
-  //int Y_Offset = 0; // + Landscape
 
   delay(350); // Small delay so Turbo frequency gains stay on screen longer
   //tft.drawRoundRect  (106, 90, 88, 22, 4, ILI9341_WHITE); //
@@ -561,32 +579,11 @@ void CustomTriggerCPU_BOOST_Circle(int cpuClockString ) {
 void CustomTriggerGPU_BOOST_Circle(int gpuCoreClockString ) {
   float GPUboostfactor = gpuCoreClockString ;
 
-
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 0;  // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 40; // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  int X_Offset = 40; // - Portrait
-  int Y_Offset = 63; // + Portrait
-
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-  //int X_Offset = 0; // - Landscape
-  //int Y_Offset = 0; // + Landscape
-
   //Do Something!!!
 
   if (GPUboostfactor >  GPU_BOOST) {  //GTX 1080 boost = 1607Mhz to 1733mhz
 
     /* GPU Boost Clock, */
-
     //                 (   X,    Y,   Length, Height, Radius,   Colour    )
     tft.fillRoundRect  (  115 - X_Offset,    170 + Y_Offset,    93,      28,     3,   ILI9341_WHITE); //
     tft.fillRoundRect  (  117 - X_Offset,    172 + Y_Offset,    89,      24,     2,   ILI9341_GREEN); //
@@ -598,31 +595,12 @@ void CustomTriggerGPU_BOOST_Circle(int gpuCoreClockString ) {
   }
 }
 
-
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // -------------------  CPU Throttle Indicator Event Portrait --------------------
 
 void CustomTriggerCPU_ThrottleIndicator_Circle(int cpuDegree ) {  // i5-9600k TJMax is 100c
   float CPUtempfactor = cpuDegree ;
 
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 0;  // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 40; // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  int X_Offset = 40; // - Portrait
-  int Y_Offset = 63; // + Portrait
-
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-  //int X_Offset = 0; // - Landscape
-  //int Y_Offset = 0; // + Landscape
 
   if (CPUtempfactor >= CPU_TJMAX ) {  // TJ Max for the Intel 9900K 100c
 
@@ -644,24 +622,6 @@ void CustomTriggerCPU_ThrottleIndicator_Circle(int cpuDegree ) {  // i5-9600k TJ
 void CustomTriggerGPU_ThrottleIndicator_Circle(int gpuDegree ) {
   float GPUtempfactor = gpuDegree ;
 
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 0;  // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 40; // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  int X_Offset = 40; // - Portrait
-  int Y_Offset = 63; // + Portrait
-
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-  //int X_Offset = 0; // - Landscape
-  //int Y_Offset = 0; // + Landscape
 
   if (GPUtempfactor >= GPU_TJMAX ) {  //GTX 1080 TJMax = 83c
 

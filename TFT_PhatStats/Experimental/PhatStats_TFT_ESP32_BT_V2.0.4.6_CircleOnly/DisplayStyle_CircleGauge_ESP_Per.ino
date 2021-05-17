@@ -7,7 +7,6 @@ void DisplayStyle_CircleGauge_ESP_Per () {
   /*ST7789 240x240 Portrait & Landscape offsets,*/
   //#define X_Offset  40 // - Portrait
   //#define Y_Offset  0  // + Portrait
-  //tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
 
 
   /*ILI9341 240x320 Portrait offsets(centre),*/
@@ -19,29 +18,13 @@ void DisplayStyle_CircleGauge_ESP_Per () {
   //#define X_Offset 40 // - Portrait
   //#define Y_Offset 63 // + Portrait
 
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-#define X_Offset  0 // - Landscape
-#define Y_Offset  0 // + Landscape
-
-
-  /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
-    Same ST7789 library as the square version*/
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 0;  // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 40; // + Portrait
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  //int X_Offset = 40; // - Portrait
-  //int Y_Offset = 63; // + Portrait
+  /*ILI9341 240x320 Landscape offsets(Middle of PCB 86mm),*/
+#define X_Offset 0 // - Portrait
+#define Y_Offset 40 // + Portrait
 
   /*ILI9341 240x320 Landscape offsets(centre),*/
-  //int X_Offset = 0; // - Landscape
-  //int Y_Offset = 0; // + Landscape
+  //#define X_Offset  0 // - Landscape
+  //#define Y_Offset  0 // + Landscape
 
 #ifdef enable_DualSerialEvent
   serialBTEvent();    // Check for Bluetooth Serial Activity

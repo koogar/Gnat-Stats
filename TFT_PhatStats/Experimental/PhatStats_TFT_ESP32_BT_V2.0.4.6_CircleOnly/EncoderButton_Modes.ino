@@ -32,7 +32,7 @@ void encoder_Modes() {
         break;
 
       case 1: // 2nd SCREEN
-        DisplayStyle_Portrait_ESP();
+        DisplayStyle_CircleGauge_ESP();
         //DisplayStyle_Landscape_ESP();
 
         break;

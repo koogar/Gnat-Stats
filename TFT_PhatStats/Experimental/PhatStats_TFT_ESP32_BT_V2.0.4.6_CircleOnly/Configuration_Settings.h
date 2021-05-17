@@ -126,10 +126,10 @@
 /*ESP32 Communication type, Uncomment only one option!!!*/
 
 /*Uncomment to enable BT, else default to USB serial only,*/
-#define enable_BT              // enable only Bluetooth serial connection
+//#define enable_BT              // enable only Bluetooth serial connection
 
 /*Uncomment to enable BT and USB serial,*/
-//#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
+#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
 #define enableTX_LED //
@@ -235,7 +235,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
 /* If commented the screen brightness will default to the fixed level below,*/
-#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
 volatile int brightness_count = 130; // Start Up Brightness

@@ -1,9 +1,7 @@
+void FeatureSet_Indicator2_Circle () {
 
-
-void FeatureSet_Indicator2 () {
-
-#define X_Offset 0
-#define Y_Offset 210
+#define X_Offset 15
+#define Y_Offset 75
 
   int featureDelay = 200;
   delay(featureDelay);
