@@ -174,16 +174,16 @@ int TX_LED_Delay = 200; // TX blink delay
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Manually name the  CPU,*/
-//#define Manual_cpuName
-String set_CPUname = "xxxxxxxx";
+#define Manual_cpuName
+String set_CPUname = "Core i9-11900k";
 
 /* Manually name the GPU,*/
-//#define Manual_gpuName
-String set_GPUname = "xxxxxxxx";
+#define Manual_gpuName
+String set_GPUname = "NVIDIA GeForce RTX 3090";
 
 /* Manually set GPU ram total,*/
-//#define Manual_gpuRam
-String set_GPUram = "xx";
+#define Manual_gpuRam
+String set_GPUram = "24";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
@@ -219,6 +219,10 @@ String set_GPUram = "xx";
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
+//---------------- Phat-Tacho Side Level TFT Threshold Indicators ------------------------
+
+#define enableSideLevelGauges
+
 //-------------------------------- NeoPixel Modes -------------------------------------
 
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
@@ -235,7 +239,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
 /* If commented the screen brightness will default to the fixed level below,*/
-//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
 volatile int brightness_count = 130; // Start Up Brightness

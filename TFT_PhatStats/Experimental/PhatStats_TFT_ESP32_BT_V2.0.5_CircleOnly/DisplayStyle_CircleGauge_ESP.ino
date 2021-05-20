@@ -64,6 +64,12 @@ void DisplayStyle_CircleGauge_ESP ()
 
     lastActiveConn = millis();
 
+    //tft.setTextColor(ILI9341_BLACK, ILI9341_WHITE);
+    tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
+
+#ifdef Debug
+    tft.setTextColor(ILI9341_BLACK, ILI9341_RED); // used to stop flickering when updating digits that do not increase in length. CPU/GPU load still need a clear box on the end digits
+#endif
 
     //--------------------------------------- Display Background ----------------------------------------------------
     tft.setRotation(ASPECT);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
@@ -92,14 +98,14 @@ void DisplayStyle_CircleGauge_ESP ()
        //tft.fillCircle(280 -X_Offset  , 120 + Y_Offset, 14, ILI9341_BLACK);  // landscape circle 119 for radius -1 for line tickness
 
     */
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>> Side Appertures  >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    tft.fillCircle   (8,   5, 5, ILI9341_WHITE); // top left corner  LS 0,0
-    //tft.fillCircle   (308, 5, 5, ILI9341_GREEN); // top right corner LS
-    //tft.fillRoundRect(297, 0, 22,  102, 11, ILI9341_GREEN); // top right corner LS
+    //>>>>>>>>>>>>>>>>>>>>>>>> Left Side Circle Apperture  >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    tft.fillCircle   (10,   10, 6, ILI9341_BLUE);  // top left corner  LS 0,0
+    tft.drawCircle   (10,   10, 7, ILI9341_WHITE); // top left corner  LS 0,0
+    
+    tft.fillCircle   (10,   228, 6, ILI9341_RED);   // bottom left corner LS
+    tft.drawCircle   (10,   228, 7, ILI9341_WHITE); // bottom left corner LS
+ 
 
-    tft.fillCircle   (8,   234, 5, ILI9341_RED); // bottom left corner LS
-    //tft.fillCircle   (308, 234, 5, ILI9341_BLUE); // top bottom corner LS
-    //tft.fillRoundRect(297, 137, 22, 102, 11, ILI9341_BLUE); // bottom right corner LS
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -107,12 +113,6 @@ void DisplayStyle_CircleGauge_ESP ()
     tft.drawRect     (50 - X_Offset, 118 + Y_Offset, 220, 4, ILI9341_RED);
     tft.drawFastHLine(50 - X_Offset, 120 + Y_Offset, 220, ILI9341_WHITE);
 
-    //tft.setTextColor(ILI9341_BLACK, ILI9341_WHITE);
-    tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
-
-#ifdef Debug
-    tft.setTextColor(ILI9341_BLACK, ILI9341_RED); // used to stop flickering when updating digits that do not increase in length. CPU/GPU load still need a clear box on the end digits
-#endif
 
     //---------------------------------------CPU & GPU Hardware ID---------------------------------------------------------
 
@@ -533,6 +533,17 @@ void DisplayStyle_CircleGauge_ESP ()
     GPU_tempGauge( gpuString1.toInt() ); // Neopixel Ring Gauge  GPU  Temperature
 
 #endif
+
+#ifdef enableSideLevelGauges //
+
+    CPU_loadLevelGauge( cpuString2.toInt() ); // Side Level Gauge  CPU  Load
+    CPU_tempLevelGauge( cpuString1.toInt() ); // Side Level Gauge  CPU  Temperature
+
+    GPU_loadLevelGauge( gpuString2.toInt() ); // Side Level Gauge  GPU  Load
+    GPU_tempLevelGauge( gpuString1.toInt() ); // Side Level Gauge  GPU  Temperature
+
+#endif
+
     //---------------------------------
 
     inputString = "";
