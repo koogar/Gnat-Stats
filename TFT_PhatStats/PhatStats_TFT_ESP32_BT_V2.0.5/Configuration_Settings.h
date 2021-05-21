@@ -94,6 +94,9 @@
       Use either BT or USB Serial "enable_DualSerialEvent"
       ADD enableTX_LED  option to enable/disable built in LED when transmitting data
 
+  v2.0.5
+      ADD CircleGuage DisplayStyle
+
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get wierd results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -126,10 +129,10 @@
 /*ESP32 Communication type, Uncomment only one option!!!*/
 
 /*Uncomment to enable BT, else default to USB serial only,*/
-#define enable_BT              // enable only Bluetooth serial connection
+//#define enable_BT              // enable only Bluetooth serial connection
 
 /*Uncomment to enable BT and USB serial,*/
-//#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
+#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
 #define enableTX_LED //
@@ -169,7 +172,7 @@ int TX_LED_Delay = 200; // TX blink delay
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
-#define gpuNameStartLength 11
+#define gpuNameStartLength 18
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -191,7 +194,7 @@ String set_GPUram = "xx";
 //---------------------------------------------------------------------------------------
 
 /* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
-//#define CPU_OverClocked
+#define CPU_OverClocked
 
 /* CPU & GPU Thermal Junction Max Temperature in "c" before throttling,*/
 #define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c

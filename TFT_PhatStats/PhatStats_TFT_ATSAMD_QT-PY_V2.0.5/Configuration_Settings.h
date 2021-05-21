@@ -91,6 +91,9 @@
   v2.0.3
        ADD enableTX_LED  option to enable/disable built in LED when transmitting data
 
+  v2.0.5
+       ADD CircleGuage DisplayStyle
+
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get wierd results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -126,7 +129,7 @@
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
-#define gpuNameStartLength 11
+#define gpuNameStartLength 18
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Manually name the  CPU,*/
@@ -218,7 +221,7 @@ volatile int brightness_count = 150; // Start Up PWM Brightness
 int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND
 
 /* Enable the built in LED blinking when transmitting data,*/
-#define enableTX_LED 
+#define enableTX_LED
 int TX_LED_Delay = 100; // TX blink delay
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/

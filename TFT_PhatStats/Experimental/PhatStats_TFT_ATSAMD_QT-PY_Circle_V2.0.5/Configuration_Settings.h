@@ -7,7 +7,8 @@
 
   /*
 
-  V1.58:  STM32 ( / ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
+
+  V1.58:  ILI9431 TFT (320 x 240) only preview version for the new features in HardwareSerialmonitor v1.3.
 
           Button to change between portrait and landscape mode.
 
@@ -31,45 +32,65 @@
   V1.59:
         Rotary Encoder Brightness Control.
 
-v1.59.6:
+  v1.59.6:
         ADD: CPU Turbo & GPU Boost Clock Indicator with Overclock Frequency Gain Display
 
         Minimise Screen Refresh Blinking using "tft.setTextColor(Text, Background);"
         and "Magic Digit Eraser" Function for digits that gain in length.
         (the above only works for the default font!!! (This is a limitation of the GRFX library)
 
-   v1.6:
-
-        ADD: Tweaks
-
   v1.6.1 :
-  
+
         ADD: ATSAMD21 Support
         ADD: Show Overclock/Turbo/Boost values as a percentage over stock CPU/GPU values
-  
-  v1.6.2 :  
+
+  v1.6.2 :
         Optimised (Non Blinking) and character erase. Thanks to contributor "(MaD)erer"
-  
-  v1.6.2B: (STM32 Only) Change pins on the Encoder and Button 
 
-  v1.6.3 :(STM32 Only) Change pins on the Encoder and Button to original.
-       Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
-    
-  v1.6.4:
-       QT-PY Only: Optimise Pins (changes from previous)
-       Remove PWM_Encoder_PNP option
-       Move ActivityChecker and Serialevent back to main loop, 
-       Add option to disable ActivityChecker to retain last info before PC crash ETC
-  
-  v1.6.5:
-       Move encoder modes in its own function tab
-       Rename switchpin to encoder_Button
-       Clean up old stuff
-       NOTE: After 1.6.6 STM32 BluePill is no longer supported
+  v1.6.3 :
+        Optimised (Non Blinking) and character erase for CPU/GPU Frequency if Speedstep is enabled
 
-  v1.6.5.9
-       ADD new visual features to bring it in line with v2
-       
+  v1.6.4 :
+        QT-PY Only: Optimise Pins (changes from previous)
+        Remove PWM_Encoder_PNP option
+        Move ActivityChecker and Serialevent back to main loop,
+        Add option to disable ActivityChecker to retain last info before PC crash ETC
+
+  v1.6.5 :
+        Move encoder modes in its own function tab
+        Rename switchpin to encoder_Button
+        Clean up old stuff
+
+  v1.6.6 :
+        STM32 BluePill is no longer supported!!!
+        ----------------------------------------
+        Add HID Volume control using the rotary encoder (runs all the time and is non-blocking)
+        Remove Static_PWM define.
+
+                 If "//Encoder_PWM" is commented(disabled) it will default to a fixed PWM value,
+                 and the encoder will act as a volume control.
+
+                 If "Encoder_PWM" is uncommeted(active) the rotary encoder
+                 will adjust the backlight PWM
+
+  v1.6.8 :
+       Volume and PWM Brightness now use a non blocking interrupt
+
+  v1.6.9:
+       Add Feature indicator to display enables features on splash screen
+
+  v2.0.0:
+       Reduce the amount of header files.
+       Change Boot Logo.
+       Reduce the Size of the MHz font in the frequency gains display to allow for an extra digit.
+
+  v2.0.2:
+       Add option to manual name CPU & GPU in the CFG
+       Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+
+  v2.0.3
+       ADD enableTX_LED  option to enable/disable built in LED when transmitting data
+
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get wierd results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
 
@@ -86,6 +107,12 @@ v1.59.6:
   --------------------------------------------------------------------------------------
 */
 
+//--------------------------- Micro Controller Selection---------------------------------
+
+/* Uncomment your Micro Processor,*/
+#define Adafruit_QTPY
+//define Seeeduino_XIAO
+
 //--------------------------- CPU/GPU Display Settings -----------------------------------
 /* Uncomment your CPU,*/
 //#define AMD_CPU
@@ -99,36 +126,34 @@ v1.59.6:
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
-#define gpuNameStartLength 18
+#define gpuNameStartLength 11
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Manually name the  CPU,*/
 //#define Manual_cpuName
-String set_CPUname = "XXXXXXX";
+String set_CPUname = "xxxxxx";
 
 /* Manually name the GPU,*/
 //#define Manual_gpuName
-String set_GPUname = "XXXXXXX";
+String set_GPUname = "xxxxxx";
 
 /* Manually set GPU ram total,*/
 //#define Manual_gpuRam
-String set_GPUram = "XX";
+String set_GPUram = "xx";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
 #define smallPercent  // Use small percent symbol
 
-//-------------------------------------------------------
-
 //---------------------------------------------------------------------------------------
 
 /* CPU is overclocked with Turbo boost disabled, to stop "TURBO" indicator,*/
-//#define CPU_OverClocked
+#define CPU_OverClocked
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* CPU & GPU Thermal Junction Max Temperature in "c" before throttling,*/
-#define CPU_TJMAX 100  //  TJ Max for the Intel 9600K    = 100c
+#define CPU_TJMAX 100  //  TJ Max for the Intel 9900K    = 100c
 #define GPU_TJMAX 83   //  TJ Max for the Nvidia GTX1080 = 83c
 
 /* CPU & GPU Turbo/Boost Frequency Values in Mhz */
@@ -138,9 +163,9 @@ String set_GPUram = "XX";
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
+#define enable_gpuPowerStats // Nvidia Specific???
+#define enable_gpuFanStats%
+#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -157,17 +182,33 @@ String set_GPUram = "XX";
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-//-------------------------------------------------------
+//-------------------------------- NeoPixel Modes -------------------------------------
 
-/* Define your Backlight PWM, Uncomment only one choice, */
+#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
-/* PWM Using a Static fixed value, connected direct to the MCU PIN*/
-#define Static_PWM // use Fixed value for PWM screen brightness control with NPN Transistor . initial start brightness
+/* VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
+#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+int     Neo_DivideBy = 5;    // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
-/* PWM connected direct to the MCU PIN*/
-//#define Encoder_PWM // use rotary encoder for PWM screen brightness control with no Transistor 3.3v . initial start brightness
+/* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
+int NeoBrightness   = 20;           // Global start up brightness
 
-//-------------------------------------------------------
+//---------------- Phat-Tacho Side Level TFT Threshold Indicators ------------------------
+
+#define enableSideLevelGauges
+
+//----------------------------- Rotary Encoder Usage ------------------------------------
+
+/* Uncomment only one option, */
+
+/* Use the Rotary Encoder for HID Volume Control*/
+//#define Encoder_HID
+
+/* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
+#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+volatile int brightness_count = 150; // Start Up PWM Brightness
+
+//-------------------------- Display Activity Shutdown -----------------------------------
 
 /* Uncomment below to turn off the screen on serial timeout, else keep last display info eg: incase of PC Crash*/
 #define enableActivityChecker
@@ -175,17 +216,19 @@ String set_GPUram = "XX";
 /* How long the display takes to timeout due to inactive serial data from the windows application */
 #define lastActiveDelay 8000
 
-//------------------------------------------------------------------------------------------------------------
+//-------------------------------- Misco Setting -----------------------------------------
 
-/* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and doesnt change*/
-int debounceEncButton = 300; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND 
+/* Debounce Rotary Encoder Button,Sometimes it gets caught during a screen refresh and does not change*/
+int debounceEncButton = 150; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND
+
+/* Enable the built in LED blinking when transmitting data,*/
+#define enableTX_LED 
+int TX_LED_Delay = 100; // TX blink delay
 
 /* Delay screen event, to stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 0; //
 
-int baud = 112500;
-
-int TX_LED_Delay = 100; // TX blink delay delay
+//----------------------------- Debug Screen Erasers ---------------------------------------
 
 /* Debug Screen, Update Erasers, */
 //#define Debug
