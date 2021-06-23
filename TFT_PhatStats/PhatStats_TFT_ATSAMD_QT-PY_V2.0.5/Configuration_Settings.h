@@ -187,10 +187,10 @@ String set_GPUram = "xx";
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 
-#define enableNeopixelGauges     // NeoPixel ring bargraph example
+//#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
 /* VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
-#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+//#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 int     Neo_DivideBy = 5;    // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
 /* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */
@@ -205,7 +205,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
 #define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
-volatile int brightness_count = 150; // Start Up PWM Brightness
+volatile int brightness_count = 200; // Start Up PWM Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 

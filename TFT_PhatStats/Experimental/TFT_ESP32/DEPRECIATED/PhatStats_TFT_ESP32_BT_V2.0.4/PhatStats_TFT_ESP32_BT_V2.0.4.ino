@@ -1,5 +1,5 @@
- #define CODE_VERS  "2.0.5.2.BT"  // Code version number
-#define device_BT "TallmanLabs"
+#define CODE_VERS  "2.0.4.BT"  // Code version number
+#define device_BT "TallmanLabs_BT"
 
 
 /*
@@ -166,14 +166,11 @@ int brightness_countLast      = 0;   // Store Last PWM Value
 //-----------------------------------------------------------------------------
 
 /* Display screen rotation  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)*/
-int ASPECT = 3; //Do not adjust,
+int ASPECT = 0; //Do not adjust,
 
 /* More Display stuff*/
 int displayDraw = 0;
 
-// SideGauges tft
-int topLevel = 0;
-int bottomLevel = 0;
 //-----------------------------------------------------------------------------
 
 /* Timer for active connection to host*/
@@ -266,8 +263,8 @@ void setup() {
   /* Clear Screen*/
   tft.fillScreen(ILI9341_BLACK);
   tft.setTextColor(ILI9341_WHITE);
-  
-  splashScreen_Circle();
+
+  splashScreen();
 
 }
 
@@ -348,8 +345,6 @@ void serialBTEvent() {
       /* Serial Activity LED */
       digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
 #endif
-
-//tft.fillRoundRect(297, 0,   22, 102 , 11, ILI9341_BLACK); // top right corner LS
 
     }
   }
@@ -436,107 +431,6 @@ void backlightOFF () {
 }
 
 //----------------------------- Splash Screens --------------------------------
-void splashScreen_Circle() {
-
-  /*ST7789 240x240 Portrait & Landscape offsets,*/
-  //#define X_Offset  40 // - Portrait
-  //#define Y_Offset  0  // + Portrait
-  //tft.setRotation(0);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
-
-
-  /*ILI9341 240x320 Portrait offsets(centre),*/
-  //#define X_Offset  40 // - Portrait
-  //#define Y_Offset  40 // + Portrait
-
-
-  /*ILI9341 240x320 Portrait offsets(Middle of PCB 86mm),*/
-  //#define X_Offset 40 // - Portrait
-  //#define Y_Offset 63 // + Portrait
-
-  /*ILI9341 240x320 Landscape offsets(centre),*/
-  //#define X_Offset  0 // - Landscape
-  //#define Y_Offset  0 // + Landscape
-  /* Initial Boot Screen, */
-
-  tft.setFont(&Org_01);
-  tft.fillScreen(ILI9341_BLACK);
-
-  backlightON ();
-  tft.drawCircle(160 - 24, 120 + 0, 115, ILI9341_RED); // // flash circle surround
-
-  //tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
-
-  tft.drawBitmap(44 + 18, 20 - 5 , HSM_BG_BMP,  142, 128 , ILI9341_WHITE);
-  tft.drawBitmap(44 + 18, 20 - 5 , HSM_BG2_BMP, 142, 128 , ILI9341_RED);
-  tft.drawBitmap(44 + 18, 20 - 5, HSM_BMP,     142, 128 , ILI9341_GREY);
-
-  tft.setCursor(20 + 18, 20 - 5);
-  tft.setTextColor(ILI9341_WHITE);
-
-  tft.setTextSize(3);
-  tft.setCursor(86 + 18, 140 - 5);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.println("PHAT ");
-  tft.setTextSize(3);
-  tft.setCursor(78 + 18, 160 - 5);
-  tft.println("TACHO");
-
-  tft.setTextSize(2);
-  tft.setCursor(22 + 18, 190 - 18);
-  tft.setTextColor(ILI9341_SILVER);
-  tft.print("PC Hardware Monitor");
-
-  tft.setTextSize(2);
-  tft.setCursor(22 + 48, 219 - 25);
-  tft.setTextColor(ILI9341_RED);
-  tft.print("tallmanlabs.com");
-
-
-  //Set version
-  tft.setFont(); // Set Default Adafruit GRFX Font
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(1);
-  tft.setCursor(95 , 230 - 18);
-  tft.print("TFT: v");
-  tft.print (CODE_VERS);
-  delay(2000);
-
-  /**/
-
-  tft.fillScreen(ILI9341_BLACK);
-  tft.drawCircle(160 - 24, 120 + 0, 115, ILI9341_RED); // // flash circle surround
-
-  tft.setTextSize(1);
-
-  tft.setCursor(10, 305);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.print("If using USB Serial? Disconnect BT!!!");
-
-  //backlightON();
-
-  FeatureSet_Indicator2_Circle (); // Display Icons for enabled features
-
-  delay(4000);
-
-  tft.fillScreen(ILI9341_BLACK);
-
-#ifdef enable_BT
-  tft.drawCircle(160 - 24, 120 + 0, 115, ILI9341_RED); // // flash circle surround
-  tft.drawBitmap(82 + 17, 62 - 35, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
-
-#else // USB
-  tft.drawCircle(160 - 24, 120 + 0, 115, ILI9341_RED); // // flash circle surround
-  tft.drawBitmap(82 + 17 , 62 - 35, WaitingDataBMP_USB, 76, 190, ILI9341_RED);
-#endif
-  tft.drawCircle(160 - 24 , 120 + 0, 115, ILI9341_RED); // // flash circle surround
-#ifdef enable_DualSerialEvent
-
-  tft.drawBitmap(82 + 17 , 62 - 35, WaitingDataBMP_USB, 76, 190, ILI9341_BLUE);
-#endif
-
-  delay(3000);
-
-}
 
 void splashScreen() {
 
@@ -597,7 +491,7 @@ void splashScreen() {
 
   backlightON();
 
-  FeatureSet_Indicator2_Circle(); // Display Icons for enabled features
+  FeatureSet_Indicator2(); // Display Icons for enabled features
 
   delay(4000);
 

@@ -94,6 +94,12 @@
       Use either BT or USB Serial "enable_DualSerialEvent"
       ADD enableTX_LED  option to enable/disable built in LED when transmitting data
 
+  v2.0.5
+      ADD CircleGuage DisplayStyle
+      
+  V2.0.6.BT (ESP32 only)
+
+      Add Battery Monitor when using BT
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get wierd results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -126,10 +132,10 @@
 /*ESP32 Communication type, Uncomment only one option!!!*/
 
 /*Uncomment to enable BT, else default to USB serial only,*/
-//#define enable_BT              // enable only Bluetooth serial connection
+#define enable_BT              // enable only Bluetooth serial connection
 
 /*Uncomment to enable BT and USB serial,*/
-#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
+//#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
 #define enableTX_LED //
@@ -169,21 +175,21 @@ int TX_LED_Delay = 200; // TX blink delay
 
 /* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 #define cpuNameStartLength 10
-#define gpuNameStartLength 11
+#define gpuNameStartLength 18
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Manually name the  CPU,*/
-#define Manual_cpuName
-String set_CPUname = "Core i9-11900k";
+//#define Manual_cpuName
+String set_CPUname = "xxxxxxxx";
 
 /* Manually name the GPU,*/
-#define Manual_gpuName
-String set_GPUname = "NVIDIA GeForce RTX 3090";
+//#define Manual_gpuName
+String set_GPUname = "xxxxxxxx";
 
 /* Manually set GPU ram total,*/
-#define Manual_gpuRam
-String set_GPUram = "24";
+//#define Manual_gpuRam
+String set_GPUram = "xx";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
@@ -219,10 +225,6 @@ String set_GPUram = "24";
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
 
-//---------------- Phat-Tacho Side Level TFT Threshold Indicators ------------------------
-
-#define enableSideLevelGauges
-
 //-------------------------------- NeoPixel Modes -------------------------------------
 
 #define enableNeopixelGauges     // NeoPixel ring bargraph example
@@ -242,7 +244,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 #define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
-volatile int brightness_count = 130; // Start Up Brightness
+volatile int brightness_count = 200; // Start Up Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 

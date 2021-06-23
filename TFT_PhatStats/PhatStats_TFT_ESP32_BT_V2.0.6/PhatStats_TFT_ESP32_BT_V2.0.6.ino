@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.5.BT"  // Code version number
+#define CODE_VERS  "2.0.6.BT"  // Code version number
 #define device_BT "TallmanLabs_BT"
 
 
@@ -39,6 +39,9 @@
 
   ESP32 analogueWrite Function
   https://github.com/ERROPiX/ESP32_AnalogWrite
+
+  Battery Monitor by Alberto Iriberri Andrés
+  https://github.com/pangodream/18650CL
 
   Hookup Guide
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
@@ -104,8 +107,19 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
   ---------------------
   Built in LED =  5 (*Not Required for Reference only!!!)
   Neopixel     =  2       (32)
+
+  Battery Monitor   Voltage divider (GND ---[100K]--- (Pin34 ADC) ----[100k]--- BATT+) 3.2v to 4.2v Range
+  --------------------
+  Battery Monitor = 34
   ==========================================================================================================
 */
+
+/* Battery Monitor */
+#include <Pangodream_18650_CL.h> // Copyright (c) 2019 Pangodream
+#define ADC_PIN 34        //!< ADC pin used, default is GPIO34 - ADC1_6 Voltage divider (2* 100K)
+#define CONV_FACTOR 1.758 //!< Convertion factor to translate analog units to volts
+#define READS 20
+Pangodream_18650_CL BL(ADC_PIN, CONV_FACTOR, READS);
 
 
 //---------------------------------------------------------------------------------------
@@ -212,6 +226,8 @@ boolean stringComplete = false;
 
 void setup() {
 
+
+
 #ifdef enable_DualSerialEvent
   SerialBT.begin(device_BT); //Bluetooth device name
 #endif
@@ -241,6 +257,7 @@ void setup() {
 
   /* Set up PINs*/
   pinMode(encoder_Button, INPUT_PULLUP);
+
 
   // Set resolution for a specific pin
   analogWriteResolution(TFT_backlight_PIN, 12); //ESP32 only
@@ -403,6 +420,8 @@ void activityChecker() {
     tft.setTextColor(ILI9341_RED);
     tft.drawBitmap(82, 80, WaitingDataBMP2_90, 76, 154, ILI9341_RED);
     tft.setTextSize(2); tft.setCursor(40, 40); tft.println("NO COM DATA!!!");
+
+
     delay(2000);
 
     //Turn off display when there is no activity
@@ -450,6 +469,14 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
 
+  // Battery Level Indicator
+  tft.drawBitmap(170, 10, BATTERY_BMP, 60, 20, ILI9341_WHITE);
+  tft.setTextSize(2);
+  tft.setCursor(178, 23);
+  tft.setTextColor(ILI9341_BLACK);
+  tft.print(BL.getBatteryVolts()); tft.print("v");
+
+
   tft.setCursor(20, 20);
   tft.setTextColor(ILI9341_WHITE);
   tft.print(baud);//tft.println(" bits/s");
@@ -471,6 +498,8 @@ void splashScreen() {
   tft.setCursor(22, 219);
   tft.setTextColor(ILI9341_RED);
   tft.print("tallmanlabs.com");
+
+
 
   /* Set version */
   tft.setFont(); // Set Default Adafruit GRFX Font
@@ -510,6 +539,20 @@ void splashScreen() {
 #ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
+
+  // Battery Level Indicator
+  tft.drawBitmap(33 + 40, 280, BATTERY_BMP, 60, 20, ILI9341_GREEN);
+
+  tft.setCursor(46 + 40, 286 ); // (Left/Right, UP/Down)
+  tft.setTextSize(1);
+  tft.setTextColor(ILI9341_BLACK);
+  tft.print(BL.getBatteryVolts()); tft.print("v");
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(2);
+  tft.setCursor(100 + 40, 283 ); // (Left/Right, UP/Down)
+  tft.print(BL.getBatteryChargeLevel());
+  tft.print("% ");
+
 
 #else // USB
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);

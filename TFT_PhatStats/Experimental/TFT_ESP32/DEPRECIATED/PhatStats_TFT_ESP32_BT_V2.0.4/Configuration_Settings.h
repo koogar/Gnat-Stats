@@ -126,10 +126,10 @@
 /*ESP32 Communication type, Uncomment only one option!!!*/
 
 /*Uncomment to enable BT, else default to USB serial only,*/
-//#define enable_BT              // enable only Bluetooth serial connection
+#define enable_BT              // enable only Bluetooth serial connection
 
 /*Uncomment to enable BT and USB serial,*/
-#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
+//#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
 #define enableTX_LED //
@@ -174,16 +174,16 @@ int TX_LED_Delay = 200; // TX blink delay
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Manually name the  CPU,*/
-#define Manual_cpuName
-String set_CPUname = "Core i9-11900k";
+//#define Manual_cpuName
+String set_CPUname = "xxxxxxxx";
 
 /* Manually name the GPU,*/
-#define Manual_gpuName
-String set_GPUname = "NVIDIA GeForce RTX 3090";
+//#define Manual_gpuName
+String set_GPUname = "xxxxxxxx";
 
 /* Manually set GPU ram total,*/
-#define Manual_gpuRam
-String set_GPUram = "24";
+//#define Manual_gpuRam
+String set_GPUram = "xx";
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define noDegree      // lose the "o"
@@ -218,10 +218,6 @@ String set_GPUram = "24";
 
 #define enable_ThrottleIndicator // Show TJMax Indicator 
 #define enable_BoostIndicator    // Show CPU & GPU Turbo/Boost Indicator
-
-//---------------- Phat-Tacho Side Level TFT Threshold Indicators ------------------------
-
-#define enableSideLevelGauges
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 

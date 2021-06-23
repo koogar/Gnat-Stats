@@ -15,7 +15,7 @@ void encoder_Modes() {
     tft.fillScreen(ILI9341_BLACK);
 
     /* Reset count if over max mode number, */
-    if (enc_Button_counter == 2) // Number of screens available when button pressed
+    if (enc_Button_counter == 3) // Number of screens available when button pressed
     {
       enc_Button_counter = 0;
     }
@@ -26,11 +26,16 @@ void encoder_Modes() {
     /* Change Mode */
     switch (enc_Button_counter) {
 
-      case 0: // 1st SCREEN    
-        DisplayStyle_CircleGauge_ESP();
+      case 0: // 1st SCREEN
+        //DisplayStyle_Portrait_ESP();
+        DisplayStyle_Portrait_Batt_ESP ();
         break;
 
       case 1: // 2nd SCREEN
+        DisplayStyle_Landscape_ESP();
+        break;
+
+      case 2: // 2nd SCREEN
         DisplayStyle_CircleGauge_ESP();
         break;
 
