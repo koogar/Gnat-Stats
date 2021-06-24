@@ -114,13 +114,17 @@ BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
   ==========================================================================================================
 */
 
-/* Battery Monitor */
+#ifdef batteryMonitor 
+
+/* Battery Monitor Settings*/
 #include <Pangodream_18650_CL.h> // Copyright (c) 2019 Pangodream
+
 #define ADC_PIN 34        //!< ADC pin used, default is GPIO34 - ADC1_6 Voltage divider (2* 100K)
 #define CONV_FACTOR 1.758 //!< Convertion factor to translate analog units to volts
 #define READS 20
 Pangodream_18650_CL BL(ADC_PIN, CONV_FACTOR, READS);
 
+#endif
 
 //---------------------------------------------------------------------------------------
 #include <Adafruit_NeoPixel.h>
@@ -468,14 +472,15 @@ void splashScreen() {
   tft.drawBitmap(44, 20, HSM_BG_BMP,  142, 128, ILI9341_WHITE);
   tft.drawBitmap(44, 20, HSM_BG2_BMP, 142, 128, ILI9341_RED);
   tft.drawBitmap(44, 20, HSM_BMP,     142, 128, ILI9341_GREY);
-
-  // Battery Level Indicator
+  
+#ifdef batteryMonitor
+  // Battery Level Indicator on Boot Screen
   tft.drawBitmap(170, 10, BATTERY_BMP, 60, 20, ILI9341_WHITE);
   tft.setTextSize(2);
   tft.setCursor(178, 23);
   tft.setTextColor(ILI9341_BLACK);
   tft.print(BL.getBatteryVolts()); tft.print("v");
-
+#endif
 
   tft.setCursor(20, 20);
   tft.setTextColor(ILI9341_WHITE);
@@ -541,7 +546,7 @@ void splashScreen() {
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
   
 #ifdef batteryMonitor
-  // Show Battery Level Indicator on plash screen
+  // Show Battery Level Indicator on waiting for data screen
   tft.drawBitmap(33 + 40, 280, BATTERY_BMP, 60, 20, ILI9341_GREEN);
 
   tft.setCursor(46 + 40, 286 ); // (Left/Right, UP/Down)

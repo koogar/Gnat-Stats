@@ -134,7 +134,7 @@
 /*Uncomment to enable BT, else default to USB serial only,*/
 #define enable_BT              // enable only Bluetooth serial connection
 
-/*Uncomment to enable BT and USB serial,*/
+/*Uncomment to enable BT and USB serial. (Not Currently working),*/
 //#define enable_DualSerialEvent // enable Bluetooth and USB serial connection
 
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
@@ -143,7 +143,7 @@ int TX_LED_Delay = 200; // TX blink delay
 
 
 //----------------------------- Battery Monitor ------------------------------------
-/*Voltage divider (GND ---[100K]--- (Pin34 ADC) ----[100k]--- BATT+) (0%)3.2v to (100%)4.2v Range,*/
+/*WARNING!!! Requires voltage divider (GND ---[100K]--- (Pin34 ADC) ----[100k]--- BATT+) (0%)3.2v to (100%)4.2v Range,*/
 
 //#define batteryMonitor // (experimental) Read current LiPo battery level if connected.
 
