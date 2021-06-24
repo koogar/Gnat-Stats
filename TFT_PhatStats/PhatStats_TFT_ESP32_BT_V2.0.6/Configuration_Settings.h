@@ -96,7 +96,7 @@
 
   v2.0.5
       ADD CircleGuage DisplayStyle
-      
+
   V2.0.6.BT (ESP32 only)
 
       Add Battery Monitor when using BT
@@ -140,6 +140,12 @@
 /* Enable the built in LED blinking when transmitting, saves power when using battery if disabled,*/
 #define enableTX_LED //
 int TX_LED_Delay = 200; // TX blink delay
+
+
+//----------------------------- Battery Monitor ------------------------------------
+/*Voltage divider (GND ---[100K]--- (Pin34 ADC) ----[100k]--- BATT+) (0%)3.2v to (100%)4.2v Range,*/
+
+//#define batteryMonitor // (experimental) Read current LiPo battery level if connected.
 
 //-------------------------------- DISCLAIMER -------------------------------------------
 /*
@@ -227,11 +233,11 @@ String set_GPUram = "xx";
 
 //-------------------------------- NeoPixel Modes -------------------------------------
 
-#define enableNeopixelGauges     // NeoPixel ring bargraph example
+//#define enableNeopixelGauges     // NeoPixel ring bargraph example
 
 
 /* BT BATTERY SAVER HACK JOB, VERY EXPERIMENTAL!!! SLIGHTLY LAGGY, HAS TO WAIT FOR SCREEN REFRESH*/
-#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+//#define Neo_BrightnessAuto   // Adjust NeoPixel brightness together with screen brightness using the rotary encoder
 int     Neo_DivideBy = 5;   // Divide NeoPixel brightness v's TFT brightness (less is brighter)
 
 /* If  NeoBrightness = 0 Phat-Stats will start with no NeoPixels lit. Turn the Rotary Encoder to turn on the NeoPixels, */

@@ -539,8 +539,9 @@ void splashScreen() {
 #ifdef enable_BT
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
   tft.drawBitmap(82, 62, WaitingDataBMP_BT, 76, 190, ILI9341_BLUE);
-
-  // Battery Level Indicator
+  
+#ifdef batteryMonitor
+  // Show Battery Level Indicator on plash screen
   tft.drawBitmap(33 + 40, 280, BATTERY_BMP, 60, 20, ILI9341_GREEN);
 
   tft.setCursor(46 + 40, 286 ); // (Left/Right, UP/Down)
@@ -552,7 +553,7 @@ void splashScreen() {
   tft.setCursor(100 + 40, 283 ); // (Left/Right, UP/Down)
   tft.print(BL.getBatteryChargeLevel());
   tft.print("% ");
-
+#endif
 
 #else // USB
   tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);

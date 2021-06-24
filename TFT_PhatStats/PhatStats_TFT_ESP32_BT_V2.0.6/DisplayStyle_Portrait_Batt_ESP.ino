@@ -604,6 +604,8 @@ void DisplayStyle_Portrait_Batt_ESP () {
     //--------------------------------------  18650 LiPo Battery Level --------------------------------------------
 
 #ifdef enable_BT
+#ifdef batteryMonitor
+    // Show Battery Level Indicator on DisplayStyle
     /* Battery Level, */
     tft.setCursor(200, 88);// (Left/Right, UP/Down)
     tft.print ("Batt:");
@@ -612,7 +614,7 @@ void DisplayStyle_Portrait_Batt_ESP () {
     tft.print(BL.getBatteryChargeLevel());
     //tft.setTextSize(1);
     tft.print("% ");
-
+#endif
 #endif
 
     //------------------------------------------ RX indicator Clear-----------------------------------------------
