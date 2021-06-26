@@ -27,8 +27,8 @@ void rotaryInterrupt_PWM2() // TFT PWM Brightness Adjust
   }
 
   // Limit count to a minimum and maximum value
-  if (brightness_count > 200) {
-    brightness_count   = 200;
+  if (brightness_count > 150) {
+    brightness_count   = 150;
 
   }
   if (brightness_count  < 0) {

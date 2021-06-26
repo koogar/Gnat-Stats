@@ -166,9 +166,9 @@ String set_GPUram = "xx";
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-#define enable_gpuPowerStats // Nvidia Specific???
-#define enable_gpuFanStats%
-#define enable_gpuFanStatsRPM
+//#define enable_gpuPowerStats // Nvidia Specific???
+//#define enable_gpuFanStats%
+//#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/

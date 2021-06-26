@@ -214,9 +214,9 @@ String set_GPUram = "xx";
 #define GPU_BOOST 1683  //  Enter Stock GPU Frequency eg. MSi GamingX 1080  = 1683MHz
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-#define enable_gpuPowerStats // Nvidia Specific???
-#define enable_gpuFanStats%
-#define enable_gpuFanStatsRPM
+//#define enable_gpuPowerStats // Nvidia Specific???
+//#define enable_gpuFanStats%
+//#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -247,10 +247,10 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN,*/
 /* If commented the screen brightness will default to the fixed level below,*/
-#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
+//#define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
 
 /*TFT Start Up Brightness*/
-volatile int brightness_count = 200; // Start Up Brightness
+volatile int brightness_count = 150; // Start Up Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
