@@ -49,10 +49,10 @@
   Move HSMonitor(v1.4) Change Baud rate to 115200.
 
 
-    Version 1.5      : Add option to manually Change the name of
-                      the CPU/GPU + GPU RAM size.
-
-                     : Change Baud rate to 115200.
+    Version 1.5      : Add option to manually Change the name of the CPU/GPU + GPU RAM size.
+                     : Add option to change CPU/GPU name length eg: for newer Nvidia drivers
+                     : Change Baud rate to 115200
+                     : Fix Seeeduino board file link
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
@@ -91,7 +91,7 @@
   https://wiki.seeedstudio.com/Seeeduino-XIAO/
 
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
-  https://files.seeedstudio.com/arduino/package_seeeduino_board
+  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
 
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 */

@@ -5,19 +5,19 @@
   |___/|_/__/ .__/_\__,_|\_, |___/\__|\_, |_\___/
            |_|          |__/         |__/
 
-  CPU BIG FREQUENCY / Small Temp
-  GPU Small Temp / Core / Shader / VRAM
+CPU BIG FREQUENCY / Small Temp
+GPU Small Temp / Core / Shader / VRAM
 
 */
 
-void DisplayStyle2_NC () {
+void DisplayStyle2 () {
 
 
   //-------------------------------------------Clearing Box ----------------------------------------------------
 
   //Clearing Boxes, eg: display.fillRect(<X>, ^Y^, W, H, Color);*/
   display.fillRect (0, 0, 128, 64, BLACK); // Clear entire screen for testing
-
+  
   //---------------------------------------- Static Background ----------------------------------------------------
 
   display.setTextSize(2); //set background txt font size
@@ -72,7 +72,7 @@ void DisplayStyle2_NC () {
 
     int cpuNameStart = inputString.indexOf("CPU:");
     if (inputString.indexOf("Intel", cpuNameStart) > -1) {
-      cpuNameStart = cpuNameStart + cpuNameStartLength;;
+      cpuNameStart = cpuNameStart + cpuNameStartLength;
     }
     else {
       cpuNameStart = cpuNameStart + 8;
@@ -83,14 +83,7 @@ void DisplayStyle2_NC () {
     }
     else
       cpuName = inputString.substring(cpuNameStart);
-
-    /* CPU Manual Name*/
-#ifdef Manual_cpuName
-    display.println(set_CPUname);
-#else
-    /* CPU Auto Detect Name*/
-   display.println(cpuName);
-#endif
+    display.println(cpuName);
 
   }
   if (inputString.indexOf("GPU") > -1)
@@ -101,7 +94,7 @@ void DisplayStyle2_NC () {
     //display.setCursor(-41, 28); // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
     int gpuNameStart = inputString.indexOf("GPU:");
     if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
-      gpuNameStart = gpuNameStart + gpuNameStartLength;;
+      gpuNameStart = gpuNameStart + gpuNameStartLength;
     }
     else {
       gpuNameStart = gpuNameStart + 8;
@@ -109,16 +102,8 @@ void DisplayStyle2_NC () {
 
 
     int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
-
-    /* GPU Manual Name*/
-#ifdef Manual_gpuName
-    String gpuName = set_GPUname; // Name spacing test
-#else
-    /* GPU Auto Detect Name*/
     String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
-#endif
     display.println(gpuName);
-
   }
 
 

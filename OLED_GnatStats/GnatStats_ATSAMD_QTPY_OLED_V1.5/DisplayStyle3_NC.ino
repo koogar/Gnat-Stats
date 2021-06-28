@@ -57,7 +57,7 @@ void DisplayStyle3_NC() { //HSMv1.3
 
     int cpuNameStart = inputString.indexOf("CPU:");
     if (inputString.indexOf("Intel", cpuNameStart) > -1) {
-      cpuNameStart = cpuNameStart + 10;
+      cpuNameStart = cpuNameStart + cpuNameStartLength;;
     }
     else {
       cpuNameStart = cpuNameStart + 8;
@@ -86,7 +86,7 @@ void DisplayStyle3_NC() { //HSMv1.3
     //display.setCursor(-41, 28); // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
     int gpuNameStart = inputString.indexOf("GPU:");
     if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
-      gpuNameStart = gpuNameStart + 11;
+      gpuNameStart = gpuNameStart + gpuNameStartLength;;
     }
     else {
       gpuNameStart = gpuNameStart + 8;
