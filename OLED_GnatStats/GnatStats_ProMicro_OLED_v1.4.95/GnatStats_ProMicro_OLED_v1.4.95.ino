@@ -146,6 +146,10 @@
 
 //--------------- Manual CPU/GPU Display Name Entry -------------------------
 /* Requires DisplayStyles ending in "_NC" (NameChange),*/
+/* Characters to delete from the start of the CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
+
+#define cpuNameStartLength 10
+#define gpuNameStartLength 18
 
 /* Manually name the  CPU,*/
 //#define Manual_cpuName
