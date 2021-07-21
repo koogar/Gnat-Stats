@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.4"  // Code version number
+#define CODE_VERS  "2.0.5.PT"  // Code version number
 
 
 /*
@@ -468,14 +468,14 @@ void splashScreen_Circle() {
   tft.setFont(&Org_01);
   tft.fillScreen(ILI9341_BLACK);
 
-  backlightON ();
+  
   tft.drawCircle(160 - 24, 120 + 0, 115, ILI9341_RED); // // flash circle surround
 
   //tft.drawRoundRect  (0, 0  , 240, 320, 8,    ILI9341_RED);
 
   tft.drawBitmap(44 + 18, 20 - 5 , HSM_BG_BMP,  142, 128 , ILI9341_WHITE);
   tft.drawBitmap(44 + 18, 20 - 5 , HSM_BG2_BMP, 142, 128 , ILI9341_RED);
-  tft.drawBitmap(44 + 18, 20 - 5, HSM_BMP,     142, 128 , ILI9341_GREY);
+  tft.drawBitmap(44 + 18, 20 - 5 , HSM_BMP,     142, 128 , ILI9341_GREY);
 
   tft.setCursor(20 + 18, 20 - 5);
   tft.setTextColor(ILI9341_WHITE);
@@ -506,6 +506,7 @@ void splashScreen_Circle() {
   tft.setCursor(95 , 230 - 18);
   tft.print("TFT: v");
   tft.print (CODE_VERS);
+  backlightON ();
   delay(2000);
 
   /**/
@@ -517,7 +518,6 @@ void splashScreen_Circle() {
 
   tft.setCursor(10, 305);
   tft.setTextColor(ILI9341_WHITE);
-  //tft.print("If using USB Serial? Disconnect BT!!!");
 
   //backlightON();
 

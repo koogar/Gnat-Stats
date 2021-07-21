@@ -206,7 +206,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
 #define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
-volatile int brightness_count = 150; // Start Up PWM Brightness
+volatile int brightness_count = 200; // Start Up PWM Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
