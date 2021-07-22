@@ -1,4 +1,4 @@
-# Arduino PC Hardware Performance Serial Display
+# PC Hardware Performance Serial Display
 
 Gnat-Stats SSD1306 OLED
 
