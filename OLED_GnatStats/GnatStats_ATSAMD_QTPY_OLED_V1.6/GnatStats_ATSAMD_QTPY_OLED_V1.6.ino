@@ -54,7 +54,7 @@
                      : Change Baud rate to 115200
                      : Fix Seeeduino board file link
     Version 1.6
-                     : ATSAMD21 SH1106 Support
+                     : ATSAMD21 SH1106 Support experimental
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
@@ -76,8 +76,8 @@
   https://github.com/adafruit/Adafruit_SH110x
 
   Adafruit GFX Library
-  https://github.com/adafruit/Adafruit-GFX-Library
-  https://github.com/adafruit/Adafruit_BusIO
+  https://github.com/adafruit/Adafruit-GFX-Library // latest version is required for SH1106 Support
+  https://github.com/adafruit/Adafruit_BusIO       // latest version is required for SH1106 Support
 
   Board Manager QY-PY
   -------------------
@@ -200,6 +200,30 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
+#ifdef OLED_SH1106_SPi // Experimental
+#include <Adafruit_SH110X.h>
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+/* ATSAMD21 SPi Hardware only for speed*/
+#define OLED_CS     5
+#define OLED_DC     7
+#define OLED_RST    9
+#define OLED_SCLK   8
+#define OLED_MOSI   10
+#define SPi_bitrate 8000000
+
+/* ATSAMD21 Bit Bang*/
+Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_SCLK, OLED_DC, OLED_RST, OLED_CS );
+
+/* ATSAMD21 7 pin SPi Hardware for speed*/
+//Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI1 ,OLED_MOSI, OLED_SCLK, OLED_DC, OLED_RST, OLED_CS, SPi_bitrate);
+//Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI ,OLED_MOSI, OLED_SCLK, OLED_DC, OLED_RST, OLED_CS, SPi_bitrate);
+//Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &SPI1, OLED_DC, OLED_RST, OLED_CS);
+
+
+#endif
+
 //----------------------
 /* More OLED stuff*/
 int oledDraw = 0;
@@ -249,7 +273,11 @@ void setup() {
 
 #ifdef OLED_SH1106
   display.begin(i2c_Address, true); // Address 0x3C default
-  //display.setTextColor(SH110X_WHITE);
+#endif
+
+#ifdef OLED_SH1106_SPi // Experimental
+  //display.begin();
+  display.begin(0, true); // we dont use the i2c address but we will reset!
 #endif
 
   display.clearDisplay();
@@ -515,9 +543,9 @@ void splashScreen() {
   display.display();
 
   // USB Serial Screen
- 
+
 #ifdef OLED_SH1106
-  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64,SH110X_WHITE);
+  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, SH110X_WHITE);
 #else
   display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
 #endif

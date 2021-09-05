@@ -3,10 +3,10 @@
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
 /* Adafruit QT-PY*/
-#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+//#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Seeeduino XIAO,*/
-//#define XIAO
+#define XIAO
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -16,9 +16,11 @@
 //--------------------- OLED Setup --------------------------
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 
-//#define OLED_SSD1306
-#define OLED_SH1106
+#define OLED_SSD1306
+//#define OLED_SH1106
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//#define OLED_SH1106_SPi //  7 pin SPi Experimental Untested
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
@@ -28,7 +30,7 @@
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /*Rotate the display at the start:  0 or 2  (0, 180 degrees)*/
-#define rotateScreen 2
+#define rotateScreen 0
 
 /* Uncomment below, to enable positive and negative screen cycler */
 //#define enableInvertscreen
