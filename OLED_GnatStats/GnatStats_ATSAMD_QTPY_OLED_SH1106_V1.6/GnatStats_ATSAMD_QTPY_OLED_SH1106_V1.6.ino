@@ -200,6 +200,28 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
+#ifdef OLED_SH1106_SPi // Experimental
+#include <Adafruit_SH110X.h>
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+/* ATSAMD21 SPi Hardware only for speed*/
+#define OLED_CS     5
+#define OLED_DC     7
+#define OLED_RST    9
+#define OLED_SCLK   8
+#define OLED_MOSI   10
+#define SPi_bitrate 8000000
+
+/* ATSAMD21 Bit Bang*/
+Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_SCLK, OLED_DC, OLED_RST, OLED_CS );
+
+/* ATSAMD21 SPi Hardware for speed*/
+//Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI ,OLED_MOSI, OLED_SCLK, OLED_DC, OLED_RST, OLED_CS, SPi_bitrate);
+
+
+#endif
+
 //----------------------
 /* More OLED stuff*/
 int oledDraw = 0;
