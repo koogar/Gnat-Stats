@@ -1,10 +1,23 @@
 
 #define enableSideLevelGauges // Phat-Tacho CircleGauge only
 
-void DisplayStyle_CircleGauge_ATSAMD ()  // Landscape only
+void DisplayStyle_CircleGauge_ESP ()  // Landscape only
 {
 
 
+#ifdef enable_DualSerialEvent
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#endif
+
+#ifdef enable_BT
+  serialBTEvent();    // Check for Bluetooth Serial Activity
+#else //USB
+  serialEvent();     // Check for USB Serial Activity
+#endif
+
+#ifdef  enableActivityChecker
+  activityChecker();      // Turn off screen when no activity
+#endif
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   /*Optimised for 1.3" SPI Colour Round LCD ST7789V (240x240),
@@ -27,11 +40,8 @@ void DisplayStyle_CircleGauge_ATSAMD ()  // Landscape only
   //#define Y_Offset 63 // + Portrait
 
   /*ILI9341 240x320 Landscape offsets(Middle of PCB 86mm),*/
-#define X_Offset     0 // - Landscape
-#define Y_Offset     -1 // + Landscape
-
-#define X_BarOffset  4 // - Landscape
-#define Y_BarOffset  1 // - Landscape
+#define X_Offset 0// - Landscape
+#define Y_Offset 0 // + Landscape
 
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -261,9 +271,9 @@ void DisplayStyle_CircleGauge_ATSAMD ()  // Landscape only
     tft.setTextSize(1);
 
     if (cpuOverclockSum > 0)
-      tft.print (" +");
+      tft.print ("+");
     else
-      tft.print ("  ");
+      tft.print (" ");
 
     tft.print(cpuOverclockSum, 0);            // Show Value in MHz
     //tft.setTextSize(1);
@@ -347,11 +357,11 @@ void DisplayStyle_CircleGauge_ATSAMD ()  // Landscape only
 
 #ifdef  enable_ShowFrequencyGain
     /* GPU OVERCLOCK Display Freq Gain, */
-    //tft.setCursor(225, 56);// (Left/Right, UP/Down)
     tft.setCursor(182 - X_Offset, 180 + Y_Offset);
     tft.fillRect (182 - X_Offset, 179 + Y_Offset , 40, 10, ILI9341_BLACK);
-
+    
 #ifdef ShowFrequencyGainMHz
+
     tft.setTextSize(1);
 
     if (gpuOverclockSum > 0)
@@ -365,7 +375,6 @@ void DisplayStyle_CircleGauge_ATSAMD ()  // Landscape only
 #endif
 #ifdef ShowFrequencyGain%
     tft.setTextSize(1);
-
 
     if (gpuOverclockGainPercentSum > 0)
       tft.print (" +");
@@ -648,7 +657,7 @@ void CustomTriggerGPU_ThrottleIndicator_Circle(int gpuDegree ) {
 void CPU_tempLevelGauge(int cpuDegree ) {
 
   /*Top CPU Temp Level Clear Box,*/
-  tft.fillRoundRect(293 + X_BarOffset - X_Offset, 0 + Y_BarOffset + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
+  tft.fillRoundRect(293 - X_Offset, 0 + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
 
   float CPUtempfactor = cpuDegree;
 
@@ -657,36 +666,36 @@ void CPU_tempLevelGauge(int cpuDegree ) {
 
   if (CPUtempfactor >= 0 ) {
     /*Top CPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8, CPUtempScalefactor  , 1, ILI9341_GREEN); // Top CPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset, 1 + Y_Offset,   8, CPUtempScalefactor  , 1, ILI9341_GREEN); // Top CPU Temp Scale
   }
 
   if (CPUtempfactor >= 45 ) {
     /*Top CPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8, CPUtempScalefactor   , 1, ILI9341_GREEN); // Top CPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset, 1 + Y_Offset,   8, CPUtempScalefactor   , 1, ILI9341_GREEN); // Top CPU Temp Scale
   }
 
   if (CPUtempfactor >= 65 ) {
     /*Top CPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8, CPUtempScalefactor   , 1, ILI9341_ORANGE); // Top CPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset, 1 + Y_Offset,   8, CPUtempScalefactor   , 1, ILI9341_ORANGE); // Top CPU Temp Scale
   }
 
   if (CPUtempfactor >= 85 ) {
     /*Top CPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8, CPUtempScalefactor  , 1, ILI9341_RED); // Top CPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset, 1 + Y_Offset,   8, CPUtempScalefactor  , 1, ILI9341_RED); // Top CPU Temp Scale
   }
 
-  tft.drawRoundRect(293 + X_BarOffset - X_Offset, 0 + Y_BarOffset + Y_Offset,   8, 94  , 1, ILI9341_WHITE); // Draw rectangle round CPU temp bar
+  tft.drawRoundRect(293 - X_Offset, 0 + Y_Offset,   8, 94  , 1, ILI9341_WHITE); // Draw rectangle round CPU temp bar
 
   /*Stop Scale running into MAX box,*/
-  tft.fillRect (288 + X_BarOffset - X_Offset , 94 + Y_BarOffset + Y_Offset,  27, 19 , ILI9341_BLACK); // Stop Scale running into MAX box
+  tft.fillRect (288 - X_Offset , 94 + Y_Offset,  27, 19 , ILI9341_BLACK); // Stop Scale running into MAX box
 
   // Max Text box CPU
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
-  tft.setCursor(295 + X_BarOffset - X_Offset , 100 + Y_BarOffset + Y_Offset);
+  tft.setCursor(295 - X_Offset , 100 + Y_Offset);
   tft.setTextSize(1);
   tft.setTextColor(ILI9341_WHITE);
   tft.print("MAX");
-  tft.drawRoundRect(292 + X_BarOffset - X_Offset , 97 + Y_BarOffset + Y_Offset,  23, 13 , 1, ILI9341_WHITE);
+  tft.drawRoundRect(292 - X_Offset , 97 + Y_Offset,  23, 13 , 1, ILI9341_WHITE);
 
 }
 
@@ -696,7 +705,7 @@ void CPU_tempLevelGauge(int cpuDegree ) {
 void CPU_loadLevelGauge(int cpuUsage ) {
 
   /*Top CPU Load Level Clear Box,*/
-  tft.fillRoundRect(306 + X_BarOffset - X_Offset, 0  + Y_BarOffset + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
+  tft.fillRoundRect(306 - X_Offset, 0 + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
 
   float CPUloadfactor = cpuUsage;
 
@@ -706,25 +715,25 @@ void CPU_loadLevelGauge(int cpuUsage ) {
 
   if (CPUloadfactor >= 0 ) {
     /*Top CPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8,  CPUloadScalefactor   , 1, ILI9341_GREEN); // Top CPU Load Scale
+    tft.fillRoundRect(306 - X_Offset, 1 + Y_Offset,   8,  CPUloadScalefactor   , 1, ILI9341_GREEN); // Top CPU Load Scale
   }
 
   if (CPUloadfactor >= 50 ) {
     /*Top CPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8,  CPUloadScalefactor   , 1, ILI9341_GREEN); // Top CPU Load Scale
+    tft.fillRoundRect(306 - X_Offset, 1 + Y_Offset,   8,  CPUloadScalefactor   , 1, ILI9341_GREEN); // Top CPU Load Scale
   }
 
   if (CPUloadfactor >= 75) {
     /*Top CPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8,  CPUloadScalefactor   , 1, ILI9341_ORANGE); // Top CPU Load Scale
+    tft.fillRoundRect(306 - X_Offset, 1 + Y_Offset,   8,  CPUloadScalefactor   , 1, ILI9341_ORANGE); // Top CPU Load Scale
   }
 
   if (CPUloadfactor >= 83 ) {
     /*Top CPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset, 1 + Y_BarOffset + Y_Offset,   8,  CPUloadScalefactor  , 1, ILI9341_RED); // Top CPU Load Scale
+    tft.fillRoundRect(306 - X_Offset, 1 + Y_Offset,   8,  CPUloadScalefactor  , 1, ILI9341_RED); // Top CPU Load Scale
   }
 
-  tft.drawRoundRect(306 + X_BarOffset - X_Offset, 0 + Y_BarOffset + Y_Offset,   8,  94 , 1, ILI9341_WHITE); // Draw rectangle round CPU load bar
+  tft.drawRoundRect(306 - X_Offset, 0 + Y_Offset,   8,  94 , 1, ILI9341_WHITE); // Draw rectangle round CPU load bar
 }
 
 
@@ -736,7 +745,7 @@ void CPU_loadLevelGauge(int cpuUsage ) {
 void GPU_tempLevelGauge(int gpuDegree ) {
 
   /*Bottom GPU Temp Level Clear Box,*/
-  tft.fillRoundRect(293 + X_BarOffset - X_Offset , 129 + Y_BarOffset + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
+  tft.fillRoundRect(293 - X_Offset , 129 + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
 
   float GPUtempfactor = gpuDegree;
 
@@ -745,41 +754,41 @@ void GPU_tempLevelGauge(int gpuDegree ) {
 
   if (GPUtempfactor >= 0 ) {
     /*Bottom GPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_GREEN); // Bottom GPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset , 130 + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_GREEN); // Bottom GPU Temp Scale
   }
 
   if (GPUtempfactor >= 25 ) {
     /*Bottom GPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_GREEN); // Bottom GPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset , 130 + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_GREEN); // Bottom GPU Temp Scale
   }
 
   if (GPUtempfactor >= 50 ) {
     /*Bottom GPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_GREEN); // Bottom GPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset , 130 + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_GREEN); // Bottom GPU Temp Scale
   }
 
   if (GPUtempfactor >= 75 ) {
     /*Bottom GPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_ORANGE); // Bottom GPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset , 130 + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_ORANGE); // Bottom GPU Temp Scale
   }
 
   if (GPUtempfactor >= 83 ) {
     /*Bottom GPU Temp Bar Scale,*/
-    tft.fillRoundRect(293 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_RED); // Bottom GPU Temp Scale
+    tft.fillRoundRect(293 - X_Offset , 130 + Y_Offset,  8, GPUtempScalefactor , 1, ILI9341_RED); // Bottom GPU Temp Scale
   }
 
-  tft.drawRoundRect(293 + X_BarOffset - X_Offset , 129 + Y_BarOffset + Y_Offset,   8, 94 , 1, ILI9341_WHITE); // Draw rectangle round GPU temp bar
+  tft.drawRoundRect(293 - X_Offset , 129 + Y_Offset,   8, 94 , 1, ILI9341_WHITE); // Draw rectangle round GPU temp bar
 
   /*Stop Scale running into MAX box,*/
-  tft.fillRect (289 + X_BarOffset - X_Offset , 223 + Y_BarOffset + Y_Offset,  27, 17 , ILI9341_BLACK);
+  tft.fillRect (289 - X_Offset , 223 + Y_Offset,  27, 17 , ILI9341_BLACK);
 
   // Max Text box GPU
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
-  tft.setCursor(295 + X_BarOffset - X_Offset , 229 + Y_BarOffset + Y_Offset);
+  tft.setCursor(295 - X_Offset , 229 + Y_Offset);
   tft.setTextSize(1);
   tft.setTextColor(ILI9341_WHITE);
   tft.print("MAX");
-  tft.drawRoundRect(292 + X_BarOffset - X_Offset , 226 + Y_BarOffset + Y_Offset,  23, 13 , 1, ILI9341_WHITE);
+  tft.drawRoundRect(292 - X_Offset , 226 + Y_Offset,  23, 13 , 1, ILI9341_WHITE);
 }
 
 //>>>>>>>>>>>> GPU LOAD
@@ -787,7 +796,7 @@ void GPU_tempLevelGauge(int gpuDegree ) {
 void GPU_loadLevelGauge(int gpuUsage ) {
 
   /*Bottom GPU Load Level Clear Box,*/
-  tft.fillRoundRect(306 + X_BarOffset - X_Offset , 129 + Y_BarOffset + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
+  tft.fillRoundRect(306 - X_Offset , 129 + Y_Offset,   8, 102 , 1, ILI9341_BLACK);
 
   float GPUloadfactor = gpuUsage;
 
@@ -796,24 +805,24 @@ void GPU_loadLevelGauge(int gpuUsage ) {
 
   if (GPUloadfactor >= 0 ) {
     /*Bottom GPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_GREEN);
+    tft.fillRoundRect(306 - X_Offset , 130 + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_GREEN);
   }
   if (GPUloadfactor >= 25 ) {
     /*Bottom GPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_GREEN);
+    tft.fillRoundRect(306 - X_Offset , 130 + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_GREEN);
   }
   if (GPUloadfactor >= 50 ) {
     /*Bottom GPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset, 8, GPUloadScalefactor  , 1, ILI9341_GREEN);
+    tft.fillRoundRect(306 - X_Offset , 130 + Y_Offset, 8, GPUloadScalefactor  , 1, ILI9341_GREEN);
   }
   if (GPUloadfactor >= 75 ) {
     /*Bottom GPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_ORANGE);
+    tft.fillRoundRect(306 - X_Offset , 130 + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_ORANGE);
   }
   if (GPUloadfactor >= 90 ) {
     /*Bottom GPU Load Bar Scale,*/
-    tft.fillRoundRect(306 + X_BarOffset - X_Offset , 130 + Y_BarOffset + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_RED);
+    tft.fillRoundRect(306 - X_Offset , 130 + Y_Offset, 8, GPUloadScalefactor , 1, ILI9341_RED);
   }
 
-  tft.drawRoundRect(306 + 4 - X_Offset , 129 + Y_BarOffset + Y_Offset,   8, 94 , 1, ILI9341_WHITE); // Draw rectangle round GPU load bar
+  tft.drawRoundRect(306 - X_Offset , 129 + Y_Offset,   8, 94 , 1, ILI9341_WHITE); // Draw rectangle round GPU load bar
 }

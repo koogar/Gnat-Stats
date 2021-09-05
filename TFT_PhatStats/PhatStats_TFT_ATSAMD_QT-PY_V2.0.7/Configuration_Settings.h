@@ -169,9 +169,9 @@ String set_GPUram = "xx";
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Remove Specific GPU items Power/Fan RPM/Fan% */
-//#define enable_gpuPowerStats // Nvidia Specific???
-//#define enable_gpuFanStats%
-//#define enable_gpuFanStatsRPM
+#define enable_gpuPowerStats // Nvidia Specific???
+#define enable_gpuFanStats%
+#define enable_gpuFanStatsRPM
 
 //--------------------------- Throttle/Boost Gains MHZ or % ------------------------------
 /* Uncomment to show Frequency gain MHz or Percent,*/
@@ -208,7 +208,7 @@ int NeoBrightness   = 20;           // Global start up brightness
 
 /* Use the Rotary Encoder for variable PWM control, connected direct to the MCU PIN*/
 #define Encoder_PWM2 // Use rotary encoder for PWM screen brightness control  3.3v
-volatile int brightness_count = 200; // Start Up PWM Brightness
+volatile int brightness_count = 160; // Start Up PWM Brightness
 
 //-------------------------- Display Activity Shutdown -----------------------------------
 
