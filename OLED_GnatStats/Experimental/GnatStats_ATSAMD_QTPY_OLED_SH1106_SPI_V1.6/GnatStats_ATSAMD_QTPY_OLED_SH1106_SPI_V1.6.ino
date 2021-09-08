@@ -200,6 +200,36 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
+#ifdef OLED_SH1106_SPI // Experimental
+//https://learn.adafruit.com/adafruit-macropad-rp2040/arduino
+#include <Adafruit_SH110X.h>
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+/* ATSAMD21 SPi Hardware only for speed*/
+
+#define OLED_MOSI     10
+#define OLED_CLK      8
+#define OLED_DC       7
+#define OLED_CS       5
+#define OLED_RST      9
+
+#define SPi_bitrate 8000000
+
+/* ATSAMD21 Bit Bang*/
+// Create the OLED display
+//Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &SPI1, OLED_DC, OLED_RST, OLED_CS);
+
+Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RST , OLED_CS );
+//Adafruit_SH1106G display (SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET , OLED_CS );
+
+/* ATSAMD21 7 pin SPi Hardware for speed*/
+//xx Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT,&SPI  ,OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET , OLED_CS, SPi_bitrate);
+//xx Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI1 ,OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET , OLED_CS, SPi_bitrate);
+//xx Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &SPI1, OLED_DC, OLED_RESET , OLED_CS);
+
+
+#endif
 
 //----------------------
 /* More OLED stuff*/
@@ -252,7 +282,11 @@ void setup() {
   display.begin(i2c_Address, true); // Address 0x3C default
 #endif
 
-
+#ifdef OLED_SH1106_SPi // Experimental
+  // Start OLED
+  display.begin(0, true); // we dont use the i2c address but we will reset!
+  display.display();
+#endif
 
   display.clearDisplay();
   display.setTextColor(WHITE);
@@ -491,6 +525,9 @@ void splashScreen() {
   display.setTextColor(SH110X_WHITE);
 #endif
 
+#ifdef OLED_SH1106_SPI
+  display.setTextColor(SH110X_WHITE);
+#endif
 
 #ifdef OLED_SH1106
   display.drawBitmap(0, 0, JustGnatBMP, 64, 64, SH110X_WHITE);
@@ -499,7 +536,12 @@ void splashScreen() {
 
 #endif
 
+#ifdef OLED_SH1106_SPI
+  display.drawBitmap(0, 0, JustGnatBMP, 64, 64, SH110X_WHITE);
+#else
+  display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
 
+#endif
 
   display.setTextSize(3);
   display.setCursor(58, 5);
@@ -527,7 +569,11 @@ void splashScreen() {
   display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
 #endif
 
-
+#ifdef OLED_SH1106_SPI
+  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, SH110X_WHITE);
+#else
+  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
+#endif
 
   display.display();
 }

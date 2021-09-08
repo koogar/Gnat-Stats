@@ -16,9 +16,12 @@
 //--------------------- OLED Setup --------------------------
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 
-#define OLED_SSD1306
+//#define OLED_SSD1306
 //#define OLED_SH1106
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#define OLED_SH1106_SPI //  7 pin SPi Experimental Untested
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
