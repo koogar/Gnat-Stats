@@ -1,4 +1,4 @@
-#define CODE_VERS  "2.0.4.IR"  // Code version number
+#define CODE_VERS  "2.0.7.IR"  // Code version number
 
 
 /*

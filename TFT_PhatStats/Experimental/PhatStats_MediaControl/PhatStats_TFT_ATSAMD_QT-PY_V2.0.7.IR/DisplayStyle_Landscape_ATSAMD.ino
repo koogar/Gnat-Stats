@@ -276,20 +276,33 @@ void DisplayStyle_Landscape_ATSAMD () {
 #ifdef  enable_ShowFrequencyGain
 
     /* CPU OVERCLOCK Display Freq Gain in MHz */
-    tft.setCursor(109, 94);// (Left/Right, UP/Down)
+
 
     //tft.print ("O/C:+ ");
 
 #ifdef ShowFrequencyGainMHz
+    tft.setCursor(109 - 6, 94); // (Left/Right, UP/Down)
     tft.setTextSize(2);
-    tft.print ("+");
+
+    if (cpuOverclockSum > 0)
+      tft.print (" +");
+    else
+      tft.print (" ");
+
     tft.print(cpuOverclockSum, 0);            // Show Value in MHz
     tft.setTextSize(1);
     tft.println ("MHz");
 #endif
+
 #ifdef ShowFrequencyGain%
+    tft.setCursor(109, 94);// (Left/Right, UP/Down)
     tft.setTextSize(2);
-    tft.print (" +");
+
+    if (cpuOverclockGainPercentSum > 0)
+      tft.print (" +");
+    else
+      tft.print ("  ");
+
     tft.print(cpuOverclockGainPercentSum, 0); // Show Value in %
     tft.println ("%");
 #endif
@@ -401,19 +414,33 @@ void DisplayStyle_Landscape_ATSAMD () {
 #ifdef  enable_ShowFrequencyGain
     /* GPU OVERCLOCK Display Freq Gain, */
     //tft.setCursor(225, 56);// (Left/Right, UP/Down)
-    tft.setCursor(109, 213);
+
     //tft.print ("GPU O/C: ");
 
 #ifdef ShowFrequencyGainMHz
+    tft.setCursor(109 - 6, 213);
     tft.setTextSize(2);
-    tft.print ("+");
+
+    if (gpuOverclockSum > 0)
+      tft.print ("+");
+    else
+      tft.print (" ");
+
     tft.print(gpuOverclockSum, 0);            // Show Value in MHz
     tft.setTextSize(1);
     tft.println ("MHz");
 #endif
+
 #ifdef ShowFrequencyGain%
+    tft.setCursor(109, 213);
     tft.setTextSize(2);
-    tft.print ("  +");
+    //tft.print ("  +");
+
+    if (gpuOverclockGainPercentSum > 0)
+      tft.print ("  +");
+    else
+      tft.print ("   ");
+
     tft.print(gpuOverclockGainPercentSum, 0); // Show Value in %
     tft.println ("%");
 #endif

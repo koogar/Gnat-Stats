@@ -87,7 +87,15 @@
   v2.0.2:
        Add option to manual name CPU & GPU in the CFG
        Adjust NeoPixel brightness together with screen brightness using the rotary encoder
+  
+  v2.0.3
+       ADD enableTX_LED  option to enable/disable built in LED when transmitting data
 
+  v2.0.5
+       ADD CircleGuage DisplayStyle
+
+   V2.0.7
+        Fix CPU & GPU Overclock gains "-+" bug
 
   Note: Gnat-Stats/Phat-Stats is optimised for desktop CPU's with dedicated graphics cards, such as Nvidia/Radeon.
       You may get weird results on mobile CPUs and integrated GPU's (iGPU's) on laptops.
@@ -229,8 +237,8 @@ int Serial_eventDelay = 0; //
 
 /* Enable the built in LED blinking when transmitting data,*/
 #define enableTX_LED 
-
 int TX_LED_Delay = 200; // TX blink delay
+
 int baud = 115200;        // do not adjust
 
 //----------------------------- Debug Screen Erasers ---------------------------------------
