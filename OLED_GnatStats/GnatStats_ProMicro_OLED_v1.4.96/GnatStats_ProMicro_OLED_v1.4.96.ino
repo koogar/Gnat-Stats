@@ -48,7 +48,7 @@
 
     Version 1.4.1  :  Change Baud rate to 115200
 
-    Version 1.4.6  :  Add dim function for SH1106 "display.dim (true);"
+    Version 1.4.6  :  Add dim function  "display.dim (true);"
 
 
 
@@ -138,10 +138,10 @@
 //----------------------------------- OLED Setup ----------------------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
-//#define OLED_SSD1306
+#define OLED_SSD1306
+//#define OLED_SH1106
 
-#define OLED_SH1106
-//#define dim_Display // dim display on SH1106 only!!!
+//#define dim_Display // dim display
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -290,13 +290,15 @@ void setup() {
   //https://github.com/TMSL/Adafruit_SH1106  Library with dimming
 #ifdef dim_Display
   display.dim (true);
-#else
-  //display.dim (false);
 #endif
 #endif
 
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
+
+#ifdef dim_Display
+  display.dim (true);
+#endif
 #endif
 
   display.clearDisplay();

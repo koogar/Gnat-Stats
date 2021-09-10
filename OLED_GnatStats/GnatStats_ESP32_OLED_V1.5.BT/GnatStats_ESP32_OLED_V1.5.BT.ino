@@ -53,10 +53,11 @@
   Move to HardwareSerialMonitor(v1.4) Change Baud rate to 115200
 
     Version 1.5.BT  : Add Bluetooth serial support (ESP32 Only)
-                    : Add option to manually Change the name of 
+                    : Add option to manually Change the name of
                       the CPU/GPU + GPU RAM size
 
                     : Change Baud rate to 115200
+                    : Add Display Dim #define dim_Display 
 
     ---------------------------------------------------------------
 
@@ -266,6 +267,9 @@ void setup() {
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
   //display.begin(SSD1306_SWITCHCAPVCC, i2c_Address, false, false);
   //display.begin(SSD1306_SWITCHCAPVCC, i2c_Address, true, true);
+#ifdef dim_Display
+  display.dim (true);
+#endif
 #endif
 
 #ifdef OLED_SH1106
