@@ -17,6 +17,8 @@
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 
 #define OLED_SSD1306
+//#define dim_Display // dim display SD1306 Only!!!
+
 //#define OLED_SH1106
 
 
