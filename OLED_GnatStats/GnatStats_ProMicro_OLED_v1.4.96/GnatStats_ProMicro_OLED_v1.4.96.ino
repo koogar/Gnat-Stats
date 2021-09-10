@@ -46,7 +46,11 @@
 
   Move HSMonitor(v1.4) Change Baud rate to 115200
 
-  Version 1.4.1  :  Change Baud rate to 115200
+    Version 1.4.1  :  Change Baud rate to 115200
+
+    Version 1.4.6  :  Add dim function for SH1106 "display.dim (true);"
+
+
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
@@ -63,8 +67,15 @@
   Adafruit SSD1306 library
   https://github.com/adafruit/Adafruit_SSD1306
 
-  Adafruit library ported to the SH1106
-  https://github.com/badzz/Adafruit_SH1106      Currently used library in this sketch!!!
+    Adafruit library ported to the SH1106
+  https://github.com/koogar/Adafruit_SH1106       Currently used Library with dimming function!!!!  "display.dim (true);"
+
+
+  Others:
+         https://github.com/wonho-maker/Adafruit_SH1106
+         https://github.com/shondll/Adafruit_SSD1306
+         https://github.com/TMSL/Adafruit_SH1106         //Library with dimming!!!!   "display.dim (true);"
+         https://github.com/badzz/Adafruit_SH1106
 
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library
@@ -79,7 +90,7 @@
 #include "bitmap.h"
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#define CODE_VERS  "1.4.95"  // Code version number 
+#define CODE_VERS  "1.4.96"  // Code version number 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*--------------------------------------------------------------------------------------
     ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
@@ -91,7 +102,7 @@
    | (_) |  _/ | |  | | (_) | .` \__ \
     \___/|_|   |_| |___\___/|_|\_|___/
 
-----------------------------------
+  ----------------------------------
     Pins Reference
   ----------------------------------
   ProMicro  : SDA: D2, SCL: D3
@@ -122,13 +133,15 @@
   NeoPixel  :  D5
   OLED_RESET:  4  Reference only!!
   ----------------------------------
-  */
+*/
 
 //----------------------------------- OLED Setup ----------------------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 //#define OLED_SSD1306
+
 #define OLED_SH1106
+//#define dim_Display // dim display on SH1106 only
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -273,6 +286,13 @@ void setup() {
   /* OLED SETUP */
 #ifdef OLED_SH1106
   display.begin(SH1106_SWITCHCAPVCC, i2c_Address);    // initialize with the I2C addr 0x3D (for the 128x64)
+
+  //https://github.com/TMSL/Adafruit_SH1106  Library with dimming
+#ifdef dim_Display
+  display.dim (true);
+#else
+  //display.dim (false);
+#endif
 #endif
 
 #ifdef OLED_SSD1306
