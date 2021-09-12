@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.6"  // Code version number 
+#define CODE_VERS  "1.6.2"  // Code version number 
 
 /*
    _____ __  __ _         _            ___           _   ___ _        _
@@ -55,7 +55,12 @@
                      : Fix Seeeduino board file link
     Version 1.6
                      : ATSAMD21 SH1106 Support experimental
+    
+    Version 1.6.1
+                     : Add Display Dim SD1306 Only!! #define dim_Display // dim display
 
+    Version 1.6.2:
+                     : Add SPi 7 Pin OLED Support (SD1306 only)
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
     Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
@@ -117,7 +122,7 @@
     \___/|_|   |_| |___\___/|_|\_|___/
 
   ----------------------------------
-    Pins Reference
+    Pins Reference i2c OLED
   ----------------------------------
   ProMicro  : SDA: D2, SCL: D3
   Leonardo  : SDA: D2, SCL: D3
@@ -282,6 +287,10 @@ void setup() {
   /* OLED SETUP */
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
+
+#ifdef dim_Display
+  display.dim (true);
+#endif
 #endif
 
 #ifdef OLED_SH1106
@@ -297,7 +306,13 @@ void setup() {
 #ifdef OLED_SD1306_SPI
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   display.begin(SSD1306_SWITCHCAPVCC);
+
+#ifdef dim_Display
+  display.dim (true);
 #endif
+#endif
+
+
 
   display.clearDisplay();
   display.setTextColor(WHITE);
