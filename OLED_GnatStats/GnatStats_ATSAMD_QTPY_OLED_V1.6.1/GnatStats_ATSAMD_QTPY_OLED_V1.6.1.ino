@@ -55,9 +55,9 @@
                      : Fix Seeeduino board file link
     Version 1.6
                      : ATSAMD21 SH1106 Support experimental
-                     
+
     Version 1.6.1
-                     : Add Display Dim SD1306 Only!! #define dim_Display // dim display  
+                     : Add Display Dim SD1306 Only!! #define dim_Display // dim display
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
@@ -257,7 +257,11 @@ void setup() {
 
 #ifdef OLED_SH1106
   display.begin(i2c_Address, true); // Address 0x3C default
+#ifdef dim_Display
+  //display.dim (true);
 #endif
+#endif
+
 
 
 

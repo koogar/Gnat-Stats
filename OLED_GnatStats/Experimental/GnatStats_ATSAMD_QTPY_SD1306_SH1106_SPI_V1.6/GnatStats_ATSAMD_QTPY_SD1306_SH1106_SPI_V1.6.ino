@@ -165,7 +165,7 @@
 #endif
 
 /* Neo Pixel Setup */
-#define NEOPIN         1
+#define NEOPIN         6
 #define NUMPIXELS      16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
@@ -200,6 +200,26 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
+#ifdef OLED_SD1306_SPI // Experimental
+
+#include <Adafruit_SSD1306.h>
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+#define OLED_MOSI     10
+#define OLED_CLK      8
+#define OLED_DC       7
+#define OLED_CS       5
+#define OLED_RESET     9
+
+// Create the OLED display
+//Software SPI
+//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+
+//hardware SPI
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_DC, OLED_RESET, OLED_CS);
+#endif
+
 #ifdef OLED_SH1106_SPI // Experimental
 //https://learn.adafruit.com/adafruit-macropad-rp2040/arduino
 #include <Adafruit_SH110X.h>
@@ -207,28 +227,14 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
 /* ATSAMD21 SPi Hardware only for speed*/
-
 #define OLED_MOSI     10
 #define OLED_CLK      8
 #define OLED_DC       7
 #define OLED_CS       5
 #define OLED_RST      9
 
-#define SPi_bitrate 8000000
-
-/* ATSAMD21 Bit Bang*/
 // Create the OLED display
 //Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &SPI1, OLED_DC, OLED_RST, OLED_CS);
-
-Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RST , OLED_CS );
-//Adafruit_SH1106G display (SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET , OLED_CS );
-
-/* ATSAMD21 7 pin SPi Hardware for speed*/
-//xx Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT,&SPI  ,OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET , OLED_CS, SPi_bitrate);
-//xx Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI1 ,OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET , OLED_CS, SPi_bitrate);
-//xx Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &SPI1, OLED_DC, OLED_RESET , OLED_CS);
-
-
 #endif
 
 //----------------------
@@ -286,6 +292,11 @@ void setup() {
   // Start OLED
   display.begin(0, true); // we dont use the i2c address but we will reset!
   display.display();
+#endif
+
+#ifdef OLED_SD1306_SPI
+  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  display.begin(SSD1306_SWITCHCAPVCC);
 #endif
 
   display.clearDisplay();

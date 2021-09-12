@@ -16,10 +16,10 @@
 //--------------------- OLED Setup --------------------------
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 
-#define OLED_SSD1306
-//#define dim_Display // dim display SD1306 Only!!!
+//#define OLED_SSD1306
+#define dim_Display // dim display SD1306 Only!!!
 
-//#define OLED_SH1106
+#define OLED_SH1106
 
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/

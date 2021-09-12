@@ -20,7 +20,8 @@
 //#define OLED_SH1106
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#define OLED_SH1106_SPI //  7 pin SPi Experimental Untested
+#define OLED_SD1306_SPI //  7 pin SPi Experimental
+//#define OLED_SH1106_SPI //  7 pin SPi Experimental Untested
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
