@@ -170,7 +170,7 @@
 #endif
 
 /* Neo Pixel Setup */
-#define NEOPIN         6
+#define NEOPIN         6 //6
 #define NUMPIXELS      16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
@@ -215,14 +215,14 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 #define OLED_CLK      8
 #define OLED_DC       7
 #define OLED_CS       5
-#define OLED_RESET     9
+#define OLED_RST      9
 
 // Create the OLED display
 //Software SPI
-//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RST, OLED_CS);
 
 //hardware SPI
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_DC, OLED_RESET, OLED_CS);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_DC, OLED_RST, OLED_CS);
 #endif
 
 #ifdef OLED_SH1106_SPI // Experimental

@@ -13,18 +13,18 @@
 /* Enable the built in LED blinking when transmitting,*/
 #define enableTX_LED
 
-//--------------------- OLED Setup --------------------------
+//--------------------- OLED Setup i2c --------------------------
+
 /*Uncomment the correct OLED display type, uncomment only one!!!*/
 
-/* i2c OLED*/
 //#define OLED_SSD1306
 #define OLED_SH1106
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
-#define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
-//#define i2c_Address 0x3d //initialize with the I2C addr 0x3D Typically Adafruit OLED's
+#define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's, 0x3D Typically Adafruit OLED's
 
 
+//--------------------- OLED Setup SPi--------------------------
 /* SPi 7 Pin OLED*/
 //#define OLED_SD1306_SPI   //  7 pin SPi Experimental
 
@@ -34,8 +34,6 @@
 
 
 #define dim_Display // dim display 
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /*Rotate the display at the start:  0 or 2  (0, 180 degrees)*/
 #define rotateScreen 0
