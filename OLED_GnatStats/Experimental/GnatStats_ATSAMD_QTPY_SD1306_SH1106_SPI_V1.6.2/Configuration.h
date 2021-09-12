@@ -18,7 +18,7 @@
 
 /* i2c OLED*/
 //#define OLED_SSD1306
-//#define OLED_SH1106
+#define OLED_SH1106
 
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
@@ -33,7 +33,7 @@
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-#define dim_Display // dim display SD1306 Only!!!
+#define dim_Display // dim display 
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

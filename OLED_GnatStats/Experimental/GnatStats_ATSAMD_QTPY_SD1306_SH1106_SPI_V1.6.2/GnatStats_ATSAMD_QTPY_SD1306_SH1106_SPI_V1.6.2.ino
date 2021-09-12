@@ -55,7 +55,7 @@
                      : Fix Seeeduino board file link
     Version 1.6
                      : ATSAMD21 SH1106 Support experimental
-    
+
     Version 1.6.1
                      : Add Display Dim SD1306 Only!! #define dim_Display // dim display
 
@@ -296,12 +296,20 @@ void setup() {
 
 #ifdef OLED_SH1106
   display.begin(i2c_Address, true); // Address 0x3C default
+  
+#ifdef dim_Display
+  display.setContrast (0); // dim display
 #endif
+#endif
+
 
 #ifdef OLED_SH1106_SPi // Experimental
   // Start OLED
   display.begin(0, true); // we dont use the i2c address but we will reset!
-  display.display();
+
+#ifdef dim_Display
+  display.setContrast (0); // dim display
+#endif
 #endif
 
 #ifdef OLED_SD1306_SPI
