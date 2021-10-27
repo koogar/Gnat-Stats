@@ -3,10 +3,10 @@
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
 /* Adafruit QT-PY*/
-//#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
+#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
 /* Seeeduino XIAO,*/
-#define XIAO
+//#define XIAO
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

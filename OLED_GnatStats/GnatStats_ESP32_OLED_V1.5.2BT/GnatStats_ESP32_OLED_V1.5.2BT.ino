@@ -2,7 +2,7 @@
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #define device_BT "TallmanLabs_BT"
-#define CODE_VERS  "1.5.1BT"  // Code version number 
+#define CODE_VERS  "1.5.2BT"  // Code version number 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 /*
@@ -53,12 +53,15 @@
   Move to HardwareSerialMonitor(v1.4) Change Baud rate to 115200
 
     Version 1.5.1BT  : Add Bluetooth serial support (ESP32 Only)
-                    : Add option to manually Change the name of
+                     : Add option to manually Change the name of
                       the CPU/GPU + GPU RAM size
 
-                    : Change Baud rate to 115200
-                    : Add Display Dim #define dim_Display 
+                     : Change Baud rate to 115200
+                     : Add Display Dim #define dim_Display
 
+
+    Version 1.5.2BT
+                     : Work Around for Dual Mode
     ---------------------------------------------------------------
 
 
@@ -110,7 +113,9 @@
   Built in LED : 13  Reference only!!
   OLED_RESET   : -1  Reference only!!
   ----------------------------------
-  ESP32 LOLIN32: SDA: 21, SCL: 22
+  ESP32 LOLIN D32:    SDA: 21, SCL: 22
+  ESP32 Lolin32 Lite: SDA: 19, SCL: 23
+
   NeoPixel     : 2 or 19
   Built in LED : 5   Reference only!!
   OLED_RESET   : -1  Reference only!!
@@ -248,7 +253,7 @@ void setup() {
 #ifdef enable_BT
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
-  Serial.begin(baud);  //  USB Serial Baud Rate
+  Serial.begin(9600);  //  USB Serial Baud Rate work around for dual mode
 #endif
 
 #ifdef enable_DualSerialEvent
@@ -505,7 +510,7 @@ void splashScreen() {
 
   //Set version to USB Serial
   display.setTextSize(1);
-  display.setCursor(66, 55);
+  display.setCursor(63, 55);
   display.print("Ver:");
   display.print (CODE_VERS);
 

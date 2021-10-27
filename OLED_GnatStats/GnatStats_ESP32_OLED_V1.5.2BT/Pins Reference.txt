@@ -19,10 +19,14 @@ https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide
   Built in LED : 13  Reference only!!
   OLED_RESET   : -1  Reference only!!
   ----------------------------------
-  ESP32 LOLIN32: SDA: 21, SCL: 22
+  ESP32 LOLIN D32:    SDA: 21, SCL: 22
+  ESP32 Lolin32 Lite: SDA: 19, SCL: 23
+
   NeoPixel     : 2 or 19
   Built in LED : 5   Reference only!!
   OLED_RESET   : -1  Reference only!!
+
+
   ----------------------------------
   STM32 BluePill: SDA: PB7, SCL: PB6
   NeoPixel      : PA7 (MOSI)

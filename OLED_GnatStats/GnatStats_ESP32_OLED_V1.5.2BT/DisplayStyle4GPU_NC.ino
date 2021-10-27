@@ -34,7 +34,7 @@ void DisplayStyle4GPU_NC () {
 
     int gpuNameStart = inputString.indexOf("GPU:");
     if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
-      gpuNameStart = gpuNameStart + 11;
+      gpuNameStart = gpuNameStart + 18;
     }
     else {
       gpuNameStart = gpuNameStart + 8;

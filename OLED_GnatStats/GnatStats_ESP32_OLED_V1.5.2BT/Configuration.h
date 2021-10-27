@@ -8,7 +8,7 @@
   When disconnected, you will need to manualy reconnect in HardwareSerialMonitor by clicking
   on the correct COM port “Standard Serial over Bluetooth link”.
 
-  Note: Once connected, two “Standard Serial over Bluetooth link” will be visible
+  Note: Once connected, two “Standard Serial over Bluetooth Com Ports” will be visible
   one is Send, the other is Receive.
   When you know the correct port for Send you can disable the other in Device Manager
   so it does not to show up in HardwareSerialMonitor.*/
@@ -123,7 +123,7 @@ String set_GPUram = "66";
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 15;
-int baud = 115200; //serial do not adjust
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //------------------ End of User configuration --------------
