@@ -292,10 +292,8 @@ long lastDisplayChange;
 
 void setup() {
 
-  /* Set up PINs*/
-#ifdef Seeeduino_XIAO_ATSAMD
-  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
+
+
 
   /* OLED SETUP */
 #ifdef OLED_SSD1306
@@ -330,6 +328,7 @@ void setup() {
   /* Set up the NeoPixel*/
   pixels.begin(); // This initializes the NeoPixel library.
 
+  /* Set up PINs*/
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD

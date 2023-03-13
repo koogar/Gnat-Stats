@@ -9,9 +9,8 @@
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
 
-
-
 //--------------------- OLED Setup --------------------------
+
 /* SSD1306 Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
 /* SH1106  Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
 
@@ -39,7 +38,6 @@
 /* Uncomment below, to take out small degree symbol for better spacing
    when hitting 100% cpu/gpu load the percent symbol gets clipped */
 //#define noDegree
-
 
 
 
@@ -91,7 +89,7 @@ String set_GPUram = "66";
 
 /* Enable the built in LED blinking when transmitting data,*/
 
-//#define enableTX_LED
+#define enableTX_LED
 
 int TX_LED_Delay = 100; // TX blink delay
 
