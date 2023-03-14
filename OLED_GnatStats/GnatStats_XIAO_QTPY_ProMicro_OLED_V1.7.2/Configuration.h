@@ -9,9 +9,8 @@
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
-//----------------------------------------------------------------------
-
 //#define ProMicro_32u4 // Unofficial Legacy update
+
 
 //--------------------- OLED Setup --------------------------
 
