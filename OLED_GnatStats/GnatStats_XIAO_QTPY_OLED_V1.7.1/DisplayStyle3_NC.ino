@@ -8,10 +8,10 @@
    CPU: Name /Temp /Big Frequency /
    GPU: Name /Temp /Big Frequency /VRAM Mhz
    RAM: System Memory Used
-   Requires HardwareSerialMonitor v 1.3
+   
 */
 
-void DisplayStyle3B() { //HSMv1.3
+void DisplayStyle3_NC() { 
   
 #ifdef OLED_SH1106
   display.setTextColor(SH110X_WHITE);
@@ -64,7 +64,7 @@ void DisplayStyle3B() { //HSMv1.3
 
     int cpuNameStart = inputString.indexOf("CPU:");
     if (inputString.indexOf("Intel", cpuNameStart) > -1) {
-      cpuNameStart = cpuNameStart + cpuNameStartLength;
+      cpuNameStart = cpuNameStart + cpuNameStartLength;;
     }
     else {
       cpuNameStart = cpuNameStart + 8;
@@ -75,7 +75,14 @@ void DisplayStyle3B() { //HSMv1.3
     }
     else
       cpuName = inputString.substring(cpuNameStart);
+
+    /* CPU Manual Name*/
+#ifdef Manual_cpuName
+    display.println(set_CPUname);
+#else
+    /* CPU Auto Detect Name*/
     display.println(cpuName);
+#endif
 
   }
   if (inputString.indexOf("GPU") > -1)
@@ -86,15 +93,21 @@ void DisplayStyle3B() { //HSMv1.3
     //display.setCursor(-41, 28); // Negative spacing so, Nvidia doesn't cause a rollover, on the next line
     int gpuNameStart = inputString.indexOf("GPU:");
     if (inputString.indexOf("NVIDIA", gpuNameStart) > -1) {
-      gpuNameStart = gpuNameStart + gpuNameStartLength;
+      gpuNameStart = gpuNameStart + gpuNameStartLength;;
     }
     else {
       gpuNameStart = gpuNameStart + 8;
     }
 
-
     int gpuNameEnd = inputString.indexOf("|", gpuNameStart);
+
+    /* GPU Manual Name*/
+#ifdef Manual_gpuName
+    String gpuName = set_GPUname; // Name spacing test
+#else
+    /* GPU Auto Detect Name*/
     String gpuName = inputString.substring(gpuNameStart, gpuNameEnd);
+#endif
     display.println(gpuName);
   }
 
@@ -192,7 +205,7 @@ void DisplayStyle3B() { //HSMv1.3
   //display.print(" P:");
   //display.print(gpuPowerString);
   //display.print("w");
-  
+
   /*GPU Memory Used Display*/
   display.print(" Used:");
   //display.print(gpuMemUsedSum);      //  show values in GB
@@ -201,7 +214,7 @@ void DisplayStyle3B() { //HSMv1.3
 
   /*GPU Core Temp Display*/
   display.setTextSize(1);
-  display.setCursor(105, 48);
+  display.setCursor(105, 47);
   display.print(gpuString1);
   display.setTextSize(1);
 

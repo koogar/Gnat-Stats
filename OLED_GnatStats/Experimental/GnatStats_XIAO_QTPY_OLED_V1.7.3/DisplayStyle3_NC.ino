@@ -8,10 +8,10 @@
    CPU: Name /Temp /Big Frequency /
    GPU: Name /Temp /Big Frequency /VRAM Mhz
    RAM: System Memory Used
-   Requires HardwareSerialMonitor v 1.3
+   
 */
 
-void DisplayStyle3_NC() { //HSMv1.3
+void DisplayStyle3_NC() { 
   
 #ifdef OLED_SH1106
   display.setTextColor(SH110X_WHITE);

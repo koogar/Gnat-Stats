@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.7.0"  // Code version number 
+#define CODE_VERS  "1.7.2"  // Code version number 
 
 /*
    _____ __  __ _         _            ___           _   ___ _        _
@@ -20,24 +20,28 @@
   UNO/NANO are not supported!!! use this sketch with Atmel 32u4 based boards such as, the Leonardo or ProMicro, due to to its native USB support.
   The Windows application "HardwareSerialMonitor v1.1 & V1.3"  uses the OpenHardwaremonitor  OpenHardwareMonitorLib.dll to detect the hardware.  http://openhardwaremonitor.org/
   The application will not detect integrated graphics as a GPU!!!
+  
+  Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
 
 
     Version 1.6
-                     : ATSAMD21 SH1106 Support experimental
+                     : ATSAMD21 SH1106 Support
 
     Version 1.6.1
                      : Add Display Dim SD1306 Only!! #define dim_Display // dim display
 
-    Version 1.7.0
+    Version 1.7.1
 
         Add support for:
                         XIAO NRF52840 / QT PY NRF52840(untested)
                         XIAO RP2040   / QT PY RP2040  (untested)
                         XIAO ESP32C3  / QT PY ESP32C3 (untested)
+                        
+   Version 1.7.2
 
+                     :Stuff
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
-    Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
 
    _    ___ ___ ___    _   ___ ___ ___ ___
   | |  |_ _| _ ) _ \  /_\ | _ \_ _| __/ __|
@@ -49,7 +53,6 @@
 
   Adafruit SSD1306 library
   https://github.com/adafruit/Adafruit_SSD1306
-
 
   SH1106 Library
   https://github.com/adafruit/Adafruit_SH110x
@@ -66,6 +69,7 @@
 
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+
 
 
   Board Manager XIAO Series
@@ -88,12 +92,13 @@
   https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
 
   XIAO ESP32C3
-  -----------
+  ------------
   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json
 
 
 
   Hookup Guide
+  ------------
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -106,7 +111,7 @@
 
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_GFX.h>
-#include "bitmap.h"
+#include "GnatStats_bitmap.h"
 #include "Configuration.h"
 
 /*--------------------------------------------------------------------------------------
@@ -208,6 +213,9 @@
 #define NEOPIN     D1
 #endif
 
+#ifdef ProMicro_32u4
+#define NEOPIN     10
+#endif
 
 #define NUMPIXELS  16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
@@ -237,6 +245,11 @@ Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET    -1   //   QT-PY / XIAO
+
+#ifdef ProMicro_32u4
+#define OLED_RESET    4  // ProMicro_32u4
+#endif
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
@@ -246,8 +259,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET    -1   //   QT-PY / XIAO
 
-#ifdef Seeeduino_XIAO_NRF52840
-#define OLED_RESET    4   //   QT-PY / XIAO
+#if defined(Seeeduino_XIAO_NRF52840) ^ defined(ProMicro_32u4)
+//#ifdef Seeeduino_XIAO_NRF52840
+#define OLED_RESET    4  // NRF52840 & ProMicro_32u4
 #endif
 
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -291,8 +305,6 @@ long lastDisplayChange;
 
 
 void setup() {
-
-
 
 
   /* OLED SETUP */
@@ -411,7 +423,7 @@ void loop() {
       displayChangeMode = 3;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
-    else if (displayChangeMode == 3) {
+    else if (displayChangeMode == 2) {
       displayChangeMode = 1;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
@@ -433,13 +445,13 @@ void loop() {
 
     if (displayChangeMode == 1) {
       DisplayStyle1_NC();
+      
     }
     else if (displayChangeMode == 2) {
       DisplayStyle2_NC ();
+      
     }
-    else if (displayChangeMode == 3) {
-      DisplayStyle3_NC ();
-    }
+  
 
     inputString = "";
     stringComplete = false;
@@ -607,8 +619,6 @@ void splashScreen() {
 
 #endif
 
-
-
   display.setTextSize(3);
   display.setCursor(58, 5);
   display.println("GNAT-");
@@ -634,8 +644,6 @@ void splashScreen() {
 #else
   display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
 #endif
-
-
 
   display.display();
 }

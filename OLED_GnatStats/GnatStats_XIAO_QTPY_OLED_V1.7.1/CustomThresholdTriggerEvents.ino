@@ -11,10 +11,7 @@
 
   Custom Trigger functions, when CPU or GPU threshold are met
 
-
 */
-
-
 
 // ------------------- CPU load / Temp Event  --------------------
 
