@@ -2,15 +2,17 @@
 //--------------------- MicroController Setup --------------------------
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
-
 #define Seeeduino_XIAO_ATSAMD
 //#define Adafruit_QTPY_ATSAMD
 //#define Seeeduino_XIAO_RP2040   // Adafruit QT PY RP2040  (untested)
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
-//#define ProMicro_32u4 // Unofficial Legacy update
+#define button_DisplayStyle // Use a button to change screens rather than timer
+//#define auto_DisplayStyle
 
+/* Debounce  Button,Sometimes it gets caught during a screen refresh and does not change*/
+int debounceButton = 1000; //  Use a 0.1uf/100nf/(104) ceramic capacitor from button Pin to GND
 
 //--------------------- OLED Setup --------------------------
 
@@ -76,6 +78,7 @@ String set_GPUram = "xx";
 
 //--------------------- Other Stuff ----------------------
 
+
 /* Enable the built in LED blinking when transmitting data,*/
 //#define enableTX_LED
 int TX_LED_Delay = 100; // TX blink delay
@@ -91,7 +94,7 @@ int TX_LED_Delay = 100; // TX blink delay
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
-int Serial_eventDelay = 15;
+int Serial_eventDelay = 5;
 int baud = 9600; //serial do not adjust
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>

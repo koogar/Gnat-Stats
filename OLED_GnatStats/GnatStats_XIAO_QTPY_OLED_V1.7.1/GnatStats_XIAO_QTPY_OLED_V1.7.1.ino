@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.7.2"  // Code version number 
+#define CODE_VERS  "1.7.1"  // Code version number 
 
 /*
    _____ __  __ _         _            ___           _   ___ _        _
@@ -20,7 +20,7 @@
   UNO/NANO are not supported!!! use this sketch with Atmel 32u4 based boards such as, the Leonardo or ProMicro, due to to its native USB support.
   The Windows application "HardwareSerialMonitor v1.1 & V1.3"  uses the OpenHardwaremonitor  OpenHardwareMonitorLib.dll to detect the hardware.  http://openhardwaremonitor.org/
   The application will not detect integrated graphics as a GPU!!!
-  
+
   Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
 
 
@@ -36,10 +36,7 @@
                         XIAO NRF52840 / QT PY NRF52840(untested)
                         XIAO RP2040   / QT PY RP2040  (untested)
                         XIAO ESP32C3  / QT PY ESP32C3 (untested)
-                        
-   Version 1.7.2
 
-                     :Stuff
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
 
@@ -111,7 +108,7 @@
 
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_GFX.h>
-#include "GnatStats_bitmap.h"
+#include "bitmap.h"
 #include "Configuration.h"
 
 /*--------------------------------------------------------------------------------------
@@ -136,7 +133,7 @@
   NeoPixel     : D1
   Built in NeoPixel: 11 Reference only!!
   OLED_RESET   : -1     Reference only!!
-  ----------------------------------
+  ---------------------
   XIAO Series  : SDA: D4, SCL: D5
   NeoPixel     : D1
   Built in LED : 13  Reference only!!
@@ -146,6 +143,10 @@
   NeoPixel     : 2 or 19
   Built in LED : 5   Reference only!!
   OLED_RESET   : -1  Reference only!!
+  ----------------------------------
+  STM32 BluePill: SDA: PB7, SCL: PB6
+  NeoPixel      : PA7 (MOSI)
+  OLED_RESET    : -1   Reference only!!
   ----------------------------------
   uVolume   :  SDA: D2, SCL: D3
   NeoPixel  :  D5
@@ -198,6 +199,7 @@
 #endif
 
 
+
 /* Neo Pixel Setup */
 
 #if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
@@ -208,9 +210,6 @@
 #define NEOPIN     D1
 #endif
 
-#ifdef ProMicro_32u4
-#define NEOPIN     10
-#endif
 
 #define NUMPIXELS  16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
@@ -240,11 +239,6 @@ Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET    -1   //   QT-PY / XIAO
-
-#ifdef ProMicro_32u4
-#define OLED_RESET    4  // ProMicro_32u4
-#endif
-
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
@@ -254,9 +248,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET    -1   //   QT-PY / XIAO
 
-#if defined(Seeeduino_XIAO_NRF52840) ^ defined(ProMicro_32u4)
-//#ifdef Seeeduino_XIAO_NRF52840
-#define OLED_RESET    4  // NRF52840 & ProMicro_32u4
+#ifdef Seeeduino_XIAO_NRF52840
+#define OLED_RESET    4   //   QT-PY / XIAO
 #endif
 
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -300,6 +293,8 @@ long lastDisplayChange;
 
 
 void setup() {
+
+
 
 
   /* OLED SETUP */
@@ -418,7 +413,7 @@ void loop() {
       displayChangeMode = 3;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
-    else if (displayChangeMode == 2) {
+    else if (displayChangeMode == 3) {
       displayChangeMode = 1;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
@@ -440,13 +435,14 @@ void loop() {
 
     if (displayChangeMode == 1) {
       DisplayStyle1_NC();
-      
+
     }
     else if (displayChangeMode == 2) {
       DisplayStyle2_NC ();
-      
     }
-  
+    else if (displayChangeMode == 3) {
+      DisplayStyle3_NC ();
+    }
 
     inputString = "";
     stringComplete = false;
@@ -623,7 +619,13 @@ void splashScreen() {
 
   //Set version to USB Serial
   display.setTextSize(1);
-  display.setCursor(66, 55);
+  display.setCursor(66, 47);
+  //display.print("Baud: ");
+  display.print (baud); display.println(".bit/s");
+
+  //Set version to USB Serial
+  display.setTextSize(1);
+  display.setCursor(66, 56);
   display.print("Ver: ");
   display.print (CODE_VERS);
 

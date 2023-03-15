@@ -9,9 +9,8 @@
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
-//----------------------------------------------------------------------
+//#define ProMicro_32u4           //'End of life' legacy update (due to memory size restrictions)
 
-//#define ProMicro_32u4 // Unofficial Legacy update
 
 //--------------------- OLED Setup --------------------------
 
@@ -22,7 +21,7 @@
 
 /*---------------- SSD1306 -------------*/
 #define OLED_SSD1306
-//#define dim_Display // dim display SD1306 Only!!!
+//#define dim_Display // dim display 25% SD1306 Only!!!
 
 /*---------------- SH1106 --------------*/
 //#define OLED_SH1106
@@ -51,16 +50,16 @@
 #define cpuNameStartLength 10
 #define gpuNameStartLength 18
 
-/* Manually set the CPU, GPU details*/
+/* Uncomment to Manually set the CPU, GPU details*/
 
 //#define Manual_cpuName
-String set_CPUname = "xxxxxxx";
+String set_CPUname = "MY CPU";
 
 //#define Manual_gpuName
-String set_GPUname = "xxxxxxx";
+String set_GPUname = "MY GPU";
 
 //#define Manual_gpuRam size in GB
-String set_GPUram = "xx";
+String set_GPUram = "24";
 
 //------------------ Threshold Triggers -------------------
 
@@ -70,10 +69,10 @@ String set_GPUram = "xx";
 #define neoBrightness 20
 
 /* User Custom  Triggers,*/
-#define enableCustomThesholdtriggers
+//#define enableCustomThesholdtriggers
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
-//#define enableNeopixelGauges //
+//#define enableNeopixelGauges 
 
 //--------------------- Other Stuff ----------------------
 
@@ -92,7 +91,7 @@ int TX_LED_Delay = 100; // TX blink delay
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
-int Serial_eventDelay = 15;
+int Serial_eventDelay = 0;
 int baud = 9600; //serial do not adjust
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>

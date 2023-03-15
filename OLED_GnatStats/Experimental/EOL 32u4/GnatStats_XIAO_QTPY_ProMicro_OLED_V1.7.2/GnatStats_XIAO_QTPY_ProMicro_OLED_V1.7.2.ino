@@ -37,9 +37,9 @@
                         XIAO RP2040   / QT PY RP2040  (untested)
                         XIAO ESP32C3  / QT PY ESP32C3 (untested)
                         
-   Version 1.7.2
-
-                     :Stuff
+    Version 1.7.2
+                        ProMicro_32u4 'End of life' legacy update (due to memory size restrictions)
+                        
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
 
@@ -136,7 +136,7 @@
   NeoPixel     : D1
   Built in NeoPixel: 11 Reference only!!
   OLED_RESET   : -1     Reference only!!
-  ---------------------
+  ----------------------------------
   XIAO Series  : SDA: D4, SCL: D5
   NeoPixel     : D1
   Built in LED : 13  Reference only!!
@@ -146,10 +146,6 @@
   NeoPixel     : 2 or 19
   Built in LED : 5   Reference only!!
   OLED_RESET   : -1  Reference only!!
-  ----------------------------------
-  STM32 BluePill: SDA: PB7, SCL: PB6
-  NeoPixel      : PA7 (MOSI)
-  OLED_RESET    : -1   Reference only!!
   ----------------------------------
   uVolume   :  SDA: D2, SCL: D3
   NeoPixel  :  D5
@@ -174,14 +170,14 @@
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD
-#define TX_LEDPin 13
+#define TX_LEDPin   13
 #endif
 
 /*onboard QT-PY NeoPixel for TX*/
 #ifdef Adafruit_QTPY_ATSAMD
-#define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
+#define TX_NeoPin   11  //Built in NeoPixel, on the QT-PY
 #else
-#define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
+#define TX_NeoPin   12  // Disable QT-PY built in Neopixel if you have a XIAO
 #endif
 
 #ifdef Seeeduino_XIAO_RP2040
@@ -200,7 +196,6 @@
 #endif
 
 #endif
-
 
 
 /* Neo Pixel Setup */
@@ -423,7 +418,7 @@ void loop() {
       displayChangeMode = 3;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
-    else if (displayChangeMode == 2) {
+    else if (displayChangeMode == 3) {
       displayChangeMode = 1;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
@@ -450,6 +445,9 @@ void loop() {
     else if (displayChangeMode == 2) {
       DisplayStyle2_NC ();
       
+    }
+     else if (displayChangeMode == 3) {
+      DisplayStyle3_NC ();
     }
   
 
@@ -625,10 +623,16 @@ void splashScreen() {
   display.setTextSize(2);
   display.setCursor(64, 30);
   display.println("STATS");
-
+  
   //Set version to USB Serial
   display.setTextSize(1);
-  display.setCursor(66, 55);
+  display.setCursor(66, 47);
+  //display.print("Baud: ");
+  display.print (baud); display.println(".bit/s");
+  
+  //Set version to USB Serial
+  display.setTextSize(1);
+  display.setCursor(66, 56);
   display.print("Ver: ");
   display.print (CODE_VERS);
 
