@@ -1,17 +1,19 @@
-# PC Hardware Performance Serial Display
  
-  #GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client  
-   Rupert Hirst & Colin Conway © 2016-2021
+  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client 
+   
+  Rupert Hirst & Colin Conway © 2016-2021
 
   http://tallmanlabs.com
   http://runawaybrainz.blogspot.com/  
-  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
+  https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
+  
+  Gnat-Stats SSD1306 OLED
 
-Gnat-Stats SSD1306 OLED
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
-https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+  Phat-Stats ILI9341 TFT
 
-![](https://github.com/koogar/Gnat-Stats/blob/master/OLED_GnatStats/images/3620111625420060746.png)
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
 
   Licence
   -------
@@ -33,3 +35,5 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; If not, see <http://www.gnu.org/licenses/>.
+
+

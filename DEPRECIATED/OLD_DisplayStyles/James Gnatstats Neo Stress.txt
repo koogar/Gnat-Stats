@@ -1,0 +1,48 @@
+
+James Bowen (Jimbob)
++Rupert Hirst Oh yeah,
+
+void allOff() {
+  for( int i = 0; i < NUMPIXELS; i++ ) {
+       pixels.setPixelColor(i, 0, 0, 0 );
+   }
+   //pixels.show();
+}
+
+void hot(int cpuUsage ){
+
+  allOff();
+  
+  float factor = cpuUsage ; 
+
+  if (factor >= 0 ){
+    pixels.setPixelColor(0, 229, 193, 0);
+  }
+  if (factor >= 12.5 ){
+    pixels.setPixelColor(1, 230, 165, 1);
+  }  
+  if (factor >= (12.5 * 2) ){
+    pixels.setPixelColor(2, 232, 137, 2);
+  }
+  if (factor >= (12.5 * 3) ){  
+    pixels.setPixelColor(3, 233, 110, 3);
+  }
+  if (factor >= (12.5 * 4) ){    
+    pixels.setPixelColor(4, 235, 82, 4);
+  }
+  if (factor >= (12.5 * 5) ){    
+    pixels.setPixelColor(5, 236, 55, 5);
+  }  
+  if (factor >= (12.5 * 6) ){    
+    pixels.setPixelColor(6, 238, 27, 6);
+  }  
+  if (factor >= (12.5 * 7) ){    
+    pixels.setPixelColor(7, 240, 0, 7);
+  }
+    
+  pixels.show();
+  
+}
+
+// Add this line to DisplayStyle1 LINE# ~128
+hot( cpuString2.toInt() );
