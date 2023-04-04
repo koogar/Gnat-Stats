@@ -19,7 +19,7 @@
   Licence
   -------
   
-  GPL v2
+  GPL v3
   
 Gnat-Stats, Phat-Stats & Hardware Serial Monitor 
 Copyright (C) 2016  Colin Conway, Rupert Hirst and contributors
