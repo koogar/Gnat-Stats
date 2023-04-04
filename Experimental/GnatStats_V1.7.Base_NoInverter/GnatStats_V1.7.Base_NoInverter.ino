@@ -1,12 +1,66 @@
 
 #define CODE_VERS  "1.7.Base"  // Code version number
+
+
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include "bitmap.h"
 #include "Setup.h"
 
+//--------------------- OLED Setup --------------------------
+
+/*Uncomment the correct OLED display type, uncomment only one display!!!*/
+
+/* SSD1306 Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
+/* SH1106  Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
+
+/*Flip the display:  0 or 2  (0, 180 degrees)*/
+#define rotateScreen 0
+
+/*---------------- SSD1306 -------------*/
+#define OLED_SSD1306
+//#define dim_Display // dim display SD1306 Only!!!
+
+/*---------------- SH1106 --------------*/
+//#define OLED_SH1106
+
+
+//--------------- Manual CPU/GPU Display Name Entry -------------------------
+
+/* Requires DisplayStyles ending in "_NC" (NameChange),*/
+/* Characters to delete from the start of the auto detected CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
+
+#define cpuNameStartLength 10
+#define gpuNameStartLength 18
+
+/* Manually set the CPU, GPU details*/
+
+//#define Manual_cpuName
+String set_CPUname = "xxxxxxx";
+
+//#define Manual_gpuName
+String set_GPUname = "xxxxxxx";
+
+//#define Manual_gpuRam size in GB
+String set_GPUram = "xx";
+//------------------------------------------------------------------------------
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
+int Serial_eventDelay = 15;
+int baud = 9600; //serial do not adjust
+
+/* Timer for active connection to host*/
+#define lastActiveDelay 6000
+
+
+/* Uncomment below, to take out small degree symbol for better spacing
+   when hitting 100% cpu/gpu load the percent symbol gets clipped */
+//#define noDegree
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //--------------------- Set i2c OLED address  --------------------------
+
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
 //#define i2c_Address 0x3d //initialize with the I2C addr 0x3D Typically Adafruit OLED's
@@ -34,22 +88,15 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-/* More OLED stuff*/
+/* OLED Screen */
 int oledDraw = 0;
 int oledOverride = 0;
-
-
-/* Inverted timers for oled*/
-long invertDelay    = 60000; 
-long lastInvertTime = 0;
-int invertedStatus  = 0;
 
 /* Timer for active connection to host*/
 boolean activeConn = false;
 long lastActiveConn = 0;
 //#define lastActiveDelay 30000
 boolean bootMode = true;
-
 
 /*vars for serial input*/
 String inputString = "";
@@ -100,6 +147,7 @@ void loop() {
 
   /*Serial stuff*/
   serialEvent();
+
   activityChecker();
 
   //>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -119,21 +167,18 @@ void loop() {
     lastActiveConn = millis();
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     /* DRAW STATS Function */
     DisplayStyle1_NC ();
+
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     inputString = "";
     stringComplete = false;
 
-    /* Keep running anti screen burn, whilst serial is active */
-    if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
-      lastInvertTime = millis();
+    // Keep running function continuously
+    if (oledDraw == 1 && !serialEvent) {
 
-#ifdef enableInvertscreen
-      /* Anti Screen Burn */
-      inverter();
-#endif
 
     }
   }
@@ -179,43 +224,19 @@ void activityChecker() {
   else
     activeConn = true;
   if (!activeConn) {
-    if (invertedStatus)
 
-      //Turn off display when there is no activity
-      display.invertDisplay(0);
     display.clearDisplay();
     display.display();
 
     //Experimental,  attempt to stop intermittent screen flicker when in no activity mode "screen off" (due to inverter function?) fill the screen 128x64 black rectangle
     display.fillRect(0, 0, 128, 64, BLACK);
     display.display();
-    oledDraw = 0;
 
+    oledDraw = 0;
 
   }
 }
 
-//-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
-
-
-void antiBurn() {
-  display.invertDisplay(0);
-  display.fillRect(0, 0, 128, 64, BLACK);
-  display.display();
-  oledDraw = 0;
-
-}
-
-
-void inverter() {
-  if ( invertedStatus == 1 ) {
-    invertedStatus = 0;
-  } else {
-    invertedStatus = 1;
-  };
-  display.invertDisplay(invertedStatus);
-  display.display();
-}
 
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 

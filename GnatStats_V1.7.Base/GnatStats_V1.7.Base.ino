@@ -1,5 +1,76 @@
 
 #define CODE_VERS  "1.7.Base"  // Code version number
+
+/*
+
+   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   Rupert Hirst & Colin Conway © 2016-2023
+
+   http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
+   https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
+
+
+  Libraries
+  -------- -
+  Adafruit Neopixel
+  https://github.com/adafruit/Adafruit_NeoPixel
+
+  Adafruit SSD1306 library
+  https://github.com/adafruit/Adafruit_SSD1306
+
+  SH1106 Library
+  https://github.com/adafruit/Adafruit_SH110x
+
+  Adafruit GFX Library
+  https://github.com/adafruit/Adafruit-GFX-Library // latest version is required for SH1106 Support
+  https://github.com/adafruit/Adafruit_BusIO       // latest version is required for SH1106 Support
+
+
+
+  Board Manager QY - PY ATSAMD
+  --------------------------
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+
+  Install Arduino ATSAMD then ADD
+  https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+
+
+
+  Board Manager XIAO Series
+  --------------------------
+  https://wiki.seeedstudio.com/Seeeduino-XIAO/
+
+
+  Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+
+  XIAO ATSAMD21
+  ------------ -
+  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+
+  XIAO NRF52840
+  ------------ -
+  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+
+  XIAO RP2040
+  ---------- -
+  https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+
+  XIAO ESP32C3
+  ------------
+  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json
+
+
+
+  Hookup Guide
+  ------------
+  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  SEE SETUP TAB FIRST, FOR QUICK SETTINGS!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+*/
+
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include "bitmap.h"
@@ -38,22 +109,22 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 int oledDraw = 0;
 int oledOverride = 0;
 
-
-/* Inverted timers for oled*/
-long invertDelay    = 60000; 
-long lastInvertTime = 0;
-int invertedStatus  = 0;
-
 /* Timer for active connection to host*/
 boolean activeConn = false;
 long lastActiveConn = 0;
 //#define lastActiveDelay 30000
 boolean bootMode = true;
 
-
 /*vars for serial input*/
 String inputString = "";
 boolean stringComplete = false;
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Inverted timers for oled*/
+long invertDelay    = 10000;
+long lastInvertTime = 0;
+int invertedStatus  = 0;
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -126,18 +197,26 @@ void loop() {
     inputString = "";
     stringComplete = false;
 
+#ifdef enableInvertscreen
     /* Keep running anti screen burn, whilst serial is active */
     if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
       lastInvertTime = millis();
 
-#ifdef enableInvertscreen
+
       /* Anti Screen Burn */
       inverter();
+
+#else
+
+    if (oledDraw == 1 && !serialEvent) {
+      // Keep running function continuously
+
 #endif
 
     }
   }
 }
+
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>END of Main Loop>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -179,10 +258,15 @@ void activityChecker() {
   else
     activeConn = true;
   if (!activeConn) {
-    if (invertedStatus)
 
-      //Turn off display when there is no activity
+    //!!!!!Careful of extra auto insertion "}" above here compile will fail!!!!!
+#ifdef enableInvertscreen
+    if (invertedStatus)
       display.invertDisplay(0);
+#endif
+
+
+    //Turn off display when there is no activity
     display.clearDisplay();
     display.display();
 
@@ -197,7 +281,7 @@ void activityChecker() {
 
 //-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
 
-
+#ifdef enableInvertscreen
 void antiBurn() {
   display.invertDisplay(0);
   display.fillRect(0, 0, 128, 64, BLACK);
@@ -216,6 +300,7 @@ void inverter() {
   display.invertDisplay(invertedStatus);
   display.display();
 }
+#endif
 
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 

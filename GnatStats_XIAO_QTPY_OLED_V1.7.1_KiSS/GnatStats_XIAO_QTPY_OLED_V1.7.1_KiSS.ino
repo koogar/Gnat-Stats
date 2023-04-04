@@ -225,15 +225,7 @@ int baud = 9600; //serial do not adjust
 /* More OLED stuff*/
 int oledDraw = 0;
 int oledOverride = 0;
-//----------------------
-/* Inverted timers for oled*/
-long invertDelay = 60000; // 60 sec  delay
-long lastInvertTime = 0;
-int invertedStatus = 1;
-//----------------------
-/* Debounce timers for buttons  /// lastDebounceTime = millis();*/
-long lastDebounceTime = 0;
-long debounceDelay = 3000;
+
 //----------------------
 
 /* Timer for active connection to host*/
@@ -257,8 +249,6 @@ long lastDisplayChange;
 
 
 void setup() {
-
-
 
 
   /* OLED SETUP */
@@ -397,15 +387,12 @@ void loop() {
 
     inputString = "";
     stringComplete = false;
+    
+// Keep running function continuously
+    if (oledDraw == 1 && !serialEvent) {
+      
 
 
-    /* Keep running anti screen burn, whilst serial is active */
-    if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
-      lastInvertTime = millis();
-
-#ifdef enableInvertscreen
-      inverter();
-#endif
     }
   }
 }
@@ -471,44 +458,24 @@ void serialEvent() {
 
 void activityChecker() {
   if (millis() - lastActiveConn > lastActiveDelay)
+
     activeConn = false;
   else
     activeConn = true;
   if (!activeConn) {
-    if (invertedStatus)
 
-      //Turn off display when there is no activity
-      display.invertDisplay(0);
     display.clearDisplay();
     display.display();
 
     //Experimental,  attempt to stop intermittent screen flicker when in no activity mode "screen off" (due to inverter function?) fill the screen 128x64 black rectangle
     display.fillRect(0, 0, 128, 64, BLACK);
     display.display();
-    oledDraw = 0;
 
+    oledDraw = 0;
 
   }
 }
 
-//-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
-
-void antiBurn() {
-  display.invertDisplay(0);
-  display.fillRect(0, 0, 128, 64, BLACK);
-  display.display();
-  oledDraw = 0;
-}
-
-void inverter() {
-  if ( invertedStatus == 1 ) {
-    invertedStatus = 0;
-  } else {
-    invertedStatus = 1;
-  };
-  display.invertDisplay(invertedStatus);
-  display.display();
-}
 
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 void splashScreen() {

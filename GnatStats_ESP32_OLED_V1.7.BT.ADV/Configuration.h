@@ -19,9 +19,6 @@
 /*Uncomment to enable BT, else default to USB serial only,*/
 //#define enable_BT
 
-/*Uncomment to enable BT and USB serial,*/
-#define enable_DualSerialEvent
-
 //-------------------------------- DISCLAIMER -------------------------------------------
 /*
   !!!THE WEMOS LOLIN32, NOT LIMITED TO, APPEARS TO HAVE NO "UNDERVOLTAGE PROTECTION"
@@ -113,6 +110,9 @@ String set_GPUram = "66";
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
 #define enableActivityChecker
+
+/* Anti Screen Burn */
+//#define enableInvertscreen
 
 /* Time between "DisplayStyle" changes */
 #define displayChangeDelay 18000

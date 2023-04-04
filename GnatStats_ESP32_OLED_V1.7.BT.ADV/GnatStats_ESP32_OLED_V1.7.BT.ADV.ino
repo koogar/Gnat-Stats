@@ -2,7 +2,7 @@
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #define device_BT "TallmanLabs_BT"
-#define CODE_VERS  "1.5.2BT"  // Code version number 
+#define CODE_VERS  "1.7.BT"  // Code version number 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 /*
@@ -147,7 +147,6 @@
 
 BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 
-
 //------------------ End of User configuration --------------
 
 /* TX LED indicator,*/
@@ -201,14 +200,6 @@ Adafruit_SH1106_ESP32 display(OLED_SDA, OLED_SCL);
 int oledDraw = 0;
 int oledOverride = 0;
 
-//----------------------
-
-/* Inverted timers for oled*/
-long invertDelay = 60000; // 60 sec  delay
-long lastInvertTime = 0;
-int invertedStatus = 1;
-
-//----------------------
 
 /* Debounce timers for buttons  /// lastDebounceTime = millis();*/
 long lastDebounceTime = 0;
@@ -237,6 +228,12 @@ long lastDisplayChange;
 
 //----------------------
 
+/* Inverted timers for oled*/
+long invertDelay = 60000; // 60 sec  delay
+long lastInvertTime = 0;
+int invertedStatus = 1;
+
+//----------------------
 
 
 /* ___ ___ _____ _   _ ___
@@ -377,12 +374,20 @@ void loop() {
     stringComplete = false;
 
 
+#ifdef enableInvertscreen
     /* Keep running anti screen burn, whilst serial is active */
     if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
       lastInvertTime = millis();
 
-#ifdef enableInvertscreen
+
+      /* Anti Screen Burn */
       inverter();
+
+#else
+    // Keep running function continuously
+    if (oledDraw == 1 && !serialEvent) {
+
+
 #endif
     }
   }
@@ -459,10 +464,13 @@ void activityChecker() {
   else
     activeConn = true;
   if (!activeConn) {
-    if (invertedStatus)
+    //!!!!!Careful of extra auto insertion "}" above here compile will fail!!!!!
+#ifdef enableInvertscreen
 
-      //Turn off display when there is no activity
+    if (invertedStatus)
       display.invertDisplay(0);
+#endif
+
     display.clearDisplay();
     display.display();
 
@@ -478,7 +486,7 @@ void activityChecker() {
 }
 
 //------------ Anti Screen Burn inverter ---------------
-
+#ifdef enableInvertscreen
 void antiBurn() {
   display.invertDisplay(0);
   display.fillRect(0, 0, 128, 64, BLACK);
@@ -495,7 +503,7 @@ void inverter() {
   display.invertDisplay(invertedStatus);
   display.display();
 }
-
+#endif
 //----------------- Splash Screens -------------------
 void splashScreen() {
 

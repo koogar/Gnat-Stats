@@ -1,3 +1,19 @@
+/*
+   _____ __  __ _         _            ___           _   ___ _        _
+  |_   _|  \/  | |   __ _| |__ ______ / __|_ _  __ _| |_/ __| |_ __ _| |_ ___
+    | | | |\/| | |__/ _` | '_ (_-<___| (_ | ' \/ _` |  _\__ \  _/ _` |  _(_-<
+    |_| |_|  |_|____\__,_|_.__/__/    \___|_||_\__,_|\__|___/\__\__,_|\__/__/
+
+   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   Rupert Hirst © 2016-2023
+
+   http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
+   https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
+   
+
+   Licence
+   -------
+   GPL v3*/
 
 //--------------------- OLED Setup --------------------------
 
@@ -15,7 +31,6 @@
 
 /*---------------- SH1106 --------------*/
 //#define OLED_SH1106
-
 
 //--------------- Manual CPU/GPU Display Name Entry -------------------------
 
@@ -36,7 +51,9 @@ String set_GPUname = "xxxxxxx";
 //#define Manual_gpuRam size in GB
 String set_GPUram = "xx";
 //------------------------------------------------------------------------------
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
 int Serial_eventDelay = 15;
 int baud = 9600; //serial do not adjust

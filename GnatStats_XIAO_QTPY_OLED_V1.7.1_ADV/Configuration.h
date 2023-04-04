@@ -47,7 +47,7 @@
 /*Flip the display:  0 or 2  (0, 180 degrees)*/
 #define rotateScreen 2
 
-/* Uncomment below, to enable positive and negative screen cycler */
+/* Anti Screen Burn */
 //#define enableInvertscreen
 
 /* Uncomment below, to take out small degree symbol for better spacing
