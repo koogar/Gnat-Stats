@@ -1,5 +1,4 @@
- 
-    ![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
+![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
   
   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client 
    
