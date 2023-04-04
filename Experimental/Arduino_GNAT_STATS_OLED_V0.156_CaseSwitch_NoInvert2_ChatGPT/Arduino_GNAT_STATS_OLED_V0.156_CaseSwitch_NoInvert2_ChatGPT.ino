@@ -39,12 +39,13 @@
 
 /* OLED setup*/
 #define SSD1306_128_64
-#define OLED_RESET -1 //4
+#define OLED_RESET -1
 
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 
 /* More OLED stuff*/
 int oledDraw = 0;
@@ -57,6 +58,9 @@ long lastActiveConn = 0;
 #define lastActiveDelay 8000
 boolean bootMode = true;
 
+/*vars for serial input*/
+String inputString = "";
+boolean stringComplete = false;
 
 /* Neo Pixel Setup */
 #define NEOPIN         5
@@ -71,22 +75,34 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KH
 #define RED       0xFF0000
 #define BLACK     0x000000 // OFF
 
-// Button pin
-int counter   = 0;
-int switchPin = 1;
+//-----------------Button ISR-----------------------------------
+const int buttonPin = 1; //use a 10k resistor see at the bottom
 
-/*vars for serial input*/
-String inputString = "";
-boolean stringComplete = false;
+// Define debounce time in milliseconds
+const int debounceDelay = 50;
+
+// Variables to track button state and timing
+bool buttonState = HIGH;
+bool lastButtonState = HIGH;
+unsigned long lastDebounceTime = 0;
+//--------------------------------------------------------------
+
+
 
 //]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 void setup() {
+
+
   /* Serial setup, start serial port at 9600 bps and wait for port to open:*/
   Serial.begin(9600);
   inputString.reserve(200);
 
-  pinMode(switchPin, INPUT_PULLUP);
+  //-----------------Button ISR-----------------------------------
+  // Set up button pin as input with pull-up resistor
+  pinMode(buttonPin, INPUT_PULLUP);
+  //attachInterrupt(digitalPinToInterrupt(buttonPin), buttonInterrupt, FALLING);
+  //---------------------------------------------------------------
 
 
   /* OLED SETUP */
@@ -104,17 +120,11 @@ void setup() {
 
 
   /* Set up the NeoPixel*/
-  //pixels.begin(); // This initializes the NeoPixel library.
   pixels.setBrightness(100); // Global Brightness
   pixels.show(); // Turn off all Pixels
 
-  /* Set up the NeoPixel Strip* /
-    strip.begin();
-    strip.setBrightness(25); // Global Brightness
-    strip.show(); // Initialize all pixels to 'off'
 
-
-    /*Initial Load screen*/
+  /*Initial Load screen*/
   //splashScreenA();   //Uses more memory
   //splashScreenB();  //Uses less memory
   //splashScreenC();    //Uses less memory
@@ -129,62 +139,71 @@ void setup() {
 void loop() {
 
 
+  /* Serial stuff*/
+  //serialEvent();
+  //activityChecker();
+  
+  // Read the current button state
+  buttonState = digitalRead(buttonPin);
 
-  //Handle input
-  int switchVal = digitalRead(switchPin);
-  if (switchVal == LOW)
-  {
-    delay(10);
-    counter ++;
-    //Reset count if over max mode number
-    if (counter == 4)
-    {
-      counter = 0;
+
+  // Check if the button state has changed and if enough time has passed since last debounce
+  if (buttonState != lastButtonState && (millis() - lastDebounceTime) > debounceDelay) {
+    // Reset debounce timer
+ 
+    lastDebounceTime = millis();
+
+    // Update last button state
+    lastButtonState = buttonState;
+
+    // Check if button is pressed (buttonState is LOW due to pull-up resistor)
+    if (buttonState == LOW) {
+      // Switch between different cases
+      static int caseNum = 1;
+      switch (caseNum) {
+
+
+        case 1:
+          DisplayStyle1 ();
+          pixels.setPixelColor(0, RED);
+          pixels.show(); // This sends the updated pixel color to the hardware
+          caseNum = 2;
+          break;
+
+        case 2:
+          DisplayStyle2 ();
+          pixels.setPixelColor(0, GREEN);
+          pixels.show(); // This sends the updated pixel color to the hardware
+          caseNum = 3;
+          break;
+
+        case 3:
+          DisplayStyle3 ();
+          pixels.setPixelColor(0, BLUE);
+          pixels.show(); // This sends the updated pixel color to the hardware
+          caseNum = 1;
+          break;
+
+        default:
+          DisplayStyle1 ();
+          pixels.setPixelColor(0, BLACK);
+          pixels.show(); // This sends the updated pixel color to the hardware
+          caseNum = 1;
+          break;
+
+      }
+
     }
   }
-
-  else
-    //Change mode
-    switch (counter) {
-
-
-      case 1:
-        DisplayStyle1 ();
-        pixels.setPixelColor(0, RED);
-        pixels.show(); // This sends the updated pixel color to the hardware
-        //counter = 2;
-
-        break;
-
-      case 2:
-        DisplayStyle2 ();
-        pixels.setPixelColor(0, GREEN);
-        pixels.show(); // This sends the updated pixel color to the hardware
-        //counter = 3;
-        break;
-
-      case 3:
-        DisplayStyle3 ();
-        pixels.setPixelColor(0, BLUE);
-        pixels.show(); // This sends the updated pixel color to the hardware
-        //counter = 1;
-        break;
-
-      default:
-        DisplayStyle1 ();
-        pixels.setPixelColor(0, RED);
-        pixels.show(); // This sends the updated pixel color to the hardware
-        //counter = 1;
-        break;
-
-
-    }
 }
 
 //END of Main Loop
 
+void buttonInterrupt() {
+  // Set buttonPressed flag to indicate that the button has been pressed
+  //buttonPressed = true;
 
-
+}
 //--------------------------------------------------------------------------------------------------------
 
 void serialEvent() {
@@ -200,9 +219,9 @@ void serialEvent() {
 
     }
 
-
   }
 }
+
 void activityChecker() {
   if (millis() - lastActiveConn > lastActiveDelay)
     activeConn = false;

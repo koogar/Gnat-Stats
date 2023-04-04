@@ -1,50 +1,17 @@
-#define CODE_VERS  "1.7.1"  // Code version number 
+#define CODE_VERS  "1.7.1.ADV"  // Code version number 
 
 /*
-   _____ __  __ _         _            ___           _   ___ _        _
-  |_   _|  \/  | |   __ _| |__ ______ / __|_ _  __ _| |_/ __| |_ __ _| |_ ___
-    | | | |\/| | |__/ _` | '_ (_-<___| (_ | ' \/ _` |  _\__ \  _/ _` |  _(_-<
-    |_| |_|  |_|____\__,_|_.__/__/    \___|_||_\__,_|\__|___/\__\__,_|\__/__/
 
    uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst & Colin Conway © 2016-2018
+   Rupert Hirst & Colin Conway © 2016-2023
 
-   http://tallmanlabs.com
-   http://runawaybrainz.blogspot.com/
-
-   Licence
-   -------
-   GPL v2
-
-  Notes:
-  UNO/NANO are not supported!!! use this sketch with Atmel 32u4 based boards such as, the Leonardo or ProMicro, due to to its native USB support.
-  The Windows application "HardwareSerialMonitor v1.1 & V1.3"  uses the OpenHardwaremonitor  OpenHardwareMonitorLib.dll to detect the hardware.  http://openhardwaremonitor.org/
-  The application will not detect integrated graphics as a GPU!!!
-
-  Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
+   http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
+   https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
 
 
-    Version 1.6
-                     : ATSAMD21 SH1106 Support
 
-    Version 1.6.1
-                     : Add Display Dim SD1306 Only!! #define dim_Display // dim display
-
-    Version 1.7.1
-
-        Add support for:
-                        XIAO NRF52840 / QT PY NRF52840(untested)
-                        XIAO RP2040   / QT PY RP2040  (untested)
-                        XIAO ESP32C3  / QT PY ESP32C3 (untested)
-
-    ---------------------------------------------------------------
-  ASCII: http://patorjk.com/software/taag/
-
-   _    ___ ___ ___    _   ___ ___ ___ ___
-  | |  |_ _| _ ) _ \  /_\ | _ \_ _| __/ __|
-  | |__ | || _ \   / / _ \|   /| || _|\__ \
-  |____|___|___/_|_\/_/ \_\_|_\___|___|___/
-
+  Libraries
+  -------- -
   Adafruit Neopixel
   https://github.com/adafruit/Adafruit_NeoPixel
 
@@ -60,7 +27,7 @@
 
 
 
-  Board Manager QY-PY ATSAMD
+  Board Manager QY - PY ATSAMD
   --------------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
 
@@ -77,15 +44,15 @@
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
 
   XIAO ATSAMD21
-  -------------
+  ------------ -
   https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
 
   XIAO NRF52840
-  -------------
+  ------------ -
   https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
 
   XIAO RP2040
-  -----------
+  ---------- -
   https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
 
   XIAO ESP32C3
@@ -99,19 +66,20 @@
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
+  SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-*/
-#include <SPI.h>
-#include <Wire.h>
+  */
+  
+  #include <SPI.h>
+  #include <Wire.h>
 
-#include <Adafruit_NeoPixel.h>
-#include <Adafruit_GFX.h>
-#include "bitmap.h"
-#include "Configuration.h"
+  #include <Adafruit_NeoPixel.h>
+  #include <Adafruit_GFX.h>
+  #include "bitmap.h"
+  #include "Configuration.h"
 
-/*--------------------------------------------------------------------------------------
+  /*--------------------------------------------------------------------------------------
     ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
    / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
   | (_| (_) | .` | _| | | (_ | |_| |   / / _ \| |  | | (_) | .` |
@@ -203,11 +171,11 @@
 /* Neo Pixel Setup */
 
 #if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
-#define NEOPIN      1
+#define NEOPIN      6
 #endif
 
 #if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
-#define NEOPIN     D1
+#define NEOPIN     D6
 #endif
 
 
@@ -267,9 +235,10 @@ long invertDelay = 60000; // 60 sec  delay
 long lastInvertTime = 0;
 int invertedStatus = 1;
 //----------------------
+
 /* Debounce timers for buttons  /// lastDebounceTime = millis();*/
-long lastDebounceTime = 0;
-long debounceDelay = 3000;
+//long lastDebounceTime = 0;
+//long debounceDelay = 3000;
 //----------------------
 
 /* Timer for active connection to host*/

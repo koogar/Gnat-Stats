@@ -115,10 +115,10 @@ void setup() {
 
 
     /*Initial Load screen*/
-  //splashScreenA();   //Uses more memory
+  splashScreenA();   //Uses more memory
   //splashScreenB();  //Uses less memory
   //splashScreenC();    //Uses less memory
-  splashScreenD();  //Uses least memory
+  //splashScreenD();  //Uses least memory
 
 }
 
@@ -199,10 +199,10 @@ void serialEvent() {
       display.display();
 
     }
-
-
   }
 }
+
+
 void activityChecker() {
   if (millis() - lastActiveConn > lastActiveDelay)
     activeConn = false;

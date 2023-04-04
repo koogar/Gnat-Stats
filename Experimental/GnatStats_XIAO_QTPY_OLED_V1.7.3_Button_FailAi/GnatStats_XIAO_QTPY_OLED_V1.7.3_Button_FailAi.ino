@@ -257,6 +257,7 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 #endif
 
 
+
 //----------------------
 /* More OLED stuff*/
 int oledDraw = 0;
@@ -271,19 +272,27 @@ int invertedStatus  = 1;
 /* Debounce timers for buttons  /// lastDebounceTime = millis();*/
 #if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
 /* Mode Button pin*/
-int mode_Button       = 1;
+const int buttonPin = 1; //use a 10k resistor see at the bottom#endif
 #endif
-
 //----------------------------
 
 #if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
 /* Mode Button pin*/
-int mode_Button       = D1;
+const int buttonPin = 1; //use a 10k resistor see at the bottom#endif
 #endif
 //----------------------
 
-int display_Button_counter = 0;
 
+// Define debounce time in milliseconds
+const int debounceDelay = 50;
+
+// Variables to track button state and timing
+bool buttonState = HIGH;
+bool lastButtonState = HIGH;
+unsigned long lastDebounceTime = 0;
+
+//---------------------------------------------------------
+int display_Button_counter = 0;
 
 /* Timer for active connection to host*/
 boolean activeConn = false;
@@ -329,7 +338,7 @@ void setup() {
   display.clearDisplay();
   display.setTextColor(WHITE);
 
- display.clearDisplay();
+  display.clearDisplay();
 
   /* stops text wrapping*/
   display.setTextWrap(false); // Stop  "Loads/Temps" wrapping and corrupting static characters
@@ -340,7 +349,7 @@ void setup() {
   inputString.reserve(200);
 
   /* Set up PINs*/
-  pinMode(mode_Button, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT_PULLUP);
 
   /* Set up the NeoPixel*/
   pixels.begin(); // This initializes the NeoPixel library.
@@ -429,57 +438,29 @@ void loop() {
     }
 
     lastActiveConn = millis();
-
+button_ISR ();
   }
 
-  int display_ButtonVal = digitalRead(mode_Button);
-  if (display_ButtonVal == LOW)
+  ////////////////////
 
-
+  
   {
-    delay(debounceButton); // Debounce Button
-    display_Button_counter ++;
-
-    /* Clear Screen*/
-    display.fillRect(0, 0, 128 , 64, BLACK);
-    display.display();
 
 
-    /* Reset count if over max mode number, */
-    if (display_Button_counter == 2) // Number of screens available when button pressed
-    {
-      display_Button_counter = 0;
-    }
-  }
+  
 
-  else
+    inputString = "";
+    stringComplete = false;
 
-    /* Change Mode */
-    switch (display_Button_counter) {
-
-      case 0: // 1st SCREEN
-        DisplayStyle1_NC ();
-        break;
-
-      case 1: // 2nd SCREEN
-
-        DisplayStyle2_NC ();
-
-        break;
-
-
-        inputString = "";
-        stringComplete = false;
-
-        /* Keep running anti screen burn, whilst serial is active */
-        if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
-          lastInvertTime = millis();
+    /* Keep running anti screen burn, whilst serial is active */
+    if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
+      lastInvertTime = millis();
 
 #ifdef enableInvertscreen
-          inverter();
+      inverter();
 #endif
-        }
     }
+  }
 }
 
 //>>>>>>>>>>>>>>>>>>> Auto Change >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

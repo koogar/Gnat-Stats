@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.7.3"  // Code version number 
+#define CODE_VERS  "1.4.1"  // Code version number 
 
 /*
    _____ __  __ _         _            ___           _   ___ _        _
@@ -21,24 +21,38 @@
   The Windows application "HardwareSerialMonitor v1.1 & V1.3"  uses the OpenHardwaremonitor  OpenHardwareMonitorLib.dll to detect the hardware.  http://openhardwaremonitor.org/
   The application will not detect integrated graphics as a GPU!!!
 
-  Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
+    Version 1     : Initial release
+    Version 1.1   : Fix intermittent screen flicker when in no activity mode "screen off" (due to inverter function?) fill the screen 128x64 black rectangle during this time.
+    Version 1.2   : Fix Freeze screen issue
+    Version 1.2.1 : Top Config option to disable/enable positive/negative screen cycle
 
+    Move HSMonitor(v1.1) to .Net 4.6.2
 
-    Version 1.6
-                     : ATSAMD21 SH1106 Support
+    Version 1.3   : Option to trigger an event at a given CPU or GPU threshold eg: LED indicator at 100% CPU Load.
+                    Top Config option to disable all pre-selected power/gnd pins on Arduino pins D4 and D5 when not powering OLED from ProMicro
+                    Top Config option to disable/enable "activitychecker" (Enable blank screen on serial timeout eg: PC powered down,
+                    Disable to retain last sampled info eg: PC crash or overclocking diagnostics)
 
-    Version 1.6.1
-                     : Add Display Dim SD1306 Only!! #define dim_Display // dim display
+    Version 1.31   : MOVE CONFLICTING!!! NEOPIXEL PIN TO 10 (32u4)
 
-    Version 1.7.1
+    Version 1.32   : Add screen height/width definitions for updated Adafruit SSD1306 library
+                   Clean up some code for clearing boxes not needed for OLED
 
-        Add support for:
-                        XIAO NRF52840 / QT PY NRF52840(untested)
-                        XIAO RP2040   / QT PY RP2040  (untested)
-                        XIAO ESP32C3  / QT PY ESP32C3 (untested)
+    Version 1.33  : Add i2c Address change option
+                    Add RotateScreen option
+                    Add Neopixel Global Brightness
+
+  Move HSMonitor(v1.3)
+
+    Version 1.4   : Add Some HardwareSerialMonitor v1.3 Features
+
+  Move HSMonitor(v1.4) Change Baud rate to 115200
+
+    Version 1.4.1  : Change Baud rate to 115200
 
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
+    Arduino UNO/NANO/MINI ETC. (Atmel ATMega 328 Chips) are not supported, Please don't ask!!!
 
    _    ___ ___ ___    _   ___ ___ ___ ___
   | |  |_ _| _ ) _ \  /_\ | _ \_ _| __/ __|
@@ -52,64 +66,36 @@
   https://github.com/adafruit/Adafruit_SSD1306
 
   SH1106 Library
-  https://github.com/adafruit/Adafruit_SH110x
+  Not supported on the ATSAMD!!!
 
   Adafruit GFX Library
-  https://github.com/adafruit/Adafruit-GFX-Library // latest version is required for SH1106 Support
-  https://github.com/adafruit/Adafruit_BusIO       // latest version is required for SH1106 Support
+  https://github.com/adafruit/Adafruit-GFX-Library
 
-
-
-  Board Manager QY-PY ATSAMD
-  --------------------------
+  Board Manager QY-PY
+  -------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
 
   Install Arduino ATSAMD then ADD
   https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
 
+  Drivers
+  ------------
+  https://github.com/adafruit/Adafruit_Windows_Drivers/releases/tag/2.5.0.0
 
-
-  Board Manager XIAO Series
-  --------------------------
+  Board Manager XIAO
+  -------------------
   https://wiki.seeedstudio.com/Seeeduino-XIAO/
 
-
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
+  https://files.seeedstudio.com/arduino/package_seeeduino_board
 
-  XIAO ATSAMD21
-  -------------
-  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
-
-  XIAO NRF52840
-  -------------
-  https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
-
-  XIAO RP2040
-  -----------
-  https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
-
-  XIAO ESP32C3
-  ------------
-  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json
-
-
-
-  Hookup Guide
-  ------------
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
-
-  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
-  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 */
 #include <SPI.h>
 #include <Wire.h>
-
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_GFX.h>
 #include "bitmap.h"
-#include "Configuration.h"
 
 /*--------------------------------------------------------------------------------------
     ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
@@ -122,7 +108,7 @@
     \___/|_|   |_| |___\___/|_|\_|___/
 
   ----------------------------------
-  Pins Reference
+    Pins Reference
   ----------------------------------
   ProMicro  : SDA: D2, SCL: D3
   Leonardo  : SDA: D2, SCL: D3
@@ -130,12 +116,12 @@
   OLED_RESET: 4   Reference only!!
   ----------------------------------
   QT-PY        : SDA: D4, SCL: D5
-  NeoPixel     : D1
+  NeoPixel     : A3
   Built in NeoPixel: 11 Reference only!!
   OLED_RESET   : -1     Reference only!!
   ---------------------
-  XIAO Series  : SDA: D4, SCL: D5
-  NeoPixel     : D1
+  XIAO         : SDA: D4, SCL: D5
+  NeoPixel     : A1
   Built in LED : 13  Reference only!!
   OLED_RESET   : -1  Reference only!!
   ----------------------------------
@@ -152,73 +138,78 @@
   NeoPixel  :  D5
   OLED_RESET:  4  Reference only!!
   ----------------------------------
+  */
 
 
-  Onboard LED's
-  -------------
-  XIAO  (NRF52840) Built in LED      =  11     (*Not Required for Reference only!!!)
-  XIAO  (RP2040)   Built in LED      =  25     (*Not Required for Reference only!!!)
-  XIAO  (ATSAMD21) Built in LED      =  13     (*Not Required for Reference only!!!)
-  QT-PY (ATSAMD21) Built in LED      =         (None on the QT-PY)
+//----------------------------------- OLED Setup ----------------------------------------
+/*Uncomment the correct Micro type, uncomment only one!!!*/
+/* Adafruit QT-PY*/
+//#define QTPY   // uncomment to disable QT-PY built in Neopixel if you have a XIAO
 
-  QT-PY (ATSAMD21) Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
+/* Seeeduino XIAO,*/
+#define XIAO
 
-*/
+/*Uncomment the correct OLED display type, uncomment only one!!!*/
+#define OLED_SSD1306
+
+/* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
+#define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
+//#define i2c_Address 0x3d //initialize with the I2C addr 0x3D Typically Adafruit OLED's
+
+/*Rotate the display at the start:  0 or 2  (0, 180 degrees)*/
+#define rotateScreen 0
+
+/* Uncomment below, to enable positive and negative screen cycler */
+//#define enableInvertscreen
+
+/* Uncomment below, to take out small degree symbol for better spacing
+   when hitting 100% cpu/gpu load the percent symbol gets clipped */
+//#define noDegree
+
+//--------------------------------- Threshold Triggers ---------------------------------------
+/* Uncomment below, to enable custom threshold event triggers*/
+
+/* User Custom  Triggers,*/
+//#define enableCustomThesholdtriggers
+
+/* Gnat-Tacho, NeoPixel ring bargraph example,*/
+//#define enableNeopixelGauges //
+
+/* uVolume only,*/
+//#define uVol_enableThesholdtriggers
+
+//------------------------------------- Other Stuff --------------------------------------------
+
+/* Global NeoPixel Brightness,*/
+#define neoBrightness 30
+
+/* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
+#define enableActivityChecker
+
+/* Time between "DisplayStyle" changes */
+#define displayChangeDelay 18000
+
+/* Timer for active connection to host*/
+#define lastActiveDelay 10000
 
 //------------------------------------ End of User configuration ---------------------------------
-
 /* Seeeduino XIAO TX LED indicator,*/
-#ifdef enableTX_LED
-
-#ifdef Seeeduino_XIAO_ATSAMD
+#ifdef XIAO
 #define TX_LEDPin 13
 #endif
 
 /*onboard QT-PY NeoPixel for TX*/
-#ifdef Adafruit_QTPY_ATSAMD
+#ifdef QTPY
 #define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
 #else
 #define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
 #endif
 
-#ifdef Seeeduino_XIAO_RP2040
-/*onboard XIAO BUILD in LED for TX*/
-#define TX_LEDPin   25
-#endif
-
-#ifdef Adafruit_QTPY_ATSAMD
-/*onboard QT-PY NeoPixel for TX*/
-#define TX_NeoPin   11  //
-#endif
-
-#ifdef Seeeduino_XIAO_NRF52840
-/*onboard XIAO BUILD in LED for TX*/
-#define TX_LEDPin   11
-#endif
-
-#endif
-
-
-
 /* Neo Pixel Setup */
-
-#if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
-#define NEOPIN      6
-#endif
-
-#if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
-#define NEOPIN     D6
-#endif
-
-
-#define NUMPIXELS  16
+#define NEOPIN         1
+#define NUMPIXELS      16
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
-
-#ifdef enableTX_LED
-#ifdef Adafruit_QTPY_ATSAMD
 Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
-#endif
-#endif
 
 /* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
 #define BLUE       0x0000FF
@@ -238,24 +229,9 @@ Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
 #define SSD1306_128_64
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET    -1   //   QT-PY / XIAO
+#define OLED_RESET -1   //   QT-PY / XIAO
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
-
-#ifdef OLED_SH1106
-#include <Adafruit_SH110X.h>
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET    -1   //   QT-PY / XIAO
-
-#ifdef Seeeduino_XIAO_NRF52840
-#define OLED_RESET    4   //   QT-PY / XIAO
-#endif
-
-Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
-#endif
-
 
 //----------------------
 /* More OLED stuff*/
@@ -263,27 +239,17 @@ int oledDraw = 0;
 int oledOverride = 0;
 //----------------------
 /* Inverted timers for oled*/
-long invertDelay    = 60000; // 60 sec  delay
+long invertDelay = 60000; // 60 sec  delay
 long lastInvertTime = 0;
-int invertedStatus  = 1;
+int invertedStatus = 1;
 //----------------------
-
 /* Debounce timers for buttons  /// lastDebounceTime = millis();*/
-#if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
-/* Mode Button pin*/
-int mode_Button       = 1;
-#endif
-
-//----------------------------
-
-#if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
-/* Mode Button pin*/
-int mode_Button       = D1;
-#endif
+long lastDebounceTime = 0;
+long debounceDelay = 3000;
 //----------------------
-
-int display_Button_counter = 0;
-
+/* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
+int Serial_eventDelay = 0;
+int baud = 115200; //serial do not adjust
 
 /* Timer for active connection to host*/
 boolean activeConn = false;
@@ -307,66 +273,35 @@ long lastDisplayChange;
 
 void setup() {
 
-
+  /* Set up PINs*/
+#ifdef XIAO
+  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#endif
 
   /* OLED SETUP */
 #ifdef OLED_SSD1306
   display.begin(SSD1306_SWITCHCAPVCC, i2c_Address); // initialize with the I2C addr 0x3D (for the 128x64
-
-#ifdef dim_Display
-  display.dim (true);
 #endif
-#endif
-
-#ifdef OLED_SH1106
-  display.begin(i2c_Address, true); // Address 0x3C default
-#ifdef dim_Display
-  //display.dim (true);
-#endif
-#endif
-
 
   display.clearDisplay();
   display.setTextColor(WHITE);
 
- display.clearDisplay();
+  display.setRotation(rotateScreen);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+  display.clearDisplay();
 
   /* stops text wrapping*/
   display.setTextWrap(false); // Stop  "Loads/Temps" wrapping and corrupting static characters
 
   /* Serial setup, start serial port at 9600 bps and wait for port to open:*/
   Serial.begin(baud); // 32u4 USB Serial Baud Rate
-
   inputString.reserve(200);
-
-  /* Set up PINs*/
-  pinMode(mode_Button, INPUT_PULLUP);
 
   /* Set up the NeoPixel*/
   pixels.begin(); // This initializes the NeoPixel library.
 
-  /* Set up PINs*/
-#ifdef enableTX_LED
-
-#ifdef Seeeduino_XIAO_ATSAMD
-  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
+#ifdef QTPY
+  TX_pixel.begin();  // This initializes the NeoPixel library.
 #endif
-
-#ifdef Adafruit_QTPY_ATSAMD
-  TX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
-#endif
-
-#ifdef Seeeduino_XIAO_RP2040
-  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
-
-#ifdef Seeeduino_XIAO_NRF52840
-  pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
-
-#endif
-
-
 
   pixels.setBrightness(neoBrightness); // Global Brightness
   pixels.show(); // Turn off all Pixels
@@ -393,30 +328,36 @@ void loop() {
   activityChecker();
 #endif
 
-#ifdef enableTX_LED
 
-#ifdef Seeeduino_XIAO_ATSAMD
-  /*Serial Activity LED */
+#ifdef XIAO
+  /*XIAO Serial Activity LED */
   digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
 #endif
 
-#ifdef Seeeduino_XIAO_RP2040
-  /*Serial Activity LED */
-  digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
-#endif
-
-#ifdef Adafruit_QTPY_ATSAMD
-  /* Serial Activity NeoPixel */
+#ifdef QTPY
+  /* QY-PY Serial Activity NeoPixel */
   TX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
   TX_pixel.show();
 #endif
 
-#ifdef Seeeduino_XIAO_NRF52840
-  /*Serial Activity LED */
-  pinMode(TX_LEDPin, HIGH); //  Builtin LED /  HIGH(OFF) LOW (ON)
-#endif
-#endif
-  //>>>>>>>>>>>>>>>>>>> Button Change >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  /*change display screen*/
+  if ((millis() - lastDisplayChange) > displayChangeDelay)
+  {
+    if (displayChangeMode == 1) {
+      displayChangeMode = 2;
+      display.fillRect(0, 0, 128 , 64, BLACK);
+    }
+    else if (displayChangeMode == 2) {
+      displayChangeMode = 3;
+      display.fillRect(0, 0, 128 , 64, BLACK);
+    }
+    else if (displayChangeMode == 3) {
+      displayChangeMode = 1;
+      display.fillRect(0, 0, 128 , 64, BLACK);
+    }
+
+    lastDisplayChange = millis();
+  }
 
   /* OLED DRAW STATS */
   if (stringComplete) {
@@ -430,64 +371,30 @@ void loop() {
 
     lastActiveConn = millis();
 
-  }
-
-  int display_ButtonVal = digitalRead(mode_Button);
-  if (display_ButtonVal == LOW)
-
-
-  {
-    delay(debounceButton); // Debounce Button
-    display_Button_counter ++;
-
-    /* Clear Screen*/
-    display.fillRect(0, 0, 128 , 64, BLACK);
-    display.display();
-
-
-    /* Reset count if over max mode number, */
-    if (display_Button_counter == 2) // Number of screens available when button pressed
-    {
-      display_Button_counter = 0;
+    if (displayChangeMode == 1) {
+      DisplayStyle1B();
     }
-  }
+    else if (displayChangeMode == 2) {
+      DisplayStyle2 ();
+    }
+    else if (displayChangeMode == 3) {
+      DisplayStyle3B ();
+    }
 
-  else
-
-    /* Change Mode */
-    switch (display_Button_counter) {
-
-      case 0: // 1st SCREEN
-        DisplayStyle1_NC ();
-        break;
-
-      case 1: // 2nd SCREEN
-
-        DisplayStyle2_NC ();
-
-        break;
+    inputString = "";
+    stringComplete = false;
 
 
-        inputString = "";
-        stringComplete = false;
-
-        /* Keep running anti screen burn, whilst serial is active */
-        if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
-          lastInvertTime = millis();
+    /* Keep running anti screen burn, whilst serial is active */
+    if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
+      lastInvertTime = millis();
 
 #ifdef enableInvertscreen
-          inverter();
+      inverter();
 #endif
-        }
     }
+  }
 }
-
-//>>>>>>>>>>>>>>>>>>> Auto Change >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-
-//***********************************************************************
-
 
 //END of Main Loop
 
@@ -497,36 +404,13 @@ void loop() {
   | _|| |_| | .` | (__  | |  | | (_) | .` \__ \
   |_|  \___/|_|\_|\___| |_| |___\___/|_|\_|___/*/
 
-//----------------  NeoPixel Reset ------------------
+//-------------------------------------------  NeoPixel Reset -------------------------------------------------------------
 
 void allNeoPixelsOff() {
   for ( int i = 0; i < NUMPIXELS; i++ ) {
     pixels.setPixelColor(i, 0, 0, 0 );
   }
   //pixels.show();
-}
-
-//----------------  NeoPixels RGB  -------------------
-
-void allNeoPixelsRED() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 255, 0, 0 );
-  }
-  pixels.show();
-}
-
-void allNeoPixelsGREEN() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 0, 255, 0 );
-  }
-  pixels.show();
-}
-
-void allNeoPixelsBLUE() {
-  for ( int i = 0; i < NUMPIXELS; i++ ) {
-    pixels.setPixelColor(i, 0, 0, 255 );
-  }
-  pixels.show();
 }
 
 //-------------------------------------------  Serial Events -------------------------------------------------------------
@@ -547,36 +431,17 @@ void serialEvent() {
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
 
-#ifdef enableTX_LED
-
-      /* Serial Activity LED */
-#ifdef Seeeduino_XIAO_ATSAMD
+#ifdef XIAO
+      /* XIAO Serial Activity LED */
       digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
 #endif
-#endif
 
-#ifdef Seeeduino_XIAO_RP2040
-#ifdef enableTX_LED
-      //USER LED GREEN
-      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-#endif
-#endif
 
-#ifdef enableTX_LED
-#ifdef Adafruit_QTPY_ATSAMD
-      TX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+#ifdef QTPY
+      /* QT-PY Serial Activity NeoPixel */
+      TX_pixel.setPixelColor(0, 0, 0, 10 ); // turn built in NeoPixel on
       TX_pixel.show();
 #endif
-#endif
-
-#ifdef enableTX_LED
-      /* Serial Activity LED */
-#ifdef Seeeduino_XIAO_NRF52840
-      digitalWrite(TX_LEDPin, LOW);   // turn the LED off HIGH(OFF) LOW (ON)
-#endif
-#endif
-
-      delay(TX_LED_Delay); // TX blink delay
 
     }
   }
@@ -628,18 +493,7 @@ void inverter() {
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 void splashScreen() {
 
-#ifdef OLED_SH1106
-  display.setTextColor(SH110X_WHITE);
-#endif
-
-
-#ifdef OLED_SH1106
-  display.drawBitmap(0, 0, JustGnatBMP, 64, 64, SH110X_WHITE);
-#else
   display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
-
-#endif
-
   display.setTextSize(3);
   display.setCursor(58, 5);
   display.println("GNAT-");
@@ -649,14 +503,8 @@ void splashScreen() {
 
   //Set version to USB Serial
   display.setTextSize(1);
-  display.setCursor(66, 47);
-  //display.print("Baud: ");
-  display.print (baud); display.println(".bit/s");
-
-  //Set version to USB Serial
-  display.setTextSize(1);
-  display.setCursor(66, 56);
-  display.print("Ver: ");
+  display.setCursor(68, 55);
+  display.print("USB:v");
   display.print (CODE_VERS);
 
   display.display();
@@ -665,12 +513,8 @@ void splashScreen() {
   display.display();
 
   // USB Serial Screen
+  //display.startscrollleft(0x00, 0x0F);
 
-#ifdef OLED_SH1106
-  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, SH110X_WHITE);
-#else
   display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
-#endif
-
   display.display();
 }
