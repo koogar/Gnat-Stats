@@ -76,6 +76,18 @@
 #include "bitmap.h"
 #include "Setup.h"
 
+/* Declare Prototype voids to the compiler*/
+void DisplayStyle1_NC ();
+void DisplayStyle2_NC ();
+void DisplayStyle3_NC ();
+void autoMode ();
+void buttonMode ();
+void inverter();
+void serialEvent();
+void activityChecker();
+void splashScreen();
+void antiBurn();
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //--------------------- Set i2c OLED address  --------------------------
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/

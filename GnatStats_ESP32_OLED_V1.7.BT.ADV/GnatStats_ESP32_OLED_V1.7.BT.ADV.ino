@@ -147,6 +147,19 @@
 
 BluetoothSerial SerialBT;    // Bluetooth Classic, not BLE
 
+/* Declare Prototype voids to the compiler*/
+void DisplayStyle1_NC ();
+void DisplayStyle2_NC ();
+void DisplayStyle3_NC ();
+void DisplayStyle4GPU_NC ();
+void autoMode ();
+void buttonMode ();
+void inverter();
+void serialEvent();
+void serialBTEvent();
+void activityChecker();
+void splashScreen();
+void antiBurn();
 //------------------ End of User configuration --------------
 
 /* TX LED indicator,*/

@@ -23,7 +23,7 @@
 /* SH1106  Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
 
 /*Flip the display:  0 or 2  (0, 180 degrees)*/
-#define rotateScreen 0
+#define rotateScreen 2
 
 /*---------------- SSD1306 -------------*/
 #define OLED_SSD1306
