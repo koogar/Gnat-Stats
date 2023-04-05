@@ -1,7 +1,8 @@
- 
+![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
+  
   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client 
    
-  Rupert Hirst & Colin Conway © 2016-2021
+  Rupert Hirst  © 2016-2023
 
   http://tallmanlabs.com
   http://runawaybrainz.blogspot.com/  
@@ -18,7 +19,7 @@
   Licence
   -------
   
-  GPL v2
+  GPL v3
   
 Gnat-Stats, Phat-Stats & Hardware Serial Monitor 
 Copyright (C) 2016  Colin Conway, Rupert Hirst and contributors
