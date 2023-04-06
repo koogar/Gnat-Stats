@@ -9,7 +9,8 @@
 
    http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
    https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
-   
+
+
    Licence
    -------
    GPL v3*/
@@ -24,12 +25,6 @@
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
 
-//--------------------- OLED Setup --------------------------
-
-/* SSD1306 Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
-/* SH1106  Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
-
-/*Uncomment the correct OLED display type, uncomment only one display!!!*/
 /*---------------- SSD1306 -------------*/
 #define OLED_SSD1306
 //#define dim_Display // dim display SD1306 Only!!!
@@ -37,14 +32,13 @@
 /*---------------- SH1106 --------------*/
 //#define OLED_SH1106
 
+/*Flip the display:  0 or 2  (0, 180 degrees)*/
+#define rotateScreen 2
+
 //--------------------- Set i2c OLED address  --------------------------
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
 #define i2c_Address 0x3c //initialize with the I2C addr 0x3C Typically eBay OLED's
 //#define i2c_Address 0x3d //initialize with the I2C addr 0x3D Typically Adafruit OLED's
-
-/*Flip the display:  0 or 2  (0, 180 degrees)*/
-#define rotateScreen 2
-
 
 //--------------- Manual CPU/GPU Display Name Entry -------------------------
 
@@ -65,7 +59,45 @@ String set_GPUname = "xxxxxxx";
 String set_GPUram = "xx";
 
 
-//------------------ End of User configuration --------------
+/* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
+#define enableActivityChecker
+
+
+/* Timer for active connection to host*/
+#define lastActiveDelay 6000
+
+/* Enable button to change screens else use auto timer change*/
+#define enable_buttonMode
+int deBounce = 350;
+
+/* Time between "DisplayStyle" changes */
+#define displayChangeDelay 18000
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
+int Serial_eventDelay = 0;
+int baud = 9600; //serial do not adjust
+
+//------------------ Threshold Triggers -------------------
+
+/* Uncomment below, to enable custom threshold event triggers*/
+
+/* Global NeoPixel Brightness,*/
+#define neoBrightness 20
+
+/* User Custom  Triggers,*/
+//#define enableCustomThesholdtriggers
+
+/* Gnat-Tacho, NeoPixel ring bargraph example,*/
+//#define enableNeopixelGauges //
+
+/* Enable the built in LED blinking when transmitting data,*/
+//#define enableTX_LED
+int TX_LED_Delay = 10; // TX blink delay
+
+/* uVolume only,*/
+//#define uVol_enableThesholdtriggers
+
 
 //---------------------------------------------- Versions ------------------------------------
 

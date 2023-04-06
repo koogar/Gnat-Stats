@@ -9,7 +9,7 @@
 
    http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
    https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
-   
+
 
    Licence
    -------
@@ -47,8 +47,6 @@
 /*Flip the display:  0 or 2  (0, 180 degrees)*/
 #define rotateScreen 2
 
-/* Anti Screen Burn */
-//#define enableInvertscreen
 
 /* Uncomment below, to take out small degree symbol for better spacing
    when hitting 100% cpu/gpu load the percent symbol gets clipped */
@@ -82,16 +80,22 @@ String set_GPUram = "xx";
 #define neoBrightness 20
 
 /* User Custom  Triggers,*/
-#define enableCustomThesholdtriggers
+//#define enableCustomThesholdtriggers
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
-#define enableNeopixelGauges //
+//#define enableNeopixelGauges //
 
+/* uVolume only,*/
+//#define uVol_enableThesholdtriggers
 //--------------------- Other Stuff ----------------------
+
+/* Enable button to change screens else use auto timer change*/
+#define enable_buttonMode
+int deBounce = 350;
 
 /* Enable the built in LED blinking when transmitting data,*/
 #define enableTX_LED
-int TX_LED_Delay = 100; // TX blink delay
+int TX_LED_Delay = 10; // TX blink delay
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
 #define enableActivityChecker
@@ -103,17 +107,16 @@ int TX_LED_Delay = 100; // TX blink delay
 #define lastActiveDelay 6000
 
 /* Anti Screen Burn */
-//#define enableInvertscreen 
+//#define enableInvertscreen // broken
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
-int Serial_eventDelay = 15;
-int baud = 9600; //serial do not adjust
+/* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 0 will do*/
+int Serial_eventDelay = 0; //serial do not adjust
+int baud = 9600;           //serial do not adjust
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-/* uVolume only,*/
-//#define uVol_enableThesholdtriggers
+
 
 //---------------------------------------------- Versions ------------------------------------
 

@@ -1,15 +1,17 @@
-#define CODE_VERS  "1.7.1.KiSS"  // Code version number 
+#define CODE_VERS  "1.8.0.ADV"  // Code version number 
 
 /*
-  uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst © 2016-2023
+
+   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+   Rupert Hirst & Colin Conway © 2016-2023
 
    http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
    https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
 
 
+
   Libraries
-  ---------
+  -------- -
   Adafruit Neopixel
   https://github.com/adafruit/Adafruit_NeoPixel
 
@@ -24,8 +26,7 @@
   https://github.com/adafruit/Adafruit_BusIO       // latest version is required for SH1106 Support
 
 
-
-  Board Manager QY-PY ATSAMD
+  Board Manager QY - PY ATSAMD
   --------------------------
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
 
@@ -42,15 +43,15 @@
   Click on File > Preference, and fill Additional Boards Manager URLs with the url below:
 
   XIAO ATSAMD21
-  -------------
+  ------------ -
   https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
 
   XIAO NRF52840
-  -------------
+  ------------ -
   https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
 
   XIAO RP2040
-  -----------
+  ---------- -
   https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
 
   XIAO ESP32C3
@@ -64,26 +65,39 @@
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-               SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
+  SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 */
+
 #include <SPI.h>
 #include <Wire.h>
 
+#include <Adafruit_NeoPixel.h>
 #include <Adafruit_GFX.h>
 #include "bitmap.h"
 #include "Configuration.h"
 
+/* Declare Prototype voids to the compiler*/
+void DisplayStyle1_NC ();
+void DisplayStyle2_NC ();
+void DisplayStyle3_NC ();
+void autoMode ();
+void buttonMode ();
+void inverter();
+void serialEvent();
+void activityChecker();
+void splashScreen();
+void antiBurn();
 /*--------------------------------------------------------------------------------------
-    ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
-   / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
+  ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
+  / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
   | (_| (_) | .` | _| | | (_ | |_| |   / / _ \| |  | | (_) | .` |
-   \___\___/|_|\_|_| |___\___|\___/|_|_\/_/ \_\_| |___\___/|_|\_|
-     ___  ___ _____ ___ ___  _  _ ___
-    / _ \| _ \_   _|_ _/ _ \| \| / __|
-   | (_) |  _/ | |  | | (_) | .` \__ \
-    \___/|_|   |_| |___\___/|_|\_|___/
+  \___\___/|_|\_|_| |___\___|\___/|_|_\/_/ \_\_| |___\___/|_|\_|
+   ___  ___ _____ ___ ___  _  _ ___
+  / _ \| _ \_   _|_ _/ _ \| \| / __|
+  | (_) |  _/ | |  | | (_) | .` \__ \
+  \___/|_|   |_| |___\___/|_|\_|___/
 
   ----------------------------------
   Pins Reference
@@ -129,7 +143,7 @@
 
 */
 
-
+//------------------------------------ End of User configuration ---------------------------------
 
 /* Seeeduino XIAO TX LED indicator,*/
 #ifdef enableTX_LED
@@ -164,6 +178,36 @@
 
 
 
+/* Neo Pixel Setup */
+
+#if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
+#define NEOPIN      6
+#endif
+
+#if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
+#define NEOPIN     D6
+#endif
+
+
+#define NUMPIXELS  16
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
+
+#ifdef enableTX_LED
+#ifdef Adafruit_QTPY_ATSAMD
+Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
+#endif
+#endif
+
+/* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
+#define BLUE       0x0000FF
+#define GREEN      0x008000
+#define RED        0xFF0000
+#define ORANGE     0xFFA500
+#define DARKORANGE 0xFF8C00
+#define YELLOW     0xFFFF00
+#define WHITE      0xFFFFFF
+#define BLACK      0x000000 // OFF
+
 //--------------------------------------------------------------------------------------
 
 /*SSD1306 OLED setup*/
@@ -190,42 +234,11 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 #endif
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>> Moved from Config settings >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-/* Uncomment below, to enable positive and negative screen cycler */
-//#define enableInvertscreen
-
-/* Uncomment below, to take out small degree symbol for better spacing
-   when hitting 100% cpu/gpu load the percent symbol gets clipped */
-//#define noDegree
-
-
-/* Time between "DisplayStyle" changes */
-#define displayChangeDelay 18000
-
-/* Enable the built in LED blinking when transmitting data,*/
-#define enableTX_LED
-int TX_LED_Delay = 100; // TX blink delay
-
-
-/* Timer for active connection to host*/
-#define lastActiveDelay 6000
-
-/* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
-#define enableActivityChecker
-
-/* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 5 will do*/
-
-int Serial_eventDelay = 15;
-int baud = 9600; //serial do not adjust
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //----------------------
 /* More OLED stuff*/
 int oledDraw = 0;
 int oledOverride = 0;
-
 //----------------------
 
 /* Timer for active connection to host*/
@@ -242,6 +255,19 @@ int displayChangeMode = 1;
 long lastDisplayChange;
 //----------------------
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Inverted timers for oled*/
+long invertDelay    = 100000;
+long lastInvertTime = 0;
+int  invertedStatus = 0;
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+// Button pin
+int counter   = 0;
+int switchPin = 1; // MCU_PIN ____[--0--]___ GND
+
+
 /* ___ ___ _____ _   _ ___
   / __| __|_   _| | | | _ \
   \__ \ _|  | | | |_| |  _/
@@ -250,6 +276,7 @@ long lastDisplayChange;
 
 void setup() {
 
+  pinMode(switchPin, INPUT_PULLUP);
 
   /* OLED SETUP */
 #ifdef OLED_SSD1306
@@ -281,7 +308,8 @@ void setup() {
   Serial.begin(baud); // 32u4 USB Serial Baud Rate
   inputString.reserve(200);
 
-
+  /* Set up the NeoPixel*/
+  pixels.begin(); // This initializes the NeoPixel library.
 
   /* Set up PINs*/
 #ifdef enableTX_LED
@@ -290,6 +318,9 @@ void setup() {
   pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
 #endif
 
+#ifdef Adafruit_QTPY_ATSAMD
+  TX_pixel.begin();  // This initializes the library for the Built in NeoPixel.
+#endif
 
 #ifdef Seeeduino_XIAO_RP2040
   pinMode(TX_LEDPin, OUTPUT); //  Builtin LED /  HIGH(OFF) LOW (ON)
@@ -300,6 +331,10 @@ void setup() {
 #endif
 
 #endif
+
+
+  pixels.setBrightness(neoBrightness); // Global Brightness
+  pixels.show(); // Turn off all Pixels
 
   /*Initial Load screen*/
   splashScreen();
@@ -323,6 +358,12 @@ void loop() {
   activityChecker();
 #endif
 
+#ifdef enable_buttonMode
+  buttonMode();
+#else
+  autoMode();
+#endif
+
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD
@@ -335,6 +376,11 @@ void loop() {
   digitalWrite(TX_LEDPin, HIGH);    // turn the LED off HIGH(OFF) LOW (ON)
 #endif
 
+#ifdef Adafruit_QTPY_ATSAMD
+  /* Serial Activity NeoPixel */
+  TX_pixel.setPixelColor(0, 0, 0, 0 ); // turn built in NeoPixel Off
+  TX_pixel.show();
+#endif
 
 #ifdef Seeeduino_XIAO_NRF52840
   /*Serial Activity LED */
@@ -342,60 +388,12 @@ void loop() {
 #endif
 #endif
 
-
-  /*change display screen*/
-  if ((millis() - lastDisplayChange) > displayChangeDelay)
-  {
-    if (displayChangeMode == 1) {
-      displayChangeMode = 2;
-      display.fillRect(0, 0, 128 , 64, BLACK);
-    }
-    else if (displayChangeMode == 2) {
-      displayChangeMode = 3;
-      display.fillRect(0, 0, 128 , 64, BLACK);
-    }
-    else if (displayChangeMode == 3) {
-      displayChangeMode = 1;
-      display.fillRect(0, 0, 128 , 64, BLACK);
-    }
-
-    lastDisplayChange = millis();
-  }
-
-  /* OLED DRAW STATS */
-  if (stringComplete) {
-
-    if (bootMode) {
-      display.clearDisplay();
-      display.display();
-      //display.stopscroll();
-      bootMode = false;
-    }
-
-    lastActiveConn = millis();
-
-    if (displayChangeMode == 1) {
-      DisplayStyle1_NC();
-
-    }
-    else if (displayChangeMode == 2) {
-      DisplayStyle2_NC ();
-    }
-    else if (displayChangeMode == 3) {
-      DisplayStyle3_NC ();
-    }
-
-    inputString = "";
-    stringComplete = false;
-    
-// Keep running function continuously
-    if (oledDraw == 1 && !serialEvent) {
-      
+  //=============================================================================
 
 
-    }
-  }
+
 }
+
 
 //END of Main Loop
 
@@ -405,8 +403,37 @@ void loop() {
   | _|| |_| | .` | (__  | |  | | (_) | .` \__ \
   |_|  \___/|_|\_|\___| |_| |___\___/|_|\_|___/*/
 
+//----------------  NeoPixel Reset ------------------
 
+void allNeoPixelsOff() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 0 );
+  }
+  //pixels.show();
+}
 
+//----------------  NeoPixels RGB  -------------------
+
+void allNeoPixelsRED() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 255, 0, 0 );
+  }
+  pixels.show();
+}
+
+void allNeoPixelsGREEN() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 255, 0 );
+  }
+  pixels.show();
+}
+
+void allNeoPixelsBLUE() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 255 );
+  }
+  pixels.show();
+}
 
 //-------------------------------------------  Serial Events -------------------------------------------------------------
 
@@ -441,7 +468,12 @@ void serialEvent() {
 #endif
 #endif
 
-
+#ifdef enableTX_LED
+#ifdef Adafruit_QTPY_ATSAMD
+      TX_pixel.setPixelColor(0, 10, 0, 0 ); // turn built in NeoPixel on
+      TX_pixel.show();
+#endif
+#endif
 
 #ifdef enableTX_LED
       /* Serial Activity LED */
@@ -458,11 +490,16 @@ void serialEvent() {
 
 void activityChecker() {
   if (millis() - lastActiveConn > lastActiveDelay)
-
     activeConn = false;
   else
     activeConn = true;
   if (!activeConn) {
+    //!!!!!Careful of extra auto insertion "}" above here compile will fail!!!!!
+#ifdef enableInvertscreen
+
+    if (invertedStatus)
+      display.invertDisplay(0);
+#endif
 
     display.clearDisplay();
     display.display();
@@ -470,12 +507,33 @@ void activityChecker() {
     //Experimental,  attempt to stop intermittent screen flicker when in no activity mode "screen off" (due to inverter function?) fill the screen 128x64 black rectangle
     display.fillRect(0, 0, 128, 64, BLACK);
     display.display();
+    //oledDraw = 0;
 
-    oledDraw = 0;
-
+    //Turn off NeoPixel when there is no activity
+    allNeoPixelsOff();
+    pixels.show();
   }
 }
 
+//-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
+#ifdef enableInvertscreen
+void antiBurn() {
+  display.invertDisplay(0);
+  display.fillRect(0, 0, 128, 64, BLACK);
+  display.display();
+  oledDraw = 0;
+}
+
+void inverter() {
+  if ( invertedStatus == 1 ) {
+    invertedStatus = 0;
+  } else {
+    invertedStatus = 1;
+  };
+  display.invertDisplay(invertedStatus);
+  display.display();
+}
+#endif
 
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 void splashScreen() {

@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.7.1.ADV"  // Code version number 
+#define CODE_VERS  "1.8.0.ADV"  // Code version number 
 
 /*
 
@@ -24,7 +24,6 @@
   Adafruit GFX Library
   https://github.com/adafruit/Adafruit-GFX-Library // latest version is required for SH1106 Support
   https://github.com/adafruit/Adafruit_BusIO       // latest version is required for SH1106 Support
-
 
 
   Board Manager QY - PY ATSAMD
@@ -79,6 +78,17 @@
 #include "bitmap.h"
 #include "Configuration.h"
 
+/* Declare Prototype voids to the compiler*/
+void DisplayStyle1_NC ();
+void DisplayStyle2_NC ();
+void DisplayStyle3_NC ();
+void autoMode ();
+void buttonMode ();
+void inverter();
+void serialEvent();
+void activityChecker();
+void splashScreen();
+void antiBurn();
 /*--------------------------------------------------------------------------------------
   ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
   / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
@@ -249,8 +259,13 @@ long lastDisplayChange;
 /* Inverted timers for oled*/
 long invertDelay    = 100000;
 long lastInvertTime = 0;
-int invertedStatus  = 0;
+int  invertedStatus = 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+// Button pin
+int counter   = 0;
+int switchPin = 1; // MCU_PIN ____[--0--]___ GND
 
 
 /* ___ ___ _____ _   _ ___
@@ -261,6 +276,7 @@ int invertedStatus  = 0;
 
 void setup() {
 
+  pinMode(switchPin, INPUT_PULLUP);
 
   /* OLED SETUP */
 #ifdef OLED_SSD1306
@@ -342,6 +358,12 @@ void loop() {
   activityChecker();
 #endif
 
+#ifdef enable_buttonMode
+  buttonMode();
+#else
+  autoMode();
+#endif
+
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD
@@ -366,72 +388,12 @@ void loop() {
 #endif
 #endif
 
-
-  /*change display screen*/
-  if ((millis() - lastDisplayChange) > displayChangeDelay)
-  {
-    if (displayChangeMode == 1) {
-      displayChangeMode = 2;
-      display.fillRect(0, 0, 128 , 64, BLACK);
-    }
-    else if (displayChangeMode == 2) {
-      displayChangeMode = 3;
-      display.fillRect(0, 0, 128 , 64, BLACK);
-    }
-    else if (displayChangeMode == 3) {
-      displayChangeMode = 1;
-      display.fillRect(0, 0, 128 , 64, BLACK);
-    }
-
-    lastDisplayChange = millis();
-  }
-
-  /* OLED DRAW STATS */
-  if (stringComplete) {
-
-    if (bootMode) {
-      display.clearDisplay();
-      display.display();
-      //display.stopscroll();
-      bootMode = false;
-    }
-
-    lastActiveConn = millis();
-
-    if (displayChangeMode == 1) {
-      DisplayStyle1_NC();
-
-    }
-    else if (displayChangeMode == 2) {
-      DisplayStyle2_NC ();
-    }
-    else if (displayChangeMode == 3) {
-      DisplayStyle3_NC ();
-    }
-
-    inputString = "";
-    stringComplete = false;
+  //=============================================================================
 
 
-#ifdef enableInvertscreen
-    /* Keep running anti screen burn, whilst serial is active */
-    if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
-      lastInvertTime = millis();
 
-
-      /* Anti Screen Burn */
-      inverter();
-
-#else
-    // Keep running function continuously
-    if (oledDraw == 1 && !serialEvent) {
-
-
-#endif
-
-    }
-  }
 }
+
 
 //END of Main Loop
 
@@ -545,7 +507,7 @@ void activityChecker() {
     //Experimental,  attempt to stop intermittent screen flicker when in no activity mode "screen off" (due to inverter function?) fill the screen 128x64 black rectangle
     display.fillRect(0, 0, 128, 64, BLACK);
     display.display();
-    oledDraw = 0;
+    //oledDraw = 0;
 
     //Turn off NeoPixel when there is no activity
     allNeoPixelsOff();
