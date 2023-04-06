@@ -1,5 +1,5 @@
 
-void buttonMode () {
+void button_Mode () {
 
   //Handle input
   int switchVal = digitalRead(switchPin);

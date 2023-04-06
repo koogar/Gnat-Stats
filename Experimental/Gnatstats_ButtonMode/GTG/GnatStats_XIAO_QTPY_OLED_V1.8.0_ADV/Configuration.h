@@ -48,11 +48,6 @@
 #define rotateScreen 2
 
 
-/* Uncomment below, to take out small degree symbol for better spacing
-   when hitting 100% cpu/gpu load the percent symbol gets clipped */
-//#define noDegree
-
-
 //--------------- Manual CPU/GPU Display Name Entry -------------------------
 
 /* Requires DisplayStyles ending in "_NC" (NameChange),*/
@@ -90,7 +85,7 @@ String set_GPUram = "xx";
 //--------------------- Other Stuff ----------------------
 
 /* Enable button to change screens else use auto timer change*/
-#define enable_buttonMode
+#define enable_buttonMode // auto_Mode is currently broken
 int deBounce = 350;
 
 /* Enable the built in LED blinking when transmitting data,*/
@@ -106,17 +101,21 @@ int TX_LED_Delay = 10; // TX blink delay
 /* Timer for active connection to host*/
 #define lastActiveDelay 6000
 
-/* Anti Screen Burn */
-//#define enableInvertscreen // broken
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 0 will do*/
 int Serial_eventDelay = 0; //serial do not adjust
 int baud = 9600;           //serial do not adjust
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Anti Screen Burn */
+//#define enableInvertscreen  // broken in button_Mod
+/* Inverted timer for oled*/
+long invertDelay    = 20000;
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+/* Uncomment below, to take out small degree symbol for better spacing
+   when hitting 100% cpu/gpu load the percent symbol gets clipped */
+//#define noDegree
 
 //---------------------------------------------- Versions ------------------------------------
 

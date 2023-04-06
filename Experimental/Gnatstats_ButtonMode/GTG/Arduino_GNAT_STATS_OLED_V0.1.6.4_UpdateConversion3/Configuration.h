@@ -112,8 +112,9 @@ int baudRate = 9600;       //serial do not adjust
 //#define noDegree
 
 /* Anti Screen Burn */
-//#define enableInvertscreen // broken
-
+//#define enableInvertscreen // broken in button_Mode
+/* Inverted timer for oled*/
+long invertDelay    = 20000;
 
 //---------------------------------------------- Versions ------------------------------------
 

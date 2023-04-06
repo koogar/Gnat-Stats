@@ -82,8 +82,8 @@
 void DisplayStyle1_NC ();
 void DisplayStyle2_NC ();
 void DisplayStyle3_NC ();
-void autoMode ();
-void buttonMode ();
+void auto_Mode ();
+void button_Mode ();
 void inverter();
 void serialEvent();
 void activityChecker();
@@ -257,7 +257,6 @@ long lastDisplayChange;
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Inverted timers for oled*/
-long invertDelay    = 100000;
 long lastInvertTime = 0;
 int  invertedStatus = 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -355,14 +354,17 @@ void loop() {
   serialEvent();
 
 #ifdef enableActivityChecker
+  /* Check for Serial Activity*/
   activityChecker();
 #endif
 
 #ifdef enable_buttonMode
-  buttonMode();
+  button_Mode();
 #else
-  autoMode();
+  auto_Mode();
 #endif
+
+  //=============================================================================
 
 #ifdef enableTX_LED
 
@@ -389,9 +391,6 @@ void loop() {
 #endif
 
   //=============================================================================
-
-
-
 }
 
 

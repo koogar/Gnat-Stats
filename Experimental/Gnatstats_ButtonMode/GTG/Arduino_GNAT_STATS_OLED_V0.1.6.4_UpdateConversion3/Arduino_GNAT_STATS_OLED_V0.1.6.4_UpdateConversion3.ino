@@ -118,7 +118,6 @@ boolean bootMode = true;
 
 //----------------------
 /* Time between "DisplayStyle" changes */
-
 int displayChangeMode = 1;
 long lastDisplayChange;
 //----------------------
@@ -138,7 +137,6 @@ boolean stringComplete = false;
 //#define enableInvertscreen // Currently only works in autoMode
 
 /* Inverted timers for oled*/
-long invertDelay    = 1000;
 long lastInvertTime = 0;
 int  invertedStatus = 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -147,8 +145,8 @@ int  invertedStatus = 0;
 void DisplayStyle1 ();
 void DisplayStyle2 ();
 void DisplayStyle3 ();
-void autoMode ();
-void buttonMode ();
+void auto_Mode ();
+void button_Mode ();
 void inverter();
 void serialEvent();
 void activityChecker();
@@ -220,9 +218,9 @@ void loop() {
   activityChecker();
 
 #ifdef enable_buttonMode
-  buttonMode ();
+  button_Mode ();
 #else
-  autoMode ();
+  auto_Mode ();
 #endif
 
 }

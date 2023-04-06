@@ -1,6 +1,6 @@
 
 
-void autoMode () {
+void auto_Mode () {
 
   /*change display screen*/
   if ((millis() - lastDisplayChange) > displayChangeDelay)
