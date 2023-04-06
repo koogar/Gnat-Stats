@@ -89,15 +89,8 @@ void serialEvent();
 void activityChecker();
 void splashScreen();
 void antiBurn();
+
 /*--------------------------------------------------------------------------------------
-  ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___ ___  _  _
-  / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _|_ _/ _ \| \| |
-  | (_| (_) | .` | _| | | (_ | |_| |   / / _ \| |  | | (_) | .` |
-  \___\___/|_|\_|_| |___\___|\___/|_|_\/_/ \_\_| |___\___/|_|\_|
-   ___  ___ _____ ___ ___  _  _ ___
-  / _ \| _ \_   _|_ _/ _ \| \| / __|
-  | (_) |  _/ | |  | | (_) | .` \__ \
-  \___/|_|   |_| |___\___/|_|\_|___/
 
   ----------------------------------
   Pins Reference
@@ -143,20 +136,19 @@ void antiBurn();
 
 */
 
-//------------------------------------ End of User configuration ---------------------------------
 
 /* Seeeduino XIAO TX LED indicator,*/
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD
-#define TX_LEDPin 13
+#define TX_LEDPin   13
 #endif
 
 /*onboard QT-PY NeoPixel for TX*/
 #ifdef Adafruit_QTPY_ATSAMD
-#define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
+#define TX_NeoPin   11  //Built in NeoPixel, on the QT-PY
 #else
-#define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
+#define TX_NeoPin   12  // Disable QT-PY built in Neopixel if you have a XIAO
 #endif
 
 #ifdef Seeeduino_XIAO_RP2040
@@ -224,10 +216,12 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #include <Adafruit_SH110X.h>
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET    -1   //   QT-PY / XIAO
+//#define OLED_RESET   -1   //   QT-PY / XIAO
 
 #ifdef Seeeduino_XIAO_NRF52840
 #define OLED_RESET    4   //   QT-PY / XIAO
+#else
+#define OLED_RESET   -1   //   QT-PY / XIAO
 #endif
 
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -264,7 +258,14 @@ int  invertedStatus = 0;
 
 // Button pin
 int counter   = 0;
-int switchPin = 1; // MCU_PIN ____[--0--]___ GND
+
+#if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
+int switchPin =  1; // MCU_PIN ____[--0--]___ GND
+#endif
+
+#if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
+int switchPin = D1; // MCU_PIN ____[--0--]___ GND
+#endif
 
 
 /* ___ ___ _____ _   _ ___
@@ -449,6 +450,8 @@ void serialEvent() {
       delay(Serial_eventDelay);   //delay screen event to stop screen data corruption
 
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
+      //display.fillCircle(115, 4, 4,WHITE); // Flash top right corner when updating
+
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
 

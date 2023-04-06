@@ -253,6 +253,8 @@ void DisplayStyle1_NC () {
 
     display.setTextSize(1);
     display.setCursor(115, 1);
+    //display.drawCircle(115, 4, 4,WHITE); // Flash top right corner when updating
+
     display.println("D1");
     display.display();
 
