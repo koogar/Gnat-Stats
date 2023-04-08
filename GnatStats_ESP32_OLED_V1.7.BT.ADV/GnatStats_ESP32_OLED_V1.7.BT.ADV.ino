@@ -95,38 +95,43 @@
 
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
   --------------------------------------------------------------------------------------
-
+  
+  
   Pins Reference
   ----------------------------------
-  ProMicro  : SDA: D2, SCL: D3
-  Leonardo  : SDA: D2, SCL: D3
-  NeoPixel  : D10
-  OLED_RESET: 4   Reference only!!
-  ----------------------------------
-  QT-PY        : SDA: D4, SCL: D5
-  NeoPixel     : A3
-  Built in NeoPixel: 11 Reference only!!
-  OLED_RESET   : -1     Reference only!!
-  ---------------------
-  XIAO         : SDA: D4, SCL: D5
-  NeoPixel     : A1
-  Built in LED : 13  Reference only!!
-  OLED_RESET   : -1  Reference only!!
-  ----------------------------------
-  ESP32 LOLIN D32:    SDA: 21, SCL: 22
-  ESP32 Lolin32 Lite: SDA: 19, SCL: 23
 
+  QT-PY        : SDA: D4, SCL: D5
+  OLED_RESET   : -1     Reference only!!
+  NeoPixel     : 1
+  Built in NeoPixel: 11 Reference only!!
+  Button       : 0
+  ---------------------
+  XIAO Series  : SDA: D4, SCL: D5
+  OLED_RESET   : -1  Reference only!!
+  NeoPixel     : 1
+  Built in LED : Board Specific!!
+  Button       : 0
+  ----------------------------------
+  ESP32 LOLIN32: SDA: 21, SCL: 22
+  OLED_RESET   : -1  Reference only!!
   NeoPixel     : 2 or 19
   Built in LED : 5   Reference only!!
-  OLED_RESET   : -1  Reference only!!
+  Button       : 0
+  ----------------------------------
+  uVolume      : SDA: D2, SCL: D3
+  OLED_RESET   : 4  Reference only!!
+  NeoPixel     : 5
+  Button       : 7
+  ----------------------------------
+  ProMicro/Leo : SDA: D2, SCL: D3
+  OLED_RESET   : 4   Reference only!!
+  NeoPixel     : 10
+  Button       : 7
   ----------------------------------
   STM32 BluePill: SDA: PB7, SCL: PB6
+  OLED_RESET    : -1  Reference only!!
   NeoPixel      : PA7 (MOSI)
-  OLED_RESET    : -1   Reference only!!
-  ----------------------------------
-  uVolume   :  SDA: D2, SCL: D3
-  NeoPixel  :  D5
-  OLED_RESET:  4  Reference only!!
+  Button        :
   ----------------------------------
   ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!
 */

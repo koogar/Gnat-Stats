@@ -1,5 +1,5 @@
 
-void buttonMode () {
+void button_Mode () {
 
   //Handle input
   int switchVal = digitalRead(switchPin);
@@ -20,27 +20,27 @@ void buttonMode () {
     switch (counter) {
 
       default:
-        DisplayStyle1_NC ();
+        DisplayStyle1_OLED ();
         //pixels.setPixelColor(0, BLACK);
         //pixels.show(); // This sends the updated pixel color to the hardware
         break;
 
       case 0:
-        DisplayStyle1_NC ();
+        DisplayStyle1_OLED ();
         //pixels.setPixelColor(0, RED);
         //pixels.show(); // This sends the updated pixel color to the hardware
 
         break;
       case 1:
-        DisplayStyle2_NC ();
+        DisplayStyle2_OLED ();
         //pixels.setPixelColor(0, GREEN);
         //pixels.show(); // This sends the updated pixel color to the hardware
         break;
 
       case 2:
-        DisplayStyle3_NC ();
+        DisplayStyle3_OLED ();
         //pixels.setPixelColor(0, BLUE);
-        // pixels.show(); // This sends the updated pixel color to the hardware
+        //pixels.show(); // This sends the updated pixel color to the hardware
         break;
 
 #ifdef enableInvertscreen

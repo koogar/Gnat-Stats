@@ -11,7 +11,7 @@
 
 */
 
-void DisplayStyle3_NC() {
+void DisplayStyle3_OLED() {
 
 #ifdef OLED_SH1106
   display.setTextColor(SH110X_WHITE);

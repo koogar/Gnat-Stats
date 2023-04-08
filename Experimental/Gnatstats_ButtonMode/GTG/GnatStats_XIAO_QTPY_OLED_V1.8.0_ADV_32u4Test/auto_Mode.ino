@@ -2,7 +2,7 @@
 
 
 
-void autoMode () {
+void auto_Mode () {
 
   /*change display screen*/
   if ((millis() - lastDisplayChange) > displayChangeDelay)
@@ -36,14 +36,14 @@ void autoMode () {
     lastActiveConn = millis();
 
     if (displayChangeMode == 1) {
-      DisplayStyle1_NC();
+      DisplayStyle1_OLED();
 
     }
     else if (displayChangeMode == 2) {
-      DisplayStyle2_NC ();
+      DisplayStyle2_OLED ();
     }
     else if (displayChangeMode == 3) {
-      DisplayStyle3_NC ();
+      DisplayStyle3_OLED ();
     }
 
     inputString = "";

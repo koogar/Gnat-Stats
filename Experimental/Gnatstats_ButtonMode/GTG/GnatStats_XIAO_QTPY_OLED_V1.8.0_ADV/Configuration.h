@@ -5,16 +5,12 @@
     |_| |_|  |_|____\__,_|_.__/__/    \___|_||_\__,_|\__|___/\__\__,_|\__/__/
 
    uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst © 2016-2023
+   Rupert Hirst © 2016-2023 Licence GPL v3
 
    http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
    https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
-
-
-   Licence
-   -------
-   GPL v3*/
-
+*/
+   
 //--------------------- MicroController Setup --------------------------
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
@@ -39,10 +35,10 @@
 /*---------------- SH1106 --------------*/
 //#define OLED_SH1106
 
-//------------ Rotate Screen -------------
+//------------ Rotate Screen 180 -------------
 
 /*Flip the display:  0 or 2  (0, 180 degrees)*/
-#define rotateScreen 2
+#define flipScreen 2
 
 //--------------------- Set i2c OLED address  --------------------------
 /* Uncomment the initialize the I2C address , uncomment only one, If you get a totally blank screen try the other*/
@@ -72,17 +68,21 @@ String set_GPUram = "xx";
 
 /* Uncomment below, to enable custom threshold event triggers*/
 
+/* User Custom  Triggers,*/
+#define enableCustomThesholdtriggers
+
+//------------- Neopixel Threshold indicator ---------------
+
 /* Global NeoPixel Brightness,*/
 #define neoBrightness 20
 
-/* User Custom  Triggers,*/
-//#define enableCustomThesholdtriggers
+/* Uncomment only 1 below, */
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
 //#define enableNeopixelGauges //
 
 /* uVolume only,*/
-//#define uVol_enableThesholdtriggers
+#define uVol_enableThesholdtriggers
 
 //--------------------- Other Miso ----------------------
 

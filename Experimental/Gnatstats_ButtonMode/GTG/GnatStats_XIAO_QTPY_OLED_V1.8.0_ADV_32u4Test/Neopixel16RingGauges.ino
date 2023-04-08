@@ -9,7 +9,7 @@
                                                              __/ |           
                                                             |___/               
 
-  Adafruit NeoPixel Ring CPU or GPU Gauge example (contibuted: James Bowen (Jimbob))
+  Adafruit NeoPixel 16 Ring 8xCPU & 8xGPU Gauge example (contibuted: James Bowen (Jimbob))
 
   CPU_loadGauge( cpuString2.toInt() ); // Neopixel Ring Gauge  CPU  Load
   CPU_tempGauge( cpuString1.toInt() ); // Neopixel Ring Gauge  CPU  Temperature

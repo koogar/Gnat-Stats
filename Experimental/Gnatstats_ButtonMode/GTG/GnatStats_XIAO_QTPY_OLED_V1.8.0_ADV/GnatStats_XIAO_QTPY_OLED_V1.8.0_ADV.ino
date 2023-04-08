@@ -1,13 +1,11 @@
 #define CODE_VERS  "1.8.0.ADV"  // Code version number 
 
-/*
 
-   uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
-   Rupert Hirst & Colin Conway © 2016-2023
+/*  uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
+  Rupert Hirst & Colin Conway © 2016-2023  Licence GPL v3
 
-   http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
-   https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
-
+  http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
+  https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
 
 
   Libraries
@@ -67,8 +65,57 @@
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  --------------------------------------------------------------------------------------
 
-*/
+  ----------------------------------
+  Pins Reference
+  ----------------------------------
+
+  QT-PY        : SDA: D4, SCL: D5
+  OLED_RESET   : -1     Reference only!!
+  NeoPixel     : 1
+  Built in NeoPixel: 11 Reference only!!
+  Button       : 0
+  ---------------------
+  XIAO Series  : SDA: D4, SCL: D5
+  OLED_RESET   : -1  Reference only!!
+  NeoPixel     : 1
+  Built in LED : Board Specific!!
+  Button       : 0
+  ----------------------------------
+  ESP32 LOLIN32: SDA: 21, SCL: 22
+  OLED_RESET   : -1  Reference only!!
+  NeoPixel     : 2 or 19
+  Built in LED : 5   Reference only!!
+  Button       : 0
+  ----------------------------------
+  uVolume      : SDA: D2, SCL: D3
+  OLED_RESET   : 4  Reference only!!
+  NeoPixel     : 5
+  Button       : 7
+  ----------------------------------
+  ProMicro/Leo : SDA: D2, SCL: D3
+  OLED_RESET   : 4  Reference only!!
+  NeoPixel     : 10
+  Button       : 7
+  ----------------------------------
+  STM32 BluePill: SDA: PB7, SCL: PB6
+  OLED_RESET    : -1  Reference only!!
+  NeoPixel      : PA7 (MOSI)
+  Button        :
+  ----------------------------------
+
+  Onboard LED's
+  -------------
+  XIAO  (NRF52840) Built in LED      =  11     (*Not Required for Reference only!!!)
+  XIAO  (RP2040)   Built in LED      =  25     (*Not Required for Reference only!!!)
+  XIAO  (ATSAMD21) Built in LED      =  13     (*Not Required for Reference only!!!)
+  QT-PY (ATSAMD21)(   None on the QT-PY   )
+
+  QT-PY (ATSAMD21) Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
+  
+  ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!*/
+//--------------------------------------------------------------------------------------
 
 #include <SPI.h>
 #include <Wire.h>
@@ -78,77 +125,51 @@
 #include "bitmap.h"
 #include "Configuration.h"
 
-/* Declare Prototype voids to the compiler*/
-void DisplayStyle1_NC ();
-void DisplayStyle2_NC ();
-void DisplayStyle3_NC ();
+/* Declare Prototype voids to the compiler */
+void DisplayStyle1_OLED ();
+void DisplayStyle2_OLED ();
+void DisplayStyle3_OLED ();
+
 void auto_Mode ();
 void button_Mode ();
-void inverter();
+
 void serialEvent();
 void activityChecker();
+
 void splashScreen();
+void inverter();
 void antiBurn();
 
-/*--------------------------------------------------------------------------------------
+void refreshNeopixels ();
+void allNeoPixelsRED  ();
+void allNeoPixelsGREEN();
+void allNeoPixelsBLUE ();
+void allNeoPixelsOFF  ();
 
-  ----------------------------------
-  Pins Reference
-  ----------------------------------
-  ProMicro  : SDA: D2, SCL: D3
-  Leonardo  : SDA: D2, SCL: D3
-  NeoPixel  : D10
-  OLED_RESET: 4   Reference only!!
-  ----------------------------------
-  QT-PY        : SDA: D4, SCL: D5
-  NeoPixel     : D1
-  Built in NeoPixel: 11 Reference only!!
-  OLED_RESET   : -1     Reference only!!
-  ---------------------
-  XIAO Series  : SDA: D4, SCL: D5
-  NeoPixel     : D1
-  Built in LED : 13  Reference only!!
-  OLED_RESET   : -1  Reference only!!
-  ----------------------------------
-  ESP32 LOLIN32: SDA: 21, SCL: 22
-  NeoPixel     : 2 or 19
-  Built in LED : 5   Reference only!!
-  OLED_RESET   : -1  Reference only!!
-  ----------------------------------
-  STM32 BluePill: SDA: PB7, SCL: PB6
-  NeoPixel      : PA7 (MOSI)
-  OLED_RESET    : -1   Reference only!!
-  ----------------------------------
-  uVolume   :  SDA: D2, SCL: D3
-  NeoPixel  :  D5
-  OLED_RESET:  4  Reference only!!
-  ----------------------------------
+void CustomTriggerCPU_load(int cpuUsage );
+void CustomTriggerCPU_temp(int cpuDegree);
+void CustomTriggerGPU_load(int gpuUsage );
+void CustomTriggerGPU_temp(int gpuDegree);
 
+void CPU_loadGauge(int cpuUsage );
+void CPU_tempGauge(int cpuDegree);
+void GPU_loadGauge(int gpuUsage );
+void GPU_tempGauge(int gpuDegree);
 
-  Onboard LED's
-  -------------
-  XIAO  (NRF52840) Built in LED      =  11     (*Not Required for Reference only!!!)
-  XIAO  (RP2040)   Built in LED      =  25     (*Not Required for Reference only!!!)
-  XIAO  (ATSAMD21) Built in LED      =  13     (*Not Required for Reference only!!!)
-  QT-PY (ATSAMD21) Built in LED      =         (None on the QT-PY)
-
-  QT-PY (ATSAMD21) Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
-
-*/
-
+//--------------------------------------------------------------------------------------
 
 /* Seeeduino XIAO TX LED indicator,*/
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD
-#define TX_LEDPin   13
+#define TX_LEDPin 13
 #endif
 
 /*onboard QT-PY NeoPixel for TX*/
 #ifdef Adafruit_QTPY_ATSAMD
-#define TX_NeoPin   11  //Built in NeoPixel, on the QT-PY
+#define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
 #else
-#define TX_NeoPin   12  // Disable QT-PY built in Neopixel if you have a XIAO
+#define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
 #endif
 
 #ifdef Seeeduino_XIAO_RP2040
@@ -168,8 +189,6 @@ void antiBurn();
 
 #endif
 
-
-
 /* Neo Pixel Setup */
 
 #if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
@@ -180,8 +199,8 @@ void antiBurn();
 #define NEOPIN     D6
 #endif
 
-
 #define NUMPIXELS  16
+
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KHZ800);
 
 #ifdef enableTX_LED
@@ -190,15 +209,6 @@ Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
 #endif
 #endif
 
-/* Pre-define Hex NeoPixel colours,  eg. pixels.setPixelColor(0, BLUE); https://htmlcolorcodes.com/color-names/ */
-#define BLUE       0x0000FF
-#define GREEN      0x008000
-#define RED        0xFF0000
-#define ORANGE     0xFFA500
-#define DARKORANGE 0xFF8C00
-#define YELLOW     0xFFFF00
-#define WHITE      0xFFFFFF
-#define BLACK      0x000000 // OFF
 
 //--------------------------------------------------------------------------------------
 
@@ -228,6 +238,7 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 #endif
 
+//--------------------------------------------------------------------------------------
 
 //----------------------
 /* More OLED stuff*/
@@ -255,6 +266,7 @@ long lastInvertTime = 0;
 int  invertedStatus = 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+//--------------------------------------------------------------------------------------
 
 // Button pin
 int counter   = 0;
@@ -266,6 +278,7 @@ int switchPin =  1; // MCU_PIN ____[--0--]___ GND
 #if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
 int switchPin = D1; // MCU_PIN ____[--0--]___ GND
 #endif
+//--------------------------------------------------------------------------------------
 
 
 /* ___ ___ _____ _   _ ___
@@ -298,7 +311,7 @@ void setup() {
   display.clearDisplay();
   display.setTextColor(WHITE);
 
-  display.setRotation(rotateScreen);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
+  display.setRotation(flipScreen);// Rotate the display at the start:  0, 1, 2 or 3 = (0, 90, 180 or 270 degrees)
   display.clearDisplay();
 
   /* stops text wrapping*/
@@ -433,6 +446,15 @@ void allNeoPixelsBLUE() {
     pixels.setPixelColor(i, 0, 0, 255 );
   }
   pixels.show();
+}
+
+void allNeoPixelsOFF() {
+  for ( int i = 0; i < NUMPIXELS; i++ ) {
+    pixels.setPixelColor(i, 0, 0, 0 );
+  }
+
+  //pixels.show();
+  pixels.clear();
 }
 
 //-------------------------------------------  Serial Events -------------------------------------------------------------
