@@ -1,17 +1,19 @@
 /*
-
-   _____          _                    _______   _
-  / ____|        | |                  |__   __| (_)
+  ------------------------------------------------------------------------------------------
+    _____          _                    _______   _
+   / ____|        | |                  |__   __| (_)
   | |    _   _ ___| |_ ___  _ __ ___      | |_ __ _  __ _  __ _  ___ _ __ ___
   | |   | | | / __| __/ _ \| '_ ` _ \     | | '__| |/ _` |/ _` |/ _ \ '__/ __|
   | |___| |_| \__ \ || (_) | | | | | |    | | |  | | (_| | (_| |  __/ |  \__ \
-  \_____\__,_|___/\__\___/|_| |_| |_|    |_|_|  |_|\__, |\__, |\___|_|  |___/
+   \_____\__,_|___/\__\___/|_| |_| |_|    |_|_|  |_|\__, |\__, |\___|_|  |___/
                                                     __/ | __/ |
                                                    |___/ |___/
 
-  Custom Trigger functions, when CPU or GPU threshold are met*/
+  Custom Trigger functions, when CPU or GPU threshold are met
+  ------------------------------------------------------------------------------------------
+*/
 
-// ------------------- CPU load / Temp Event  --------------------
+// ------------------- CPU load Event  --------------------
 
 void CustomTriggerCPU_load(int cpuUsage ) {
 
@@ -35,7 +37,7 @@ void CustomTriggerCPU_load(int cpuUsage ) {
 }
 
 
-
+// ------------------- CPU Temp Event  --------------------
 
 void CustomTriggerCPU_temp(int cpuDegree ) {
 
@@ -61,7 +63,7 @@ void CustomTriggerCPU_temp(int cpuDegree ) {
   }
 }
 
-// -------------------  GPU Load / Temp Event  --------------------
+// -------------------  GPU Load Event  --------------------
 
 
 void CustomTriggerGPU_load(int gpuUsage ) {
@@ -88,7 +90,7 @@ void CustomTriggerGPU_load(int gpuUsage ) {
   }
 }
 
-
+// -------------------  GPU Temp Event  --------------------
 
 void CustomTriggerGPU_temp(int gpuDegree ) {
 

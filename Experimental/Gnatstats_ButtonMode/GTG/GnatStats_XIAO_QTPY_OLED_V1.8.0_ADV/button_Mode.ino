@@ -9,7 +9,7 @@ void button_Mode () {
     delay(deBounce);
     counter ++;
     //Reset count if over max mode number
-    if (counter == 3)
+    if (counter == 4)
     {
       counter = 0;
     }
@@ -43,13 +43,20 @@ void button_Mode () {
         //pixels.show(); // This sends the updated pixel color to the hardware
         break;
 
+      case 3:
+        DisplayStyle4_OLED ();
+        //pixels.setPixelColor(0, BLUE);
+        //pixels.show(); // This sends the updated pixel color to the hardware
+        break;
+
+
 #ifdef enableInvertscreen
         /* Keep running anti screen burn, whilst serial is active */
         if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
           lastInvertTime = millis();
 
           /* Anti Screen Burn */
-           inverter();
+          inverter();
 
 #else
         // Keep running function continuously
@@ -58,5 +65,4 @@ void button_Mode () {
 #endif
 
         }
-
     }

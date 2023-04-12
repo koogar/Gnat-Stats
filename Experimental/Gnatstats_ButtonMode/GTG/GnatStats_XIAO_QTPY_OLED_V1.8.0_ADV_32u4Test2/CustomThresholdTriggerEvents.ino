@@ -9,7 +9,12 @@
                                                     __/ | __/ |
                                                    |___/ |___/
 
-  Custom Trigger functions, when CPU or GPU threshold are met*/
+  Custom Trigger functions, when CPU or GPU threshold are met
+
+
+*/
+
+
 
 // ------------------- CPU load / Temp Event  --------------------
 

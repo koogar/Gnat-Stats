@@ -12,13 +12,6 @@
 
 void DisplayStyle2_OLED () {
 
-#ifdef OLED_SH1106
-  display.setTextColor(SH110X_WHITE);
-#endif
-
-#ifdef OLED_SH1106_SPI
-  display.setTextColor(SH110X_WHITE);
-#endif
 
   //>>>>>>>>>>>>>>>> Addition for Buttons >>>>>>>>>>>>>>
   /* OLED DRAW STATS */
