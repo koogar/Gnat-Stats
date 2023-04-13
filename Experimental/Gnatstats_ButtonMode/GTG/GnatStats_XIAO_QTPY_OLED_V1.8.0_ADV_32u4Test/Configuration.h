@@ -20,8 +20,12 @@
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
-#define ProMicro_32u4
-//--------------------- OLED Setup --------------------------
+
+//-----------------------------------------------------------------------------------------------------
+#define ProMicro_32u4            // End of Life & Limited to 2 DisplayStyles Due to Memory Restrictions
+//-----------------------------------------------------------------------------------------------------
+
+//------------------------- OLED Setup ----------------------------------------------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one display!!!*/
 
@@ -29,11 +33,11 @@
 /* SH1106  Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
 
 /*---------------- SSD1306 -------------*/
-//#define OLED_SSD1306
+#define OLED_SSD1306
 //#define dim_Display // dim display SD1306 Only!!!
 
 /*---------------- SH1106 --------------*/
-#define OLED_SH1106
+//#define OLED_SH1106
 
 //------------ Rotate Screen 180 -------------
 
@@ -80,12 +84,15 @@ String set_GPUram = "xx";
 //#define enableNeopixelGauges //
 
 /* uVolume only,*/
-#define uVol_enableThesholdtriggers
+//#define uVol_enableThesholdtriggers
 
 //--------------------- Other Miso ----------------------
 
-/* Enable button to change screens else use auto timer change*/
-//#define enable_buttonMode // auto_Mode is currently broken
+/* Enable button to change screens else use auto timer change */
+#define enable_buttonMode
+ 
+/* Enable auto to change screens using auto timer change using "displayChangeDelay" */
+//#define enable_autoMode   
 int deBounce = 350;
 
 /* Enable the built in LED blinking when transmitting data,*/
@@ -106,22 +113,10 @@ int Serial_eventDelay = 2; //serial do not adjust
 int baud = 9600;           //serial do not adjust
 
 
-//------------------------------------ End of User configuration ---------------------------------
+//--------------------------------------- End of User configuration -----------------------------------
 
 
-/* Uncomment below, to take out small degree symbol for better spacing
-   when hitting 100% cpu/gpu load the percent symbol gets clipped */
-//#define noDegree
-
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/* Anti Screen Burn */
-//#define enableInvertscreen  // broken in button_Mod
-/* Inverted timer for oled*/
-long invertDelay    = 20000;
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-//---------------------------------------------- Versions ------------------------------------
+//----------------------------------------------- Versions -------------------------------------------
 
 /*
   Notes:
