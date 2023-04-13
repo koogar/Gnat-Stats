@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
   
   GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client 
@@ -38,3 +39,7 @@ You should have received a copy of the GNU General Public License
 along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 
+=======
+# Gnat-Stats
+GnatStats Tiny OLED Arduino PC Hardware Performance Serial Display
+>>>>>>> 03943f79781df510c760309c703d969341ba0c42
