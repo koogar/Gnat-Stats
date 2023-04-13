@@ -22,10 +22,10 @@ void uVol_TriggerCPU_load(int cpuUsage ) {
 #define neo_RED        0xFF0000
 #define neo_GREEN      0x008000
 #define neo_BLUE       0x0000FF
-///#define neo_ORANGE     0xFFA500
-///#define neo_DARKORANGE 0xFF8C00
-///#define neo_YELLOW     0xFFFF00
-///#define neo_WHITE      0xFFFFFF
+#define neo_ORANGE     0xFFA500
+#define neo_DARKORANGE 0xFF8C00
+#define neo_YELLOW     0xFFFF00
+#define neo_WHITE      0xFFFFFF
 
 
   float CPUloadfactor = cpuUsage ;

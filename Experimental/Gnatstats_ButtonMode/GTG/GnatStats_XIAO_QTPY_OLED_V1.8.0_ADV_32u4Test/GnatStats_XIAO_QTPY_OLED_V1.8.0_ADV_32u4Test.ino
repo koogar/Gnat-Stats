@@ -132,6 +132,8 @@ void DisplayStyle3_OLED ();
 
 void auto_Mode ();
 void button_Mode ();
+void button_Mode_32u4 ();
+void auto_Mode_32u4   ();
 
 void serialEvent();
 void activityChecker();
@@ -238,6 +240,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define OLED_RESET   -1   //   QT-PY / XIAO
 #endif
 
+/* Convert SSD1306 to SH1106  OLED Text/Fill/Draw Colours */
+#define WHITE SH110X_WHITE
+#define BLACK SH110X_BLACK
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #endif
@@ -246,9 +251,6 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 //----------------------
 /* More OLED stuff*/
-/* OLED Text/Fill/Draw Colours */
-#define WHITE      0xFFFFFF
-#define BLACK      0x000000 // OFF
 int oledDraw = 0;
 int oledOverride = 0;
 //----------------------
@@ -269,10 +271,17 @@ long lastDisplayChange;
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Inverted timers for oled*/
+/* Anti Screen Burn */
+//#define enableInvertscreen  // broken in button_Mod
+long invertDelay    = 20000;
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 long lastInvertTime = 0;
 int  invertedStatus = 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+/* Uncomment below, to take out small degree symbol for better spacing
+   when hitting 100% cpu/gpu load the percent symbol gets clipped */
+//#define noDegree
 //--------------------------------------------------------------------------------------
 
 // Button pin
@@ -318,7 +327,6 @@ void setup() {
 #endif
 #endif
 
-
   display.clearDisplay();
   display.setTextColor(WHITE);
 
@@ -355,7 +363,6 @@ void setup() {
 #endif
 
 #endif
-
 
   pixels.setBrightness(neoBrightness); // Global Brightness
   pixels.show(); // Turn off all Pixels
@@ -484,7 +491,6 @@ void serialEvent() {
 
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       //display.fillCircle(115, 4, 4,WHITE); // Flash top right corner when updating
-
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
 
@@ -551,6 +557,7 @@ void activityChecker() {
 }
 
 //-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
+
 #ifdef enableInvertscreen
 void antiBurn() {
   display.invertDisplay(0);
@@ -573,17 +580,8 @@ void inverter() {
 //--------------------------------------------- Splash Screens --------------------------------------------------------
 void splashScreen() {
 
-#ifdef OLED_SH1106
-  display.setTextColor(SH110X_WHITE);
-#endif
-
-
-#ifdef OLED_SH1106
-  display.drawBitmap(0, 0, JustGnatBMP, 64, 64, SH110X_WHITE);
-#else
+  display.setTextColor(WHITE);
   display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
-
-#endif
 
   display.setTextSize(3);
   display.setCursor(58, 5);
@@ -610,12 +608,11 @@ void splashScreen() {
   display.display();
 
   // USB Serial Screen
-
-#ifdef OLED_SH1106
-  display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, SH110X_WHITE);
+  
+#ifdef ProMicro_32u4
+  // save memory
 #else
   display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
 #endif
-
   display.display();
 }

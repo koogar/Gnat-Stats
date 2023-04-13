@@ -15,13 +15,17 @@
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
 //#define Seeeduino_XIAO_ATSAMD
-#define Adafruit_QTPY_ATSAMD
+//#define Adafruit_QTPY_ATSAMD
 //#define Seeeduino_XIAO_RP2040   // Adafruit QT PY RP2040  (untested)
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
 
-//--------------------- OLED Setup --------------------------
+//-----------------------------------------------------------------------------------------------------
+#define ProMicro_32u4            // End of Life & Limited to 2 DisplayStyles Due to Memory Restrictions
+//-----------------------------------------------------------------------------------------------------
+
+//------------------------- OLED Setup ----------------------------------------------------------------
 
 /*Uncomment the correct OLED display type, uncomment only one display!!!*/
 
@@ -47,9 +51,7 @@
 
 //--------------- Manual CPU/GPU Display Name Entry -------------------------
 
-/* Requires DisplayStyles ending in "_NC" (NameChange),*/
 /* Characters to delete from the start of the auto detected CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
-
 #define cpuNameStartLength 10
 #define gpuNameStartLength 18
 
@@ -69,12 +71,12 @@ String set_GPUram = "xx";
 /* Uncomment below, to enable custom threshold event triggers*/
 
 /* User Custom  Triggers,*/
-#define enableCustomThesholdtriggers
+//#define enableCustomThesholdtriggers
 
 //------------- Neopixel Threshold indicator ---------------
 
 /* Global NeoPixel Brightness,*/
-#define neoBrightness 20
+#define neoBrightness 80
 
 /* Uncomment only 1 below, */
 
@@ -82,12 +84,15 @@ String set_GPUram = "xx";
 //#define enableNeopixelGauges //
 
 /* uVolume only,*/
-#define uVol_enableThesholdtriggers
+//#define uVol_enableThesholdtriggers
 
 //--------------------- Other Miso ----------------------
 
-/* Enable button to change screens else use auto timer change*/
-#define enable_buttonMode // auto_Mode is currently broken
+/* Enable button to change screens else use auto timer change */
+#define enable_buttonMode
+ 
+/* Enable auto to change screens using auto timer change using "displayChangeDelay" */
+//#define enable_autoMode   
 int deBounce = 350;
 
 /* Enable the built in LED blinking when transmitting data,*/
@@ -104,26 +109,14 @@ int TX_LED_Delay = 10; // TX blink delay
 #define lastActiveDelay 6000
 
 /* Delay screen event, to help stop screen data corruption ESP8622 use 25, most others 0 will do*/
-int Serial_eventDelay = 0; //serial do not adjust
+int Serial_eventDelay = 2; //serial do not adjust
 int baud = 9600;           //serial do not adjust
 
 
-//------------------------------------ End of User configuration ---------------------------------
+//--------------------------------------- End of User configuration -----------------------------------
 
 
-/* Uncomment below, to take out small degree symbol for better spacing
-   when hitting 100% cpu/gpu load the percent symbol gets clipped */
-//#define noDegree
-
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/* Anti Screen Burn */
-//#define enableInvertscreen  // broken in button_Mod
-/* Inverted timer for oled*/
-long invertDelay    = 20000;
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-//---------------------------------------------- Versions ------------------------------------
+//----------------------------------------------- Versions -------------------------------------------
 
 /*
   Notes:
