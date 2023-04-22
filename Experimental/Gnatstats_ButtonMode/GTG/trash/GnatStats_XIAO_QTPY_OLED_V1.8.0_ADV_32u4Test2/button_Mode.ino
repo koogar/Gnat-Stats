@@ -11,7 +11,7 @@ void button_Mode () {
     //Reset count if over max mode number
 
 #ifdef ProMicro_32u4 // Limited to 2 DisplayStyles Due to Memory
-    if (counter == 2)
+    if (counter == 3)
 #else
     if (counter == 3)
 #endif
@@ -24,7 +24,6 @@ void button_Mode () {
   else
     //Change mode
     switch (counter) {
-
 
 
       default:

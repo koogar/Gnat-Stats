@@ -10,7 +10,7 @@
    http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
    https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
 */
-   
+
 //--------------------- MicroController Setup --------------------------
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
@@ -34,10 +34,14 @@
 
 /*---------------- SSD1306 -------------*/
 //#define OLED_SSD1306
-//#define dim_Display // dim display SD1306 Only!!!
 
-/*---------------- SH1106 --------------*/
-#define OLED_SH1106
+/*SH1106 32u4 OLED*/
+//#define OLED_SH1106
+
+//#define dim_Display // dim display
+
+/*---------------- SH110X XIAO --------------*/
+#define OLED_SH110X
 
 //------------ Rotate Screen 180 -------------
 
@@ -58,13 +62,13 @@
 /* Manually set the CPU, GPU details*/
 
 //#define Manual_cpuName
-String set_CPUname = "xxxxxxx";
+//String set_CPUname = "xxxxxxx";
 
 //#define Manual_gpuName
-String set_GPUname = "xxxxxxx";
+//String set_GPUname = "xxxxxxx";
 
 //#define Manual_gpuRam size in GB
-String set_GPUram = "xx";
+//String set_GPUram = "xx";
 
 //------------------ Threshold Triggers -------------------
 
@@ -90,13 +94,13 @@ String set_GPUram = "xx";
 
 /* Enable button to change screens else use auto timer change */
 #define enable_buttonMode
- 
+
 /* Enable auto to change screens using auto timer change using "displayChangeDelay" */
-//#define enable_autoMode   
+//#define enable_autoMode
 int deBounce = 350;
 
 /* Enable the built in LED blinking when transmitting data,*/
-#define enableTX_LED
+//#define enableTX_LED
 int TX_LED_Delay = 10; // TX blink delay
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
@@ -136,10 +140,10 @@ int baud = 9600;           //serial do not adjust
 
    Version 1.8
 
-                     :Add 
+                     :Add
                         Auto or Button to change to the next screen
 
-                        
+
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
 */

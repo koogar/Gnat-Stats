@@ -113,7 +113,7 @@
   QT-PY (ATSAMD21)(   None on the QT-PY   )
 
   QT-PY (ATSAMD21) Built in Neopixel =  11 or (12 to turn it off) (*Not Required for Reference only!!!)
-
+  
   ALWAYS RUN "HARDWARE SERIAL MONITOR" AS ADMIN!!!*/
 //--------------------------------------------------------------------------------------
 
@@ -129,7 +129,9 @@
 void DisplayStyle1_OLED ();
 void DisplayStyle2_OLED ();
 void DisplayStyle3_OLED ();
-void DisplayStyle4_OLED ();
+
+void auto_Mode ();
+void button_Mode ();
 
 void serialEvent();
 void activityChecker();
@@ -160,14 +162,14 @@ void GPU_tempGauge(int gpuDegree);
 #ifdef enableTX_LED
 
 #ifdef Seeeduino_XIAO_ATSAMD
-#define TX_LEDPin   13
+#define TX_LEDPin 13
 #endif
 
 /*onboard QT-PY NeoPixel for TX*/
 #ifdef Adafruit_QTPY_ATSAMD
-#define TX_NeoPin   11  //Built in NeoPixel, on the QT-PY
+#define TX_NeoPin 11  //Built in NeoPixel, on the QT-PY
 #else
-#define TX_NeoPin   12  // Disable QT-PY built in Neopixel if you have a XIAO
+#define TX_NeoPin 12  // Disable QT-PY built in Neopixel if you have a XIAO
 #endif
 
 #ifdef Seeeduino_XIAO_RP2040
@@ -190,15 +192,11 @@ void GPU_tempGauge(int gpuDegree);
 /* Neo Pixel Setup */
 
 #if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
-#define NEOPIN     6
+#define NEOPIN      6
 #endif
 
 #if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
 #define NEOPIN     D6
-#endif
-
-#ifdef ProMicro_32u4
-#define  NEOPIN    5
 #endif
 
 #define NUMPIXELS  16
@@ -224,18 +222,18 @@ Adafruit_NeoPixel TX_pixel(1, TX_NeoPin, NEO_GRB + NEO_KHZ800);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
-#ifdef OLED_SH1106
+#ifdef OLED_SH110X
+
 #include <Adafruit_SH110X.h>
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 //#define OLED_RESET   -1   //   QT-PY / XIAO
 
-#if defined(Seeeduino_XIAO_NRF52840) ^ defined(ProMicro_32u4)
+#ifdef Seeeduino_XIAO_NRF52840
 #define OLED_RESET    4   //   QT-PY / XIAO
 #else
 #define OLED_RESET   -1   //   QT-PY / XIAO
 #endif
-
 /* Convert SSD1306 to SH1106  OLED Text/Fill/Draw Colours */
 #define WHITE SH110X_WHITE
 #define BLACK SH110X_BLACK
@@ -267,21 +265,14 @@ long lastDisplayChange;
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /* Inverted timers for oled*/
-/* Anti Screen Burn */
-//#define enableInvertscreen  // broken in button_Mod
-long invertDelay    = 20000;
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 long lastInvertTime = 0;
 int  invertedStatus = 0;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-/* Uncomment below, to take out small degree symbol for better spacing
-   when hitting 100% cpu/gpu load the percent symbol gets clipped */
-//#define noDegree
 //--------------------------------------------------------------------------------------
 
 // Button pin
-int counter   =  0;
+int counter   = 0;
 
 #if defined(Seeeduino_XIAO_ATSAMD) ^ defined(Adafruit_QTPY_ATSAMD) ^ defined(Seeeduino_XIAO_NRF52840)
 int switchPin =  1; // MCU_PIN ____[--0--]___ GND
@@ -289,10 +280,6 @@ int switchPin =  1; // MCU_PIN ____[--0--]___ GND
 
 #if defined(Seeeduino_XIAO_RP2040) ^ defined(Seeeduino_XIAO_ESP32C3)
 int switchPin = D1; // MCU_PIN ____[--0--]___ GND
-#endif
-
-#ifdef ProMicro_32u4
-int switchPin =  7; // MCU_PIN ____[--0--]___ GND
 #endif
 //--------------------------------------------------------------------------------------
 
@@ -316,7 +303,7 @@ void setup() {
 #endif
 #endif
 
-#ifdef OLED_SH1106
+#ifdef OLED_SH110X
   display.begin(i2c_Address, true); // Address 0x3C default
 #endif
 
@@ -484,6 +471,7 @@ void serialEvent() {
 
       //display.drawRect(82, 0, 44, 10, WHITE); // Position Test
       //display.fillCircle(115, 4, 4,WHITE); // Flash top right corner when updating
+
       display.fillRect(115, 0, 42, 10, BLACK); // Flash top right corner when updating
       display.display();
 
@@ -559,6 +547,7 @@ void antiBurn() {
   oledDraw = 0;
 }
 
+
 void inverter() {
   if ( invertedStatus == 1 ) {
     invertedStatus = 0;
@@ -574,6 +563,7 @@ void inverter() {
 void splashScreen() {
 
   display.setTextColor(WHITE);
+
   display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
 
   display.setTextSize(3);
@@ -586,6 +576,7 @@ void splashScreen() {
   //Set version to USB Serial
   display.setTextSize(1);
   display.setCursor(66, 47);
+  //display.print("Baud: ");
   display.print (baud); display.println(".bit/s");
 
   //Set version to USB Serial
@@ -597,23 +588,11 @@ void splashScreen() {
   display.display();
   delay(3000);
   display.clearDisplay();
-  //display.display();
+  display.display();
 
   // USB Serial Screen
 
-#ifdef ProMicro_32u4 // Do not BITMAP to save memory
-  display.setTextSize(3); //set background txt font size
-  display.setCursor(1, 1);
-  display.println(">");
-  display.setTextSize(2);
-  display.setCursor(20, 30);
-  display.println("0101010..");
-  display.setTextSize(1);
-  display.setCursor(1, 54);
-  display.println("waiting for data.....");
-#else
   display.drawBitmap(0, 0, WaitingDataBMP, 128, 64, WHITE);
-#endif
 
   display.display();
 }
