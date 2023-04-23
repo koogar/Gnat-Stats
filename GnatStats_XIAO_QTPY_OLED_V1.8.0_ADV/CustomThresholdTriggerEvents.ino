@@ -35,8 +35,6 @@ void CustomTriggerCPU_load(int cpuUsage ) {
 }
 
 
-
-
 void CustomTriggerCPU_temp(int cpuDegree ) {
 
   float CPUtempfactor = cpuDegree ;
