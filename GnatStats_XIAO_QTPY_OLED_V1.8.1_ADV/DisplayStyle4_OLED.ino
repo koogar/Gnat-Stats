@@ -213,7 +213,7 @@ void DisplayStyle4_OLED() { // GPU STATS ONLY
 
   //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
 
-#ifdef uVol_enableThesholdtriggers
+#ifdef uVol_enableThresholdtriggers
 
   //uVol_TriggerCPU_temp( cpuString1.toInt() ); // Neopixel CPU  Temperature
   uVol_TriggerCPU_load( cpuString2.toInt() ); // Neopixel CPU  Load
@@ -223,7 +223,7 @@ void DisplayStyle4_OLED() { // GPU STATS ONLY
 
 #endif
 
-#ifdef enableCustomThesholdtriggers
+#ifdef enable_CustomThresholdtriggers
 
   CustomTriggerCPU_temp( cpuString1.toInt() ); // Neopixel CPU  Temperature
   CustomTriggerCPU_load( cpuString2.toInt() ); // Neopixel CPU  Load
@@ -233,7 +233,7 @@ void DisplayStyle4_OLED() { // GPU STATS ONLY
 
 #endif
 
-#ifdef enableNeopixelGauges
+#ifdef enable_NeopixelGauges
 
   CPU_loadGauge( cpuString2.toInt() ); // Neopixel Ring Gauge  CPU  Load
   //CPU_tempGauge( cpuString1.toInt() ); // Neopixel Ring Gauge  CPU  Temperature

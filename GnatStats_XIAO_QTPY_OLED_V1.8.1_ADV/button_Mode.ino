@@ -19,11 +19,11 @@ void button_Mode () {
     //Change mode
     switch (counter) {
 
-      default:
-        DisplayStyle1_OLED ();
-        //pixels.setPixelColor(0, BLACK);
-        //pixels.show(); // This sends the updated pixel color to the hardware
-        break;
+      //default:
+      //DisplayStyle1_OLED ();
+      //pixels.setPixelColor(0, BLACK);
+      //pixels.show(); // This sends the updated pixel color to the hardware
+      //break;
 
       case 0:
         DisplayStyle1_OLED ();
@@ -50,7 +50,7 @@ void button_Mode () {
         break;
 
 
-#ifdef enableInvertscreen
+#ifdef enable_Invertscreen
         /* Keep running anti screen burn, whilst serial is active */
         if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
           lastInvertTime = millis();

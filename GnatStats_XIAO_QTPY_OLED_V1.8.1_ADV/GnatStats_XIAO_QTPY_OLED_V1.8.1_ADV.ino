@@ -1,4 +1,4 @@
-#define CODE_VERS  "1.8.0.ADV"  // Code version number 
+#define CODE_VERS  "1.8.1.ADV"  // Code version number 
 
 
 /*  uVolume, GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client
@@ -61,6 +61,23 @@
   Hookup Guide
   ------------
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+
+  Library Working Version Checker 18/04/2023
+  (some libraries may not be used in this sketch)
+  ------------------------------------------------
+  Arduino IDE           v1.8.19
+  espressif (ESP32)     v2.0.5 (v2.08 = ESP32_AnalogWrite compile error)
+  ------------------------------------------------
+
+  Adafruit BusIO           v1.14.0 (Current 04/2023
+  Adafruit_GFX             v1.11.5 (Current 04/2023)
+  Adafruit_NeoPixel        v1.11.0 (Current 04/2023)
+  Adafruit_SSD1306         v2.5.7  (Current 04/2023)
+  Adafruit_SH1106_BADZZ    v1.1.0  (32u4 only)(Current 04/2023)
+  Adafruit SH110x          v2.1.8  (ATSAMD Only Current 04/2023)
+  HID-Project              v2.8.2  (Current 04/2023)
+  IRremote                 v2.7.0  (DO NOT USE IRremote LIBRARY HIGHER THAN v2.7.0 it breaks stats update)
+  TML_ErriezRotaryFullStep v???    (Current 04/2023)
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SEE CONFIGURATION TAB FIRST, FOR QUICK SETTINGS!!!!
@@ -177,10 +194,6 @@ void GPU_tempGauge(int gpuDegree);
 #define TX_LEDPin   25
 #endif
 
-#ifdef Adafruit_QTPY_ATSAMD
-/*onboard QT-PY NeoPixel for TX*/
-#define TX_NeoPin   11  //
-#endif
 
 #ifdef Seeeduino_XIAO_NRF52840
 /*onboard XIAO BUILD in LED for TX*/
@@ -365,7 +378,7 @@ void loop() {
   /*Serial stuff*/
   serialEvent();
 
-#ifdef enableActivityChecker
+#ifdef enable_ActivityChecker
   /* Check for Serial Activity*/
   activityChecker();
 #endif
@@ -517,7 +530,7 @@ void activityChecker() {
     activeConn = true;
   if (!activeConn) {
     //!!!!!Careful of extra auto insertion "}" above here compile will fail!!!!!
-#ifdef enableInvertscreen
+#ifdef enable_Invertscreen
 
     if (invertedStatus)
       display.invertDisplay(0);
@@ -539,7 +552,7 @@ void activityChecker() {
 
 //-------------------------------------------- Anti Screen Burn inverter ------------------------------------------------
 
-#ifdef enableInvertscreen
+#ifdef enable_Invertscreen
 void antiBurn() {
   display.invertDisplay(0);
   display.fillRect(0, 0, 128, 64, BLACK);

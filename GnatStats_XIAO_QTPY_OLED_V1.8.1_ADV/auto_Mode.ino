@@ -16,6 +16,10 @@ void auto_Mode () {
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
     else if (displayChangeMode == 3) {
+      displayChangeMode = 4;
+      display.fillRect(0, 0, 128 , 64, BLACK);
+    }
+    else if (displayChangeMode == 4) {
       displayChangeMode = 1;
       display.fillRect(0, 0, 128 , 64, BLACK);
     }
@@ -45,11 +49,15 @@ void auto_Mode () {
     else if (displayChangeMode == 3) {
       DisplayStyle3_OLED ();
     }
+    else if (displayChangeMode == 4) {
+      DisplayStyle4_OLED ();
+    }
+
 
     inputString = "";
     stringComplete = false;
 
-#ifdef enableInvertscreen
+#ifdef enable_Invertscreen
     /* Keep running anti screen burn, whilst serial is active */
     if ((millis() - lastInvertTime) > invertDelay && oledDraw == 1) {
       lastInvertTime = millis();
@@ -65,5 +73,3 @@ void auto_Mode () {
 
     }
   }
-
-  

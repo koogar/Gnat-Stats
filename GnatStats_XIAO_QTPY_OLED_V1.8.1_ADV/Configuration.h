@@ -10,14 +10,20 @@
    http://tallmanlabs.com  http://runawaybrainz.blogspot.com/
    https://github.com/koogar/Gnat-Stats  https://hackaday.io/project/181320-gnat-stats-tiny-oled-pc-performance-monitor
 */
-   
+
 //--------------------- MicroController Setup --------------------------
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
-//#define Seeeduino_XIAO_ATSAMD
-#define Adafruit_QTPY_ATSAMD
+#define Seeeduino_XIAO_ATSAMD
+//#define Adafruit_QTPY_ATSAMD
 //#define Seeeduino_XIAO_RP2040   // Adafruit QT PY RP2040  (untested)
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
+
+
+//------------------- Seeeduino_XIAO_ESP32C3 Experimental!!! ------------
+/* NOTE: The XIAO ESP32C3 is very problematic when uploading "in circuit" and has to be removed for programming.
+  Most of the time it has to be forced into bootloader mode (Hold BOOT button down and power cycle while uploading) */
+
 //#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
 
@@ -32,8 +38,8 @@
 //#define OLED_SSD1306
 //#define dim_Display // dim display SD1306 Only!!!
 
-/*---------------- SH1106 --------------*/
-#define OLED_SH110X
+/*---------------- SH110X --------------*/
+#define OLED_SH110X // SH1107
 
 //------------ Rotate Screen 180 -------------
 
@@ -64,12 +70,12 @@ String set_GPUname = "xxxxxxx";
 //#define Manual_gpuRam size in GB
 String set_GPUram = "xx";
 
-//------------------ Threshold Triggers -------------------
 
-/* Uncomment below, to enable custom threshold event triggers*/
+//---------------- Display Modes Auto or Button ------------
+/* Enable button to change screens else use auto timer change*/
 
-/* User Custom  Triggers,*/
-#define enableCustomThesholdtriggers
+//#define enable_buttonMode // else auto_Mode display change mode
+int deBounce = 1000; // Button De-Bounce, Screen will only change on the next refresh be patient
 
 //------------- Neopixel Threshold indicator ---------------
 
@@ -79,23 +85,21 @@ String set_GPUram = "xx";
 /* Uncomment only 1 below, */
 
 /* Gnat-Tacho, NeoPixel ring bargraph example,*/
-//#define enableNeopixelGauges //
+//#define enable_NeopixelGauges //
 
 /* uVolume only,*/
-#define uVol_enableThesholdtriggers
+//#define uVol_enableThresholdtriggers
 
 //--------------------- Other Miso ----------------------
 
-/* Enable button to change screens else use auto timer change*/
-#define enable_buttonMode // auto_Mode is currently broken
-int deBounce = 350;
+
 
 /* Enable the built in LED blinking when transmitting data,*/
-#define enableTX_LED
+//#define enableTX_LED
 int TX_LED_Delay = 10; // TX blink delay
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
-#define enableActivityChecker
+#define enable_ActivityChecker
 
 /* Time between "DisplayStyle" changes */
 #define displayChangeDelay 18000
@@ -111,17 +115,6 @@ int baud = 9600;           //serial do not adjust
 //------------------------------------ End of User configuration ---------------------------------
 
 
-/* Uncomment below, to take out small degree symbol for better spacing
-   when hitting 100% cpu/gpu load the percent symbol gets clipped */
-//#define noDegree
-
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/* Anti Screen Burn */
-//#define enableInvertscreen  // broken in button_Mod
-/* Inverted timer for oled*/
-long invertDelay    = 20000;
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //---------------------------------------------- Versions ------------------------------------
 
@@ -141,12 +134,26 @@ long invertDelay    = 20000;
                         XIAO RP2040   / QT PY RP2040  (untested)
                         XIAO ESP32C3  / QT PY ESP32C3 (untested)
 
-   Version 1.8
+   Version 1.8.1
 
-                     :Add 
+                     :Add
                         Auto or Button to change to the next screen
 
-                        
+
     ---------------------------------------------------------------
   ASCII: http://patorjk.com/software/taag/
 */
+
+//---------------------------------------------------------------------------------------------
+
+/* Uncomment below, to take out small degree symbol for better spacing
+   when hitting 100% cpu/gpu load the percent symbol gets clipped */
+//#define noDegree
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* Anti Screen Burn */
+//#define enable_Invertscreen  // broken in button_Mod
+/* Inverted timer for oled*/
+long invertDelay    = 20000;
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>

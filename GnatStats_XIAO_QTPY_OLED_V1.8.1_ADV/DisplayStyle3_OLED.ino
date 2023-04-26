@@ -5,13 +5,13 @@
   |___/|_/__/ .__/_\__,_|\_, |___/\__|\_, |_\___/
            |_|          |__/         |__/
 
-   CPU: Name/Big Temp /Big Load
-   GPU: Name/GPU Total Memory /Big Temp /Big Load
-   RAM: System Memory Used / Memory Total
+   CPU: Name /Temp /Big Frequency /
+   GPU: Name /Temp /Big Frequency /VRAM Mhz
+   RAM: System Memory Used
 
 */
 
-void DisplayStyle1_OLED () {
+void DisplayStyle3_OLED() {
 
 
   //>>>>>>>>>>>>>>>> Addition for Buttons >>>>>>>>>>>>>>
@@ -28,30 +28,36 @@ void DisplayStyle1_OLED () {
 
     lastActiveConn = millis();
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
     //-------------------------------------------Clearing Box ----------------------------------------------------
 
     //Clearing Boxes, eg: display.fillRect(<X>, ^Y^, W, H, Color);*/
     display.fillRect (0, 0, 128, 64, BLACK); // Clear entire screen for testing
 
-    //--------------------------------------- Display Background ----------------------------------------------------
+    //---------------------------------------- Static Background ----------------------------------------------------
 
-    /* OLED Background */
     display.setTextSize(2); //set background txt font size
     display.setCursor(1, 12);
     display.println("CPU");
     display.setCursor(1, 38);
     display.println("GPU");
     display.setTextSize(1); //set background txt font size
-    display.setCursor(1, 56);
-    display.println("SYSRAM: ");
 
-    //---------------------------------------CPU & GPU Hardware ID----------------------------------------------------
+    //---------------------------------------CPU & GPU Hardware ID--------------------------------------------------
+
+    /*CPU Manual Position Test*/
+    //display.setTextSize(0);
+    //display.setCursor(-35, 1);// Negative spacing so, CPU ID doesn't cause a rollover, on the next line
+    //String cpuName = "Intel Core i7-5820K"; // Name spacing test
 
     /*CPU & GPU Hardware ID*/
     display.setTextSize(0); // string font size
     String cpuName = "";
     display.println(cpuName);
+
+    /* GPU Manual Position Test*/
+    //display.setTextSize(0);
+    //display.setCursor(-42, 28); // Negative spacing so, GPU ID doesn't cause a rollover, on the next line
+    //String gpuName = "Nvidia GeForce GTX 1080"; // Name spacing test
 
     display.setTextSize(0); // string font size
     String gpuName = "";
@@ -62,6 +68,7 @@ void DisplayStyle1_OLED () {
       String cpuName = "";
       display.setTextSize(1);
       display.setCursor(0, 1);
+      //display.setCursor(-35, 1);
 
       int cpuNameStart = inputString.indexOf("CPU:");
       if (inputString.indexOf("Intel", cpuNameStart) > -1) {
@@ -112,21 +119,34 @@ void DisplayStyle1_OLED () {
       display.println(gpuName);
     }
 
-    //------------------------------------------ CPU Load/Temp -------------------------------------------------
+    //------------------------------------------ CPU Freq -------------------------------------------------
 
-    /*CPU Display String*/
+    /*CPU Freq Display String*/
+    int cpuCoreClockStart = inputString.indexOf("CHC") + 3;
+    int cpuCoreClockEnd = inputString.indexOf("|", cpuCoreClockStart);
+    String cpuClockString = inputString.substring(cpuCoreClockStart, cpuCoreClockEnd);
+
+    /*CPU  Freq Display*/
+    display.setTextSize(2);
+    display.setCursor(42, 12);
+    display.print(cpuClockString);
+    display.setTextSize(1);
+    display.print("MHz");
+
+    //------------------------------------------ CPU Temp -------------------------------------------------
+
+    /*CPU Temp Display String*/
     int cpuStringStart = inputString.indexOf("C");
     int cpuDegree = inputString.indexOf("c");
     int cpuStringLimit = inputString.indexOf("|");
     String cpuString1 = inputString.substring(cpuStringStart + 1, cpuDegree);
     String cpuString2 = inputString.substring(cpuDegree + 1, cpuStringLimit - 1);
 
-    /*CPU TEMPERATURE*/
-    display.setTextSize(2);
-    display.setCursor(42, 12);
+    /*CPU Temp Display*/
+    display.setTextSize(1);
+    display.setCursor(105, 22);
     display.print(cpuString1);
     display.setTextSize(1);
-
 #ifdef noDegree
     display.print("C");       // Centigrade Symbol
 #else
@@ -134,24 +154,75 @@ void DisplayStyle1_OLED () {
     display.print("C");       // Centigrade Symbol
 #endif
 
-    /*CPU LOAD, ALL CORES*/
-    display.setTextSize(2);
-    display.print(cpuString2);
-    display.setTextSize(1);
-    display.println("%");    // Small Percent Symbol
+    //------------------------------------------ GPU Freq/Temp -------------------------------------------------
 
-    //------------------------------------------ GPU Load/Temp -------------------------------------------------
+    /* GPU temp V's GPU freq to check for throttling and max 'GPU Boost' */
 
-    /*GPU Display String*/
+    /*GPU Core Freq Display String*/
+    int gpuCoreClockStart = inputString.indexOf("GCC") + 3;
+    int gpuCoreClockEnd = inputString.indexOf("|", gpuCoreClockStart);
+    String gpuCoreClockString = inputString.substring(gpuCoreClockStart, gpuCoreClockEnd);
+
+    /*GPU Core Temp Display String*/
     int gpuStringStart = inputString.indexOf("G", cpuStringLimit);
     int gpuDegree = inputString.indexOf("c", gpuStringStart);
     int gpuStringLimit = inputString.indexOf("|", gpuStringStart);
     String gpuString1 = inputString.substring(gpuStringStart + 1, gpuDegree);
     String gpuString2 = inputString.substring(gpuDegree + 1, gpuStringLimit - 1);
 
-    /*GPU TEMPERATURE*/
+    /*GPU Memory Used*/
+    int gpuMemoryUsedStart = inputString.indexOf("GMU") + 3;
+    int gpuMemoryUsedEnd = inputString.indexOf("|", gpuMemoryUsedStart);
+    String gpuMemoryUsedString = inputString.substring(gpuMemoryUsedStart, gpuMemoryUsedEnd);
+
+    double gpuMemUsed = atof(gpuMemoryUsedString.c_str());
+    double  gpuMemUsedSum = gpuMemUsed / 1024;
+
+
+    /*GPU Power*/
+    int gpuPowerStart = inputString.indexOf("GPWR") + 4;
+    int gpuPowerEnd = inputString.indexOf("|", gpuPowerStart);
+    String gpuPowerString = inputString.substring(gpuPowerStart, gpuPowerEnd);
+
+    /*GPU Fan %*/
+    int gpuFanStart = inputString.indexOf("GFANL") + 5;  // GPU Fan Load %
+    int gpuFanEnd = inputString.indexOf("|", gpuFanStart);
+    String gpuFanString = inputString.substring(gpuFanStart, gpuFanEnd);
+
+    /*GPU Fan RPM*/
+    int gpuRPMStart = inputString.indexOf("GRPM") + 4;
+    int gpuRPMEnd = inputString.indexOf("|", gpuRPMStart);
+    String gpuRPMString = inputString.substring(gpuRPMStart, gpuRPMEnd);
+
+    /*GPU Core Freq Display*/
     display.setTextSize(2);
     display.setCursor(42, 38);
+    //display.print("Core  :");
+    display.print(gpuCoreClockString);
+    display.setTextSize(1);
+    display.print("MHz");
+
+
+    /*GPU Fan Power Display*/
+
+    display.setCursor(1, 57);
+    display.print("Fan:");
+    //display.print(gpuRPMString);// RPM
+    display.print(gpuFanString);  // %
+    display.print("%");
+    //display.print(" P:");
+    //display.print(gpuPowerString);
+    //display.print("w");
+
+    /*GPU Memory Used Display*/
+    display.print(" Used:");
+    //display.print(gpuMemUsedSum);      //  show values in GB
+    display.print(gpuMemoryUsedString); //  show values in MB
+    display.print("MB");
+
+    /*GPU Core Temp Display*/
+    display.setTextSize(1);
+    display.setCursor(105, 47);
     display.print(gpuString1);
     display.setTextSize(1);
 
@@ -162,59 +233,9 @@ void DisplayStyle1_OLED () {
     display.print("C");       // Centigrade Symbol
 #endif
 
-    /*GPU LOAD*/
-    display.setTextSize(2);
-    display.print(gpuString2);
-    display.setTextSize(1);
-    display.println("%");      // Small Percent Symbol
-
-    //---------------------------------------------Total GPU Memory-----------------------------------------------------------
-
-    int gpuMemoryStart = inputString.indexOf("GMT") + 3;
-    int gpuMemoryEnd = inputString.indexOf("|", gpuMemoryStart);
-    String gpuMemoryString = inputString.substring(gpuMemoryStart, gpuMemoryEnd);
-
-    double totalGPUmem = atof(gpuMemoryString.c_str());
-    double totalGPUmemSum = totalGPUmem / 1024;    // divide by 1024 to get the correct value
-    float  totalGPUmemSumDP = totalGPUmemSum ;     // float to handle the decimal point when printed (totalGPUmemSumDP, 0)
-
-    display.setCursor(103, 28);
-    ////display.print(gpuMemoryString); // Show Value in MB
-    //display.print(totalGPUmemSumDP, 0); // Show Value in GB
-
-#ifdef Manual_gpuRam
-    display.print(set_GPUram);
-#else
-    display.print(totalGPUmemSumDP, 0); // Show Value in GB
-#endif
-
-    display.println("GB");
-    //----------------------------------------SYSTEM  RAM TOTAL---------------------------------------------------
-    /*SYSTEM RAM String*/
-    int ramStringStart = inputString.indexOf("R", gpuStringLimit);
-    int ramStringLimit = inputString.indexOf("|", ramStringStart);
-    String ramString = inputString.substring(ramStringStart + 1 , ramStringLimit);
-
-
-    /*SYSTEM RAM AVALABLE String*/
-    int AramStringStart = inputString.indexOf("RA", ramStringLimit);
-    int AramStringLimit = inputString.indexOf("|", AramStringStart);
-    String AramString = inputString.substring(AramStringStart + 2 , AramStringLimit);
-
-    /*SYSTEM RAM TOTAL String*/
-    double intRam = atof(ramString.c_str());
-    double intAram = atof(AramString.c_str());
-    //double  intRamSum = intRam + intAram;
-    float  intRamSum = intRam + intAram; //float to handle the decimal point when printed (intRamSum,0)
-
-    /*RAM USED/TOTAL*/
-    display.setCursor(42, 56);
-    display.print(intRamSum, 0); display.print(" / "); display.print(ramString); //display.print("GB");
-
     //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------
 
-
-#ifdef uVol_enableThesholdtriggers
+#ifdef uVol_enableThresholdtriggers
 
     //uVol_TriggerCPU_temp( cpuString1.toInt() ); // Neopixel CPU  Temperature
     uVol_TriggerCPU_load( cpuString2.toInt() ); // Neopixel CPU  Load
@@ -224,7 +245,7 @@ void DisplayStyle1_OLED () {
 
 #endif
 
-#ifdef enableCustomThesholdtriggers
+#ifdef enable_CustomThresholdtriggers
 
     CustomTriggerCPU_temp( cpuString1.toInt() ); // Neopixel CPU  Temperature
     CustomTriggerCPU_load( cpuString2.toInt() ); // Neopixel CPU  Load
@@ -234,7 +255,7 @@ void DisplayStyle1_OLED () {
 
 #endif
 
-#ifdef enableNeopixelGauges
+#ifdef enable_NeopixelGauges
 
     CPU_loadGauge( cpuString2.toInt() ); // Neopixel Ring Gauge  CPU  Load
     //CPU_tempGauge( cpuString1.toInt() ); // Neopixel Ring Gauge  CPU  Temperature
@@ -246,15 +267,15 @@ void DisplayStyle1_OLED () {
 
     display.setTextSize(1);
     display.setCursor(115, 1);
-    //display.drawCircle(115, 4, 4,WHITE); // Flash top right corner when updating
+    display.println("D3");
 
-    display.println("D1");
     display.display();
 
     //>>>>>>>>>>>>>>>> Addition for Buttons >>>>>>>>>>>>
     inputString = "";
     stringComplete = false;
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     oledDraw = 1;
 
   }
