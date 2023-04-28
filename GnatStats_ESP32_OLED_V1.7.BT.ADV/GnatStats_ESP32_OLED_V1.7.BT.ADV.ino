@@ -95,8 +95,8 @@
 
   https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
   --------------------------------------------------------------------------------------
-  
-  
+
+
   Pins Reference
   ----------------------------------
 
@@ -141,7 +141,7 @@
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_GFX.h>
-#include "bitmap.h"
+#include "bitmaps_V2.h"
 #include "Configuration.h"
 
 #include "BluetoothSerial.h"
@@ -251,6 +251,8 @@ long invertDelay = 60000; // 60 sec  delay
 long lastInvertTime = 0;
 int invertedStatus = 1;
 
+
+int baud = 9600;
 //----------------------
 
 
@@ -268,7 +270,8 @@ void setup() {
 #ifdef enable_BT
   SerialBT.begin(device_BT); //Bluetooth device name
 #else //USB
-  Serial.begin(9600);  //  USB Serial Baud Rate work around for dual mode
+
+  Serial.begin(baud);  //  USB Serial Baud Rate work around for dual mode
 #endif
 
 #ifdef enable_DualSerialEvent
@@ -526,17 +529,26 @@ void inverter() {
 void splashScreen() {
 
   allNeoPixelsOff();
-  display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
+  //display.drawBitmap(0, 0, JustGnatBMP, 64, 64, WHITE);
+  display.drawBitmap(0, 0, HSM_OLED3_BMP, 58, 62, WHITE);
+  //display.drawBitmap(0, 0, HSM_OLED2_BMP, 69, 63, WHITE);
+  //display.drawBitmap(0, 0, HSM_OLED1_BMP, 63, 58, WHITE);
   display.setTextSize(3);
-  display.setCursor(58, 5);
+  display.setCursor(61, 5);
   display.println("GNAT-");
   display.setTextSize(2);
-  display.setCursor(64, 30);
+  display.setCursor(65, 30);
   display.println("STATS");
 
   //Set version to USB Serial
   display.setTextSize(1);
-  display.setCursor(63, 55);
+  display.setCursor(66, 47);
+  //display.print("Baud: ");
+  display.print (baud); display.println(".bit/s");
+
+  //Set version to USB Serial
+  display.setTextSize(1);
+  display.setCursor(66, 56);
   display.print("Ver:");
   display.print (CODE_VERS);
 

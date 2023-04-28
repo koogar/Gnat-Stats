@@ -74,7 +74,7 @@ String set_GPUram = "xx";
 //---------------- Display Modes Auto or Button ------------
 /* Enable button to change screens else use auto timer change*/
 
-//#define enable_buttonMode // else auto_Mode display change mode
+#define enable_buttonMode // else auto_Mode display change mode
 int deBounce = 1000; // Button De-Bounce, Screen will only change on the next refresh be patient
 
 //------------- Neopixel Threshold indicator ---------------
@@ -95,7 +95,7 @@ int deBounce = 1000; // Button De-Bounce, Screen will only change on the next re
 
 
 /* Enable the built in LED blinking when transmitting data,*/
-//#define enableTX_LED
+#define enableTX_LED
 int TX_LED_Delay = 10; // TX blink delay
 
 /* comment out, to disable blank screen on serial timeout to retain info eg: PC crash fault diagnostics  */
