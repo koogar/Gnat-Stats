@@ -1,8 +1,9 @@
 
-![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
+
   
  Gnat-Stats is an open-source project that transforms a small OLED display into a real-time PC hardware performance monitor using Arduino-compatible microcontrollers. It visually presents metrics like CPU and GPU temperatures, loads, and system memory usage.([GitHub][1], [GitHub][2])
-
+ 
+![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
 ---
 
 ## 🔧 Features
