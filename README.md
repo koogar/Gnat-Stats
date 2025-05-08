@@ -61,7 +61,7 @@
 
 This project is licensed under the [GPL-2.0 License](https://github.com/koogar/Gnat-Stats/blob/master/LICENSE.txt).
 
-Gnat-Stats, Phat-Stats & Hardware Serial Monitor 
+Gnat-Stats, Phat-Stats, Tacho-Stats, uVolume & HardwareSerialMonitor 
 Copyright (C) 2016  Colin Conway, Rupert Hirst and contributors
  
 This program is free software; you can redistribute it and/or
