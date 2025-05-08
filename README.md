@@ -22,6 +22,7 @@
 
    * Connect an SSD1306 or SH1106 OLED display to your microcontroller.
    * Ensure proper I2C connections and address configuration.([GitHub][3])
+   * For detailed setup guides and tutorials, refer to the [Gnat-Stats OLED Display Hook-Up Guide](https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html).
 
 2. **Software Installation**:
 
