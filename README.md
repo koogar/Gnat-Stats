@@ -1,45 +1,70 @@
-<<<<<<< HEAD
+
 ![](https://github.com/koogar/Gnat-Stats/blob/master/images/3620111625420060746.png)
   
-  GNATSTATS OLED, PHATSTATS TFT PC Performance Monitor & HardwareSerialMonitor Windows Client 
-   
-  Rupert Hirst  © 2016-2023
+ Gnat-Stats is an open-source project that transforms a small OLED display into a real-time PC hardware performance monitor using Arduino-compatible microcontrollers. It visually presents metrics like CPU and GPU temperatures, loads, and system memory usage.([GitHub][1], [GitHub][2])
 
-  http://tallmanlabs.com
-  http://runawaybrainz.blogspot.com/  
-  https://hackaday.io/project/19018-gnat-stats-tiny-oled-pc-performance-monitor
-  
-  Gnat-Stats SSD1306 OLED
+---
 
-  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ssd1306-oled-hook-up-guide.html
+## 🔧 Features
 
-  Phat-Stats ILI9341 TFT
+* **Real-Time Monitoring**: Displays CPU/GPU temperatures, loads, and system RAM usage.
+* **Compact Design**: Utilizes SSD1306 or SH1106 OLED displays for a minimal footprint.
+* **Customizable Layouts**: Offers multiple display styles and anti-burn features.
+* **Hardware Compatibility**: Supports boards like Seeeduino XIAO, Adafruit QT Py, and ESP32.
+* **Serial Communication**: Receives data from a Windows client via USB serial.([GitHub][3])
 
-  https://runawaybrainz.blogspot.com/2021/03/phat-stats-ili9341-tft-display-hook-up.html
+---
 
-  Licence
-  -------
-  
-  GPL v3
-  
-Gnat-Stats, Phat-Stats & Hardware Serial Monitor 
-Copyright (C) 2016  Colin Conway, Rupert Hirst and contributors
- 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+## 🛠️ Getting Started
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+1. **Hardware Setup**:
 
-You should have received a copy of the GNU General Public License
-along with this program; If not, see <http://www.gnu.org/licenses/>.
+   * Connect an SSD1306 or SH1106 OLED display to your microcontroller.
+   * Ensure proper I2C connections and address configuration.([GitHub][3])
+
+2. **Software Installation**:
+
+   * Install necessary Arduino libraries:
+
+     * Adafruit NeoPixel
+     * Adafruit SSD1306
+     * Adafruit SH110X
+     * Adafruit GFX
+     * Adafruit BusIO
+   * Configure your board using the appropriate Board Manager URLs:
+
+     * For Seeeduino XIAO:
+
+       ```
+       https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+       ```
+
+3. **Firmware Upload**:
+
+   * Open the desired `.ino` file (e.g., `GnatStats_V1.7.Base.ino`) in the Arduino IDE.
+   * Select the correct board and port.
+   * Upload the sketch to your microcontroller.([GitHub][3])
+
+4. **Windows Client**:
+
+   * Install the [HardwareSerialMonitor](https://github.com/koogar/HardwareSerialMonitor) on your Windows PC to relay performance data.
+3. **Configuration**:
+
+   * Adjust settings within the Gnat-Stats firmware and HardwareSerialMonitor to match your hardware setup and monitoring preferences.
 
 
-=======
-# Gnat-Stats
-GnatStats Tiny OLED Arduino PC Hardware Performance Serial Display
->>>>>>> 03943f79781df510c760309c703d969341ba0c42
+---
+
+## 📜 License
+
+This project is licensed under the [GPL-2.0 License](https://github.com/koogar/Gnat-Stats/blob/master/LICENSE.txt).
+
+---
+
+For more details, visit the [Gnat-Stats GitHub Repository](https://github.com/koogar/Gnat-Stats).
+
+[1]: https://github.com/koogar/Gnat-Stats/releases?utm_source=chatgpt.com "Releases · koogar/Gnat-Stats - GitHub"
+[2]: https://github.com/koogar/Gnat-Stats/blob/master/GnatStats_V1.7.Base/DisplayStats.ino?utm_source=chatgpt.com "Gnat-Stats/GnatStats_V1.7.Base/DisplayStats.ino at master - GitHub"
+[3]: https://github.com/koogar/Gnat-Stats/blob/master/GnatStats_V1.7.Base/GnatStats_V1.7.Base.ino?utm_source=chatgpt.com "Gnat-Stats/GnatStats_V1.7.Base/GnatStats_V1.7.Base.ino at ... - GitHub"
+[4]: https://github.com/koogar/Gnat-Stats?utm_source=chatgpt.com "GitHub - koogar/Gnat-Stats: GnatStats Tiny OLED Arduino PC Hardware ..."
+
