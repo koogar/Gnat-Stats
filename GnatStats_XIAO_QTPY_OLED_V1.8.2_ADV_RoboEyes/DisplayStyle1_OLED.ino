@@ -178,17 +178,43 @@ void DisplayStyle1_OLED () {
     double totalGPUmemSum = totalGPUmem / 1024;    // divide by 1024 to get the correct value
     float  totalGPUmemSumDP = totalGPUmemSum ;     // float to handle the decimal point when printed (totalGPUmemSumDP, 0)
 
-    display.setCursor(103, 28);
-    ////display.print(gpuMemoryString); // Show Value in MB
-    //display.print(totalGPUmemSumDP, 0); // Show Value in GB
+
+    /*GPU Memory Used*/
+    int gpuMemoryUsedStart = inputString.indexOf("GMU") + 3;
+    int gpuMemoryUsedEnd = inputString.indexOf("|", gpuMemoryUsedStart);
+    String gpuMemoryUsedString = inputString.substring(gpuMemoryUsedStart, gpuMemoryUsedEnd);
+
+    double gpuMemUsed = atof(gpuMemoryUsedString.c_str());
+    double  gpuMemUsedSum = gpuMemUsed / 1024;
+
+
+    //display.setCursor(103, 28);
+    display.setCursor(84, 28);
+    
 
 #ifdef Manual_gpuRam
     display.print(set_GPUram);
 #else
-    display.print(totalGPUmemSumDP, 0); // Show Value in GB
+
+    /*GPU Memory Total Display*/
+    //display.print(totalGPUmemSumDP, display.print("GB"); 0); // Show Value in GB
+    //display.print(gpuMemoryString); display.print("MB") // Show Value in MB
+
+    /*GPU Memory Used Display*/
+    //display.print(gpuMemUsedSum); display.println("GB");     //  show values in GB
+    display.print(gpuMemoryUsedString); display.print("MB");   //  show values in MB
+
 #endif
 
-    display.println("GB");
+
+
+    //display.setCursor(90, 28);
+    /*GPU Memory Used Display*/
+
+    //display.print(gpuMemUsedSum);      //  show values in GB
+    //display.print(gpuMemoryUsedString); //  show values in MB
+    //display.print("MB");
+
     //----------------------------------------SYSTEM  RAM TOTAL---------------------------------------------------
     /*SYSTEM RAM String*/
     int ramStringStart = inputString.indexOf("R", gpuStringLimit);
@@ -209,6 +235,7 @@ void DisplayStyle1_OLED () {
 
     /*RAM USED/TOTAL*/
     display.setCursor(42, 56);
+
     display.print(intRamSum, 0); display.print(" / "); display.print(ramString); //display.print("GB");
 
     //--------------------------Trigger an event when CPU or GPU threshold is met ---------------------------------

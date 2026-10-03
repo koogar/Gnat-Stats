@@ -256,8 +256,8 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 #ifdef Robot_Eyes
 #include <FluxGarage_RoboEyes.h>
-roboEyes roboEyes; // create RoboEyes instance
-
+//roboEyes roboEyes; // create RoboEyes instance
+RoboEyes<Adafruit_SH1106G> roboEyes(display);
 #endif
 //--------------------------------------------------------------------------------------
 

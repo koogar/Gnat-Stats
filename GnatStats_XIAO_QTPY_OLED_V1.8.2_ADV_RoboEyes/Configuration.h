@@ -15,7 +15,7 @@
 /*Uncomment the correct Micro type, uncomment only one!!!*/
 
 //#define Seeeduino_XIAO_ATSAMD
-#define Adafruit_QTPY_ATSAMD
+//#define Adafruit_QTPY_ATSAMD
 //#define Seeeduino_XIAO_RP2040   // Adafruit QT PY RP2040  (untested)
 //#define Seeeduino_XIAO_NRF52840 // Adafruit QT PY NRF52840(untested)
 
@@ -24,7 +24,7 @@
 /* NOTE: The XIAO ESP32C3 is very problematic when uploading "in circuit" and has to be removed for programming.
   Most of the time it has to be forced into bootloader mode (Hold BOOT button down and power cycle while uploading) */
 
-//#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
+#define Seeeduino_XIAO_ESP32C3  // Adafruit QT PY ESP32S2, QT PY ESP32S3,  QT Py ESP32 Pico (untested)
 
 
 //--------------------- OLED Setup --------------------------
@@ -35,11 +35,11 @@
 /* SH1106  Compatability -->> QT PY ATSAMD21(YES), XIAO ATSAMD21(YES), XIAO RP2040 (YES), XIAO NRF52840 (YES), XIAO ESP32C3 (YES)*/
 
 /*---------------- SSD1306 -------------*/
-#define OLED_SSD1306
+//#define OLED_SSD1306
 //#define dim_Display // dim display SD1306 Only!!!
 
 /*---------------- SH110X --------------*/
-//#define OLED_SH110X // SH1107
+#define OLED_SH110X // SH1107
 
 //------------ Rotate Screen 180 -------------
 
@@ -56,8 +56,8 @@
 /* Requires DisplayStyles ending in "_NC" (NameChange),*/
 /* Characters to delete from the start of the auto detected CPU/GPU name eg: Remove "Intel" or "Nvidia" to save space*/
 
-#define cpuNameStartLength 10
-#define gpuNameStartLength 18
+#define cpuNameStartLength 19
+#define gpuNameStartLength 19
 
 /* Manually set the CPU, GPU details*/
 
